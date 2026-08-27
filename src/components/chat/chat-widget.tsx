@@ -42,7 +42,11 @@ export function ChatWidget() {
         onFocus={() => setLoaded(true)}
         aria-expanded={open}
         aria-controls={panelId}
-        aria-label={open ? "Close the Code Hippies AI assistant" : "Ask Code Hippies' AI assistant"}
+        aria-label={
+          open
+            ? "Close the Code Hippies AI assistant"
+            : "Ask Code Hippies' AI assistant — browse 50 common questions"
+        }
         data-testid="chat-trigger"
         className="fixed right-4 z-50 grid size-12 place-items-center rounded-full border border-brand-400/30 bg-ink-900/95 text-brand-400 shadow-lg backdrop-blur transition-transform duration-200 hover:scale-105 hover:border-brand-400/60 md:right-6"
         style={{ bottom: "calc(5.5rem + env(safe-area-inset-bottom, 0px))" }}

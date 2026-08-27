@@ -200,3 +200,52 @@ The result is a lockfile with zero advisories at any severity, and both audit
 gates — production and dev — failing the build on high or critical. Bump the
 pinned version deliberately when Lighthouse CI publishes a release with the
 tree fixed.
+
+## The FAQ assistant: three layers, in order of trustworthiness
+
+The assistant answers in three stages, tried in order, each strictly more
+likely to be wrong than the one before it:
+
+1. **Curated match** (`src/lib/rag/faq-match.ts`). The 50 questions in
+   `src/data/faq.ts` have answers written on purpose. A confident match returns
+   one verbatim — no retrieval, no model call, no tokens spent, and no way for
+   the assistant to paraphrase itself into saying something different from what
+   `/faq` says.
+2. **Retrieval** over the generated knowledge base, for anything the curated
+   set does not cover.
+3. **Refusal**, when retrieval returns nothing above the relevance floor. A
+   near-miss also returns the closest curated questions, so a slightly-wrong
+   phrasing becomes a one-tap correction rather than a dead end.
+
+### Why match scores are banded
+
+Content tokens are stemmed and stopword-filtered, so a short question can
+reduce to a single token. "When can you start?" becomes `["start"]` — and so
+does the alias "How do I get started?" on a completely different entry. Both
+then score a perfect Jaccard 1.0 and the winner is decided by array order,
+which is how a visitor gets a confident answer to a question they never asked.
+The test suite caught exactly this on three questions.
+
+Scores are therefore banded so a literal match can never lose to a
+coincidence: canonical literal 1.0, alias literal 0.98, containment 0.86,
+token similarity capped at 0.95. Do not remove the cap.
+
+A second bug from the same test run: questions made entirely of stopwords
+("Who are you?") tokenise to nothing, and the matcher used to bail before
+trying a literal comparison. It now bails only when the normalised string is
+empty.
+
+### Adding or editing questions
+
+`src/data/faq.ts` is the single source of truth. It feeds the `/faq` page, the
+`FAQPage` JSON-LD, the generated knowledge base and the assistant's browse
+panel — so they cannot drift apart. After editing, run `npm run kb:build &&
+npm test`. The suite asserts that every canonical question and every alias
+resolves to its own entry, and that the out-of-scope questions still refuse:
+widening the matched surface is precisely the change that can quietly pull a
+should-refuse question above the threshold.
+
+Answers are deliberately not served by `/api/faq`. The browse panel sends the
+chosen question back through `/api/chat`, so every answer takes the same
+audited path — CSRF, rate limit, validation — and a browsed question is logged
+in the gap log the same way a typed one is.

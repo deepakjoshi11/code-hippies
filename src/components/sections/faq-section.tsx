@@ -53,9 +53,10 @@ export function FaqSection({
 export function FaqFooterNote() {
   return (
     <p className="mt-8 text-sm text-ink-500">
-      Question not covered here? Ask the{" "}
-      <span className="text-ink-200">AI assistant in the corner</span> — it answers from this site&rsquo;s
-      knowledge base and tells you honestly when it does not know. Or{" "}
+      Question not covered here? The{" "}
+      <span className="text-ink-200">assistant in the corner</span> has all 50 of these grouped by
+      category and searchable, answers anything else from this site&rsquo;s knowledge base, and tells
+      you honestly when it does not know. Or{" "}
       <Link href="/contact" className="text-brand-400 underline underline-offset-4">
         send the brief directly
       </Link>

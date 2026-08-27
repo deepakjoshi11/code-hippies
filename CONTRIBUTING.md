@@ -149,9 +149,15 @@ frontmatter, including `relatedService` and `relatedCaseStudy` so the internal
 linking holds. Run `npm test` — the content suite checks frontmatter and that
 those references resolve.
 
-**An FAQ entry.** Add it to `src/data/faq.ts` under an existing category. It
-appears on `/faq`, in the `FAQPage` structured data, and in the assistant's
-knowledge base after `npm run kb:build`.
+**An FAQ entry.** Add it to `src/data/faq.ts` under an existing category, with
+two or three `aka` phrasings covering how a visitor would actually type it. It
+appears on `/faq`, in the `FAQPage` structured data, in the assistant's browse
+panel, and in its knowledge base after `npm run kb:build`.
+
+Then run `npm test`. `tests/faq-bot.test.ts` asserts that every canonical
+question and every alias resolves to its own entry — a collision means someone
+gets a confident answer to a question they did not ask — and that out-of-scope
+questions still refuse. See `NOTES.md` for why match scores are banded.
 
 ## Quality audit
 

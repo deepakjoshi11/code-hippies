@@ -10,7 +10,7 @@ import { breadcrumbSchema, faqSchema, graph } from "@/lib/schema";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
-  title: "FAQ — Working with Deepak Joshi",
+  title: "FAQ — 50 Questions, Answered",
   description:
     "Straight answers on pricing, scope, stack choices, code ownership, AI hallucination and security — the questions that come up in every first call.",
   path: "/faq",
@@ -52,7 +52,7 @@ export default function FaqPage() {
           as="h1"
           eyebrow="Frequently asked questions"
           title="The questions that come up in every first call"
-          description="Answered here in full so the first conversation can be about your project rather than about how I work. Every answer is also in the AI assistant's knowledge base — ask it directly if you prefer."
+          description={`All ${faqs.length} of them, answered in full, so the first conversation can be about your project rather than about how I work. Every answer is also loaded into the assistant in the corner of this page — browse them by category there, or just ask in your own words.`}
         />
 
         <nav aria-label="FAQ categories" className="mt-8">

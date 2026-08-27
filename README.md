@@ -44,10 +44,13 @@ on with configuration, and `CONTRIBUTING.md` for architecture and conventions.
   own FAQ and its own `Service` structured data.
 - **A 9-stage process page** with a defined output and a defined client
   responsibility per stage.
-- **A 23-question FAQ** emitted as `FAQPage` JSON-LD, plus per-service FAQs.
+- **A 50-question FAQ** across nine categories, emitted as `FAQPage` JSON-LD and
+  loaded into the assistant as a browsable, searchable question set.
 - **5 long-form technical articles** — the long-term SEO engine.
-- **A retrieval-grounded AI assistant** that answers from a generated knowledge
-  base and refuses when nothing relevant is retrieved.
+- **A retrieval-grounded FAQ assistant** with a three-layer pipeline — curated
+  answer, then retrieval, then refusal — so the 50 common questions are answered
+  verbatim and anything outside the knowledge base is declined rather than
+  guessed at.
 - **A conversion funnel**: hero → case studies → process → evidence → pricing →
   multi-step brief form → booking, with WhatsApp available at every stage.
 

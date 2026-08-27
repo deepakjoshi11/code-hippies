@@ -124,7 +124,7 @@ export default function HomePage() {
         <SectionHeader
           eyebrow="FAQ"
           title="The questions that come up in every first call"
-          description="Answered here so the first conversation can be about your project rather than about how I work."
+          description={`Six of them here. The other ${faqs.length - homeFaqs.length} are on the FAQ page and inside the assistant in the corner, which you can browse by category or just ask.`}
         />
         <div className="mt-10">
           <FaqSection items={homeFaqs} />

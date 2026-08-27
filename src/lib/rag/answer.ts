@@ -1,4 +1,6 @@
 import { retrieve, type Retrieved } from "./retriever";
+import { matchFaq, rankFaqs } from "./faq-match";
+import { faqs } from "@/data/faq";
 
 export const NO_INFORMATION_RESPONSE =
   "I don't have that in my knowledge base, so I'm not going to guess at it. " +
@@ -9,6 +11,10 @@ export type Answer = {
   answer: string;
   sources: { title: string; page?: string }[];
   refused: boolean;
+  /** Set when the answer came verbatim from the curated FAQ set. */
+  faq?: { question: string; category: string };
+  /** Related curated questions the visitor can ask next, as one-tap follow-ups. */
+  related?: string[];
 };
 
 const SYSTEM_PROMPT = `You are the assistant for Code Hippies, the engineering studio of Deepak Joshi.
@@ -44,10 +50,36 @@ function buildUserPrompt(question: string, sources: Retrieved[]): string {
  * is never silently broken and never ungrounded.
  */
 export async function answerQuestion(question: string): Promise<Answer> {
+  /*
+   * Layer 1: the curated FAQ. These 50 questions have answers written on
+   * purpose, so a confident match returns one verbatim — no retrieval, no
+   * model call, no opportunity to paraphrase something into being wrong, and
+   * no way for the assistant to drift from what /faq says.
+   */
+  const curated = matchFaq(question);
+  if (curated) {
+    return {
+      answer: curated.a,
+      sources: [{ title: `FAQ — ${curated.category}`, page: "/faq" }],
+      refused: false,
+      faq: { question: curated.q, category: curated.category },
+      related: relatedQuestions(curated.q, curated.category),
+    };
+  }
+
+  // Layer 2: retrieval over the generated knowledge base.
   const sources = retrieve(question, 5);
 
   if (sources.length === 0) {
-    return { answer: NO_INFORMATION_RESPONSE, sources: [], refused: true };
+    // Layer 3: refuse — but offer the nearest curated questions if any came
+    // close, so a near-miss becomes a one-tap correction rather than a wall.
+    const near = rankFaqs(question, 3).map((m) => m.faq.q);
+    return {
+      answer: NO_INFORMATION_RESPONSE,
+      sources: [],
+      refused: true,
+      ...(near.length > 0 ? { related: near } : {}),
+    };
   }
 
   const citations = dedupeSources(sources);
@@ -108,6 +140,14 @@ function truncate(text: string, max: number): string {
   const cut = text.slice(0, max);
   const lastStop = cut.lastIndexOf(". ");
   return `${lastStop > max * 0.5 ? cut.slice(0, lastStop + 1) : cut.trimEnd()}…`;
+}
+
+/** Other curated questions in the same category, for one-tap follow-ups. */
+function relatedQuestions(exclude: string, category: string): string[] {
+  return faqs
+    .filter((f) => f.category === category && f.q !== exclude)
+    .slice(0, 3)
+    .map((f) => f.q);
 }
 
 function dedupeSources(sources: Retrieved[]): { title: string; page?: string }[] {
