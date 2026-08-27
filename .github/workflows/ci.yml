@@ -71,10 +71,20 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # Fails the build on high and critical advisories. A monthly manual
-      # check means being, on average, two weeks behind a published exploit.
-      - name: npm audit
+      # Fails the build on high and critical advisories in code that actually
+      # ships. A monthly manual check means being, on average, two weeks behind
+      # a published exploit.
+      - name: npm audit (production dependencies)
         run: npm run audit:ci
+
+      # The dev graph is audited separately and at the same severity. It is a
+      # separate step because the two have different remediation urgency: a
+      # production advisory is shipping to users, a dev one is not. Lighthouse
+      # CI is deliberately NOT a dependency — it is pinned at the call site in
+      # the lighthouse job, because its puppeteer tree carries unfixable high
+      # advisories it would otherwise drag into this lockfile.
+      - name: npm audit (dev tooling)
+        run: npm run audit:dev
 
       - name: Assert no secrets reached the client bundle
         run: |
@@ -113,7 +123,7 @@ jobs:
       # noisy enough to fail a good build — and a flaky gate gets disabled
       # within a month, which returns you to having no gate at all.
       - name: Lighthouse CI (desktop)
-        run: npx lhci autorun --config=lighthouserc.json
+        run: npx --yes @lhci/cli@0.15.1 autorun --config=lighthouserc.json
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
 
@@ -123,7 +133,7 @@ jobs:
       # build cannot hold would just teach everyone to ignore the gate.
       # Categories, CLS and TBT are enforced here.
       - name: Lighthouse CI (mobile)
-        run: npx lhci autorun --config=lighthouserc.mobile.json
+        run: npx --yes @lhci/cli@0.15.1 autorun --config=lighthouserc.mobile.json
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
 

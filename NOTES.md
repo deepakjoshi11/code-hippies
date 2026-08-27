@@ -181,3 +181,22 @@ npx next start -p 4200 &
 CHROME_PATH=/path/to/chrome npx lighthouse http://localhost:4200/ --preset=desktop
 CHROME_PATH=/path/to/chrome npx lighthouse http://localhost:4200/   # mobile
 ```
+
+## Why Lighthouse CI is not a dependency
+
+`@lhci/cli` pulls a puppeteer → `@puppeteer/browsers` → `extract-zip` → `tmp`
+tree that carries seven high-severity advisories with no patched release
+available; `npm audit fix --force` proposes downgrading it to 0.1.0, which is
+not a fix. Having it in `devDependencies` meant `npm audit` could never be
+clean, which is how audit gates come to be ignored.
+
+It is a CI binary, not project code, so it is pinned at the call site instead:
+
+```yaml
+run: npx --yes @lhci/cli@0.15.1 autorun --config=lighthouserc.json
+```
+
+The result is a lockfile with zero advisories at any severity, and both audit
+gates — production and dev — failing the build on high or critical. Bump the
+pinned version deliberately when Lighthouse CI publishes a release with the
+tree fixed.
