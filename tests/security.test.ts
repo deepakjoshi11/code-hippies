@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { leadSchema, chatSchema } from "@/lib/schemas";
+import { leadSchema, chatSchema, isHoneypotTripped } from "@/lib/schemas";
 import { rateLimit } from "@/lib/security/rate-limit";
 import { timingSafeEqual, createToken } from "@/lib/security/csrf";
 
@@ -31,8 +31,14 @@ describe("input validation", () => {
     expect(leadSchema.safeParse({ ...valid, message: "x".repeat(4001) }).success).toBe(false);
   });
 
-  it("rejects a filled honeypot field", () => {
-    expect(leadSchema.safeParse({ ...valid, website: "http://spam.example" }).success).toBe(false);
+  it("detects a filled honeypot without leaking which field it is", () => {
+    const parsed = leadSchema.safeParse({ ...valid, website: "http://spam.example" });
+    // The schema must ACCEPT it — a 400 naming the field teaches a bot to omit
+    // it next time. Detection happens separately and the route returns 200.
+    expect(parsed.success).toBe(true);
+    expect(isHoneypotTripped({ website: "http://spam.example" })).toBe(true);
+    expect(isHoneypotTripped({ website: "" })).toBe(false);
+    expect(isHoneypotTripped({ website: undefined })).toBe(false);
   });
 
   it("normalises email case and trims whitespace", () => {

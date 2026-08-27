@@ -20,9 +20,9 @@ import { faqSchema, graph } from "@/lib/schema";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Code Hippies — Deepak Joshi | Full-stack, mobile & AI/LLM engineer",
+  title: "Deepak Joshi — Full-stack, Mobile & AI/LLM Engineer",
   description:
-    "Deepak Joshi builds production web applications, iOS and Android apps and retrieval-grounded AI systems for startups and agencies. Thirteen live builds, every technical claim verifiable.",
+    "Deepak Joshi builds production web apps, iOS and Android apps and grounded AI systems for startups and agencies. 13 live builds you can verify yourself.",
   path: "/",
   keywords: [
     "Deepak Joshi developer",

@@ -15,9 +15,9 @@ import { absoluteUrl } from "@/lib/site";
 import { formatDate } from "@/lib/utils";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Blog — engineering notes on Next.js, RAG, performance and security",
+  title: "Blog — Engineering Notes",
   description:
-    "Technical articles from Deepak Joshi on rendering strategy and SEO, retrieval-grounded AI that refuses to guess, Core Web Vitals budgets in CI, choosing a stack per client, and pre-launch security.",
+    "Technical articles on rendering strategy and SEO, AI that refuses to guess, Core Web Vitals budgets in CI, choosing a stack, and pre-launch security.",
   path: "/blog",
   keywords: [
     "Next.js engineering blog",

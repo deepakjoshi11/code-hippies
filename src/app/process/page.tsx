@@ -11,9 +11,9 @@ import { processSteps } from "@/data/process";
 import { absoluteUrl } from "@/lib/site";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Process — how a project actually runs, stage by stage",
+  title: "Process — How a Project Actually Runs",
   description:
-    "Nine stages from discovery to maintenance, each with a defined output and a defined thing the client is responsible for. Discovery before pricing, scope in writing, changes quoted rather than absorbed.",
+    "Nine stages from discovery to maintenance, each with a defined output and a defined client responsibility. Discovery before pricing, scope in writing.",
   path: "/process",
   keywords: [
     "software development process",

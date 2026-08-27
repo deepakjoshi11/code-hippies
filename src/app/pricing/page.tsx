@@ -17,9 +17,9 @@ import { pageMetadata } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Pricing & engagement models — fixed-scope, retainer, staff augmentation",
+  title: "Pricing & Engagement Models",
   description:
-    "Three ways to work with Code Hippies: fixed-scope projects quoted after discovery, monthly retainers with reserved engineering days, and staff augmentation on a day rate. What is included, and what is not.",
+    "Three ways to work together: fixed-scope projects quoted after discovery, monthly retainers, and staff augmentation. What is included, and what is not.",
   path: "/pricing",
   keywords: [
     "freelance developer pricing India",

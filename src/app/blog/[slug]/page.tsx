@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import { mdxComponents } from "@/components/blog/mdx-components";
 import { ArrowUpRight } from "lucide-react";
 
 import { getAllPosts, getPost } from "@/lib/blog";
@@ -100,11 +101,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
         <Section className="py-0">
           <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_18rem] lg:gap-14">
-            <div className="prose-hippie max-w-3xl">
-              <MDXRemote source={post.content} />
+            <div className="prose-hippie min-w-0 max-w-3xl">
+              <MDXRemote source={post.content} components={mdxComponents} />
             </div>
 
-            <aside className="flex flex-col gap-4 lg:sticky lg:top-28 lg:self-start">
+            <aside className="flex min-w-0 flex-col gap-4 lg:sticky lg:top-28 lg:self-start">
               {service ? (
                 <Card>
                   <CardBody className="flex flex-col gap-2.5">

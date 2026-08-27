@@ -19,7 +19,7 @@ export function ServiceCards({ headingLevel = "h3" }: { headingLevel?: "h2" | "h
       {services.map((service, i) => {
         const Icon = icons[service.icon];
         return (
-          <Reveal as="li" key={service.slug} delay={i * 0.06}>
+          <Reveal as="li" key={service.slug} delay={i * 0.06} className="min-w-0">
             <Card className="group h-full">
               <CardBody className="flex h-full flex-col gap-4">
                 <span className="grid size-11 shrink-0 place-items-center rounded-xl border border-brand-400/20 bg-brand-500/10 text-brand-400">

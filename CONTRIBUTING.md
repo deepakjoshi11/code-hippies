@@ -152,3 +152,22 @@ those references resolve.
 **An FAQ entry.** Add it to `src/data/faq.ts` under an existing category. It
 appears on `/faq`, in the `FAQPage` structured data, and in the assistant's
 knowledge base after `npm run kb:build`.
+
+## Quality audit
+
+```bash
+npm run build
+npm start &
+npm run audit:quality            # add a URL argument for a non-default port
+```
+
+Checks link integrity (internal crawl plus every external link), metadata and
+document outline, axe-core WCAG 2.1 A/AA at 390px and 1440px, and horizontal
+overflow at 360, 390, 768, 1024 and 1440px. Exits non-zero on any failure.
+
+`playwright` and `@axe-core/playwright` are dev dependencies for this script
+only. If the sandbox provides its own Chromium, point at it:
+
+```bash
+CHROME_PATH=/path/to/chrome npm run audit:quality http://localhost:3000
+```

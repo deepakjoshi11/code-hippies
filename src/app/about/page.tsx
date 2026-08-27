@@ -21,9 +21,9 @@ import { site } from "@/lib/site";
 export const revalidate = 21600;
 
 export const metadata: Metadata = pageMetadata({
-  title: "About Deepak Joshi — ex-Deloitte USI, founder of Dharmarthlabs",
+  title: "About Deepak Joshi — Ex-Deloitte USI",
   description:
-    "Deepak Joshi is a full-stack, mobile and AI/LLM engineer, previously at Deloitte USI and founder of Dharmarthlabs. Code Hippies is the studio he builds under, with live GitHub activity.",
+    "Deepak Joshi is a full-stack, mobile and AI/LLM engineer, previously at Deloitte USI and founder of Dharmarthlabs. Code Hippies is his engineering studio.",
   path: "/about",
   keywords: [
     "Deepak Joshi developer",

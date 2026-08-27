@@ -34,7 +34,9 @@ export async function generateMetadata({
   if (!study) return {};
 
   return pageMetadata({
-    title: `${study.name} — ${study.stack.slice(0, 2).join(" + ")} case study`,
+    title: `${study.name} — ${study.stack[0]} Case Study`,
+    // Summary plus the plain-language line, clamped at the SERP limit — the
+    // two together describe both what was built and what it does.
     description: `${study.summary} ${study.layman}`,
     path: `/work/${study.slug}`,
     keywords: [...study.stack, study.category, "Code Hippies case study"],

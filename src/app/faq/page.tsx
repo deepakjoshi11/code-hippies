@@ -10,9 +10,9 @@ import { breadcrumbSchema, faqSchema, graph } from "@/lib/schema";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
-  title: "FAQ — working with Code Hippies and Deepak Joshi",
+  title: "FAQ — Working with Deepak Joshi",
   description:
-    "Straight answers on pricing, scope, technology choices, code ownership, AI hallucination, security practices and what happens after launch. The questions that come up in every first call.",
+    "Straight answers on pricing, scope, stack choices, code ownership, AI hallucination and security — the questions that come up in every first call.",
   path: "/faq",
   keywords: [
     "how much does a website cost India",

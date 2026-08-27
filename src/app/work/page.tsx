@@ -9,9 +9,9 @@ import { breadcrumbSchema, graph } from "@/lib/schema";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Case studies — 13 live production sites",
+  title: "Case Studies — 13 Live Production Sites",
   description:
-    "Thirteen production websites and platforms built by Deepak Joshi: Next.js news networks, an Astro consultation funnel, WordPress publishing, React SPAs and static builds. Every technical claim verified on the live site.",
+    "13 production sites built by Deepak Joshi — Next.js news networks, an Astro funnel, WordPress publishing, React SPAs. Every claim verified on the live site.",
   path: "/work",
   keywords: [
     "Code Hippies portfolio",

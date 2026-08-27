@@ -312,7 +312,7 @@ function RadioGroup({
             <input
               type="radio"
               value={option}
-              className="size-4 accent-[oklch(0.7_0.16_165)]"
+              className="size-5 accent-[oklch(0.7_0.16_165)]"
               {...register(name)}
             />
             {option}

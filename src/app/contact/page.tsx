@@ -11,9 +11,9 @@ import { pageMetadata } from "@/lib/seo";
 import { absoluteUrl, site, whatsappHref } from "@/lib/site";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Start a project — send a brief to Code Hippies",
+  title: "Start a Project — Send a Brief",
   description:
-    "Send Deepak Joshi a project brief: project type, budget band and timeline. Two minutes, and you get a scoped recommendation and an honest read on feasibility in the first conversation.",
+    "Send a project brief: type, budget band and timeline. Two minutes, and the first conversation starts with a scoped recommendation, not with basics.",
   path: "/contact",
   keywords: [
     "hire Deepak Joshi",

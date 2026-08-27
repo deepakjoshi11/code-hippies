@@ -34,7 +34,7 @@ export async function generateMetadata({
   if (!service) return {};
 
   return pageMetadata({
-    title: `${service.name} — ${service.longTailTarget}`,
+    title: service.name,
     description: service.summary,
     path: `/services/${service.slug}`,
     keywords: service.keywords,

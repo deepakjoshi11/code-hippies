@@ -48,16 +48,16 @@ export function ProofSection() {
       </p>
       <ul className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
         {evidence.map((c, i) => (
-          <Reveal as="li" key={c.slug} delay={i * 0.05}>
+          <Reveal as="li" key={c.slug} delay={i * 0.05} className="min-w-0">
             <Card className="h-full">
               <CardBody className="flex h-full flex-col gap-3 p-5">
                 <a
                   href={c.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 font-mono text-xs text-brand-400 hover:underline"
+                  className="flex min-w-0 items-center gap-1.5 font-mono text-xs text-brand-400 hover:underline"
                 >
-                  {c.displayUrl}
+                  <span className="truncate">{c.displayUrl}</span>
                   <ExternalLink className="size-3" aria-hidden="true" />
                   <span className="sr-only">(opens in a new tab)</span>
                 </a>

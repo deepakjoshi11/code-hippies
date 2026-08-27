@@ -11,9 +11,9 @@ import { pageMetadata } from "@/lib/seo";
 import { faqs } from "@/data/faq";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Services — web, mobile, AI/LLM, SEO and security engineering",
+  title: "Services — Web, Mobile, AI/LLM & Security",
   description:
-    "Five distinct engineering offers from Code Hippies: Next.js web development, iOS and Android apps, retrieval-grounded AI systems, technical SEO and Core Web Vitals, and OWASP security review.",
+    "Five engineering offers: Next.js web development, iOS and Android apps, grounded AI systems, technical SEO and Core Web Vitals, and OWASP security review.",
   path: "/services",
   keywords: [
     "hire full-stack developer India",
@@ -66,7 +66,13 @@ export default function ServicesIndexPage() {
           title="Which one do you actually need?"
           description="If you are not sure, the shortest route is a one-week audit — SEO, performance or security — which gives you a prioritised findings list before you commit to anything bigger."
         />
-        <div className="mt-10 overflow-x-auto">
+        {/* Focusable so a keyboard user can scroll it — WCAG 2.1.1. */}
+        <div
+          className="mt-10 overflow-x-auto"
+          tabIndex={0}
+          role="region"
+          aria-label="Services compared by best fit and typical engagement length"
+        >
           <table className="w-full min-w-[46rem] border-collapse text-left text-sm">
             <caption className="sr-only">
               Code Hippies services compared by typical engagement length and best fit

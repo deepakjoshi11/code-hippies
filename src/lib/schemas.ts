@@ -40,11 +40,21 @@ export const leadSchema = z.object({
   /**
    * Honeypot. Real users never see this field, so anything in it is a bot.
    * Named plausibly on purpose — "website" is what naive form-fillers target.
+   *
+   * Deliberately NOT rejected by the schema. A 400 saying "website must be
+   * empty" tells the bot exactly which field betrayed it, and it retries
+   * without that field. The route handler checks it separately and returns a
+   * 200 so the bot believes it succeeded — see isHoneypotTripped.
    */
-  website: z.string().max(0).optional().or(z.literal("")),
+  website: z.string().max(200).optional(),
 });
 
 export type LeadInput = z.infer<typeof leadSchema>;
+
+/** True when the invisible honeypot field was filled — i.e. it is a bot. */
+export function isHoneypotTripped(lead: Pick<LeadInput, "website">): boolean {
+  return Boolean(lead.website && lead.website.trim().length > 0);
+}
 
 export const chatSchema = z.object({
   question: z

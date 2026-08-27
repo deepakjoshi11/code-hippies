@@ -16,7 +16,7 @@ export function CaseStudyCard({
 }) {
   const Heading = headingLevel;
   return (
-    <Reveal as="li" delay={index * 0.05} className="h-full">
+    <Reveal as="li" delay={index * 0.05} className="h-full min-w-0">
       <Card className="group h-full overflow-hidden">
         <div
           aria-hidden="true"
@@ -61,8 +61,8 @@ export function CaseStudyCard({
             ))}
           </ul>
 
-          <div className="flex items-center justify-between gap-3 border-t border-ink-100/10 pt-4">
-            <span className="inline-flex items-center gap-1.5 text-sm font-medium text-brand-400">
+          <div className="flex min-w-0 items-center justify-between gap-3 border-t border-ink-100/10 pt-4">
+            <span className="inline-flex shrink-0 items-center gap-1.5 text-sm font-medium text-brand-400">
               Read the case study
               <ArrowUpRight
                 className="size-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
@@ -73,10 +73,10 @@ export function CaseStudyCard({
               href={study.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="relative z-10 inline-flex items-center gap-1.5 font-mono text-xs text-ink-500 transition-colors hover:text-ink-100"
+              className="relative z-10 flex min-w-0 items-center gap-1.5 font-mono text-xs text-ink-500 transition-colors hover:text-ink-100"
             >
-              {study.displayUrl}
-              <ExternalLink className="size-3.5" aria-hidden="true" />
+              <span className="truncate">{study.displayUrl}</span>
+              <ExternalLink className="size-3.5 shrink-0" aria-hidden="true" />
               <span className="sr-only">(opens the live site in a new tab)</span>
             </a>
           </div>

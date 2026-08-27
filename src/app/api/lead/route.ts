@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { leadSchema } from "@/lib/schemas";
+import { isHoneypotTripped, leadSchema } from "@/lib/schemas";
 import { clientKey, rateLimit } from "@/lib/security/rate-limit";
 import { verifyCsrf } from "@/lib/security/csrf";
 
@@ -37,9 +37,10 @@ export async function POST(request: Request) {
     );
   }
 
-  // Honeypot: invisible to humans, irresistible to naive bots. Return 200 so
-  // the bot believes it succeeded and does not retry with variations.
-  if (parsed.data.website) {
+  // Honeypot: invisible to humans, irresistible to naive bots. Returns the
+  // same 200 a real submission gets, so the bot believes it succeeded and does
+  // not retry with the field omitted. Nothing is delivered.
+  if (isHoneypotTripped(parsed.data)) {
     return NextResponse.json({ ok: true });
   }
 

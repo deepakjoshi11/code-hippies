@@ -159,6 +159,7 @@ html.lenis body {
   text-decoration: underline;
 }
 .prose-hippie code {
+  overflow-wrap: anywhere;
   font-family: var(--font-mono);
   font-size: 0.875em;
   background: color-mix(in oklab, var(--color-ink-100) 10%, transparent);
@@ -166,6 +167,7 @@ html.lenis body {
   border-radius: 5px;
 }
 .prose-hippie pre {
+  max-width: 100%;
   background: var(--color-ink-900);
   border: 1px solid var(--border-subtle);
   border-radius: 12px;
@@ -220,28 +222,29 @@ html.lenis body {
 }
 
 /*
- * Scroll reveal. The default state is visible — content is never hidden by
- * CSS alone, so a failed or slow bundle leaves a fully readable page and the
- * LCP candidate is never waiting on JavaScript. The hidden state is applied
- * by the Reveal component on mount, and only to elements already below the
- * fold. See src/components/ui/reveal.tsx.
+ * Scroll reveal.
+ *
+ * Transform only — deliberately no opacity. Fading content in from zero means
+ * that at any given moment part of the page is invisible: unreadable if the
+ * observer never fires, and reported by axe-core as a 1.01:1 contrast failure
+ * because the computed colour really is the background. A translate reads as
+ * a reveal just as clearly and every word stays legible the whole time.
+ *
+ * The default state is also "visible": the pending state is applied by the
+ * component on mount and only to elements already below the fold, so a slow
+ * or failed bundle still leaves a complete, readable page.
  */
 .reveal {
-  opacity: 1;
   transform: none;
-  transition:
-    opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .reveal[data-reveal="pending"] {
-  opacity: 0;
-  transform: translateY(18px);
+  transform: translateY(20px);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .reveal[data-reveal="pending"] {
-    opacity: 1;
     transform: none;
   }
 }
