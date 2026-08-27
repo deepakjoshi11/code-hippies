@@ -23,13 +23,13 @@ export function LeadForm({ defaultEngagement }: { defaultEngagement?: string }) 
   const [done, setDone] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
   const [csrf, setCsrf] = useState<string | null>(null);
+  const [messageLength, setMessageLength] = useState(0);
   const headingRef = useRef<HTMLParagraphElement>(null);
 
   const {
     register,
     handleSubmit,
     trigger,
-    watch,
     formState: { errors },
   } = useForm<LeadInput>({
     resolver: zodResolver(leadSchema),
@@ -53,6 +53,8 @@ export function LeadForm({ defaultEngagement }: { defaultEngagement?: string }) 
   useEffect(() => {
     headingRef.current?.focus();
   }, [step]);
+
+  const messageField = register("message");
 
   const goNext = async () => {
     const fields = STEPS[step]!.fields;
@@ -217,10 +219,14 @@ export function LeadForm({ defaultEngagement }: { defaultEngagement?: string }) 
               rows={6}
               className={cn(inputClass, "resize-y")}
               aria-invalid={Boolean(errors.message)}
-              {...register("message")}
+              {...messageField}
+              onChange={(event) => {
+                setMessageLength(event.target.value.length);
+                void messageField.onChange(event);
+              }}
             />
-            <p className="mt-1.5 text-right text-xs text-ink-500">
-              {watch("message")?.length ?? 0} / 4000
+            <p className="mt-1.5 text-right text-xs text-ink-500" aria-hidden="true">
+              {messageLength} / 4000
             </p>
           </Field>
         </div>

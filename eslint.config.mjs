@@ -1,21 +1,21 @@
-import { dirname } from "node:path";
-import { fileURLToPath } from "node:url";
-import { FlatCompat } from "@eslint/eslintrc";
+import next from "eslint-config-next";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const compat = new FlatCompat({ baseDirectory: __dirname });
-
+/**
+ * Flat config. eslint-config-next v16 exports a flat config array directly —
+ * no FlatCompat shim needed.
+ */
 const config = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
-    ignores: [".next/**", "node_modules/**", "out/**", ".lighthouseci/**"],
+    ignores: [
+      ".next/**",
+      "node_modules/**",
+      "out/**",
+      "knowledge-base/**",
+      ".lighthouseci/**",
+      "next-env.d.ts",
+    ],
   },
-  {
-    rules: {
-      "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
-    },
-  },
+  ...next,
 ];
 
 export default config;

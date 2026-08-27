@@ -13,7 +13,13 @@ export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
 
-  useEffect(() => setOpen(false), [pathname]);
+  // Close the mobile menu on navigation. Derived during render rather than in
+  // an effect, so it does not cause a second render pass.
+  const [lastPathname, setLastPathname] = useState(pathname);
+  if (pathname !== lastPathname) {
+    setLastPathname(pathname);
+    if (open) setOpen(false);
+  }
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);

@@ -28,10 +28,42 @@ let cached: Index | null = null;
 const STOP_WORDS = new Set([
   "the", "a", "an", "and", "or", "but", "is", "are", "was", "were", "be", "been",
   "being", "to", "of", "in", "on", "at", "for", "with", "by", "from", "as", "it",
-  "its", "this", "that", "these", "those", "i", "you", "your", "we", "our", "do",
-  "does", "did", "can", "will", "would", "should", "could", "have", "has", "had",
-  "not", "no", "so", "if", "than", "then", "there", "what", "which", "who", "how",
+  "its", "this", "that", "these", "those", "i", "you", "your", "yours", "we",
+  "our", "ours", "my", "mine", "us", "me", "do", "does", "did", "doing", "can",
+  "will", "would", "should", "could", "may", "might", "must", "have", "has",
+  "had", "not", "no", "so", "if", "than", "then", "there", "here", "what",
+  "which", "who", "whom", "whose", "how", "when", "where", "why", "about",
+  "tell", "give", "get", "got", "need", "want", "into", "out", "up", "down",
+  "over", "under", "again", "just", "also", "very", "too", "own", "same",
+  "such", "only", "other", "others", "any", "all", "both", "each", "more",
+  "most", "much", "many", "some", "few", "during", "while", "after", "before",
+  "between", "through", "like", "make", "makes", "made", "use", "used", "using",
+  "happen", "happens", "happened", "thing", "things", "please", "kind", "sort",
 ]);
+
+/**
+ * Light suffix stemmer. Not linguistically rigorous — it exists so that
+ * "hallucinating" retrieves a chunk written as "hallucination", which is a
+ * concrete failure the eval suite caught. Suffixes are stripped longest-first
+ * and only when a usable stem remains.
+ */
+const SUFFIXES = [
+  "ations", "ation", "ating", "ated", "ates", "ising", "izing", "ised", "ized",
+  "ements", "ement", "ingly", "ing", "edly", "ies", "ied", "ers", "er", "est",
+  "ly", "ed", "es", "s",
+];
+
+function stem(token: string): string {
+  if (token.length <= 4) return token;
+  for (const suffix of SUFFIXES) {
+    if (token.length - suffix.length >= 4 && token.endsWith(suffix)) {
+      const stemmed = token.slice(0, -suffix.length);
+      // Collapse a doubled final consonant left behind ("shipping" -> "ship").
+      return stemmed.replace(/([bdfgklmnprt])\1$/, "$1");
+    }
+  }
+  return token;
+}
 
 export function tokenize(text: string): string[] {
   return text
@@ -39,6 +71,8 @@ export function tokenize(text: string): string[] {
     .replace(/[^a-z0-9+#./\s-]/g, " ")
     .split(/[\s/]+/)
     .map((t) => t.replace(/^[-.]+|[-.]+$/g, ""))
+    .filter((t) => t.length > 1 && !STOP_WORDS.has(t))
+    .map(stem)
     .filter((t) => t.length > 1 && !STOP_WORDS.has(t));
 }
 
@@ -116,7 +150,7 @@ function cosine(a: Float32Array, b: Float32Array): number {
  * entirely, so the generator can be handed nothing and must refuse. Tuned
  * against a set of deliberately out-of-scope questions — see the eval suite.
  */
-export const RELEVANCE_FLOOR = 0.16;
+export const RELEVANCE_FLOOR = 0.33;
 
 export function retrieve(question: string, topK = 5): Retrieved[] {
   const { chunks, vectors, idf } = getIndex();
@@ -128,16 +162,36 @@ export function retrieve(question: string, topK = 5): Retrieved[] {
   const queryVector = embed(queryTokens, idf);
   const querySet = new Set(queryTokens);
 
+  /*
+   * Lexical overlap is weighted by inverse document frequency rather than
+   * counted raw. Without this, an out-of-scope question like "what are the
+   * current Bitcoin prices?" scores well merely because "current" and
+   * "prices" appear all over the knowledge base, while the one term that
+   * decides relevance — "bitcoin" — matches nothing. IDF weighting makes the
+   * rare, meaning-bearing term dominate, which is what pushes genuinely
+   * unanswerable questions below the floor.
+   */
+  const maxIdf = defaultIdf(idf);
+  const queryWeights = new Map<string, number>();
+  let queryMass = 0;
+  for (const token of querySet) {
+    const weight = idf.get(token) ?? maxIdf;
+    queryWeights.set(token, weight);
+    queryMass += weight;
+  }
+  queryMass ||= 1;
+
   const scored = chunks.map((chunk, i) => {
     const dense = cosine(queryVector, vectors[i]!);
-    // Lexical overlap reranks the dense candidates — cheap, and it recovers
-    // exact-term matches (product names, header names) the projection blurs.
-    const chunkTokens = new Set(tokenize(chunk.text));
-    let overlap = 0;
-    for (const token of querySet) if (chunkTokens.has(token)) overlap++;
-    const lexical = overlap / querySet.size;
 
-    return { ...chunk, score: dense * 0.65 + lexical * 0.35 };
+    const chunkTokens = new Set(tokenize(chunk.text));
+    let matchedMass = 0;
+    for (const [token, weight] of queryWeights) {
+      if (chunkTokens.has(token)) matchedMass += weight;
+    }
+    const lexical = matchedMass / queryMass;
+
+    return { ...chunk, score: dense * 0.35 + lexical * 0.65 };
   });
 
   return scored
