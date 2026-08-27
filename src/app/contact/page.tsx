@@ -8,7 +8,8 @@ import { Card, CardBody, Eyebrow } from "@/components/ui/card";
 import { JsonLd } from "@/components/seo/json-ld";
 import { breadcrumbSchema, graph, orgId } from "@/lib/schema";
 import { pageMetadata } from "@/lib/seo";
-import { absoluteUrl, site, whatsappHref } from "@/lib/site";
+import { absoluteUrl, site } from "@/lib/site";
+import { buildChannels } from "@/data/channels";
 
 export const metadata: Metadata = pageMetadata({
   title: "Start a Project — Send a Brief",
@@ -73,20 +74,27 @@ export default async function ContactPage({
             <Card>
               <CardBody className="flex flex-col gap-4">
                 <Eyebrow>Faster routes</Eyebrow>
-                <a
-                  href={whatsappHref()}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-start gap-3 rounded-xl border border-ink-100/10 p-3.5 transition-colors hover:border-brand-400/30"
-                >
-                  <MessageCircle className="mt-0.5 size-5 shrink-0 text-brand-400" aria-hidden="true" />
-                  <span>
-                    <span className="block text-sm font-medium text-ink-50">WhatsApp</span>
-                    <span className="block text-xs leading-relaxed text-ink-400">
-                      Best for a quick question before you commit to a brief.
-                    </span>
-                  </span>
-                </a>
+                {buildChannels()
+                  .filter((c) => c.kind === "messaging" || c.kind === "direct")
+                  .map((c) => (
+                    <a
+                      key={c.id}
+                      href={c.href!}
+                      target={c.href!.startsWith("http") ? "_blank" : undefined}
+                      rel={c.href!.startsWith("http") ? "noopener noreferrer" : undefined}
+                      className="flex items-start gap-3 rounded-xl border border-ink-100/10 p-3.5 transition-colors hover:border-brand-400/30"
+                    >
+                      <MessageCircle
+                        className="mt-0.5 size-5 shrink-0"
+                        style={{ color: c.color }}
+                        aria-hidden="true"
+                      />
+                      <span className="min-w-0">
+                        <span className="block text-sm font-medium text-ink-50">{c.label}</span>
+                        <span className="block text-xs leading-relaxed text-ink-400">{c.hint}</span>
+                      </span>
+                    </a>
+                  ))}
                 <a
                   href={`mailto:${site.email}`}
                   className="flex items-start gap-3 rounded-xl border border-ink-100/10 p-3.5 transition-colors hover:border-brand-400/30"

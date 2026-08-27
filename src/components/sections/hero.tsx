@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { ArrowRight, MessageCircle } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { ButtonLink } from "@/components/ui/button";
 import { proofMetrics, trustSignals } from "@/data/proof";
-import { whatsappHref } from "@/lib/site";
+import { ChannelCta } from "@/components/ui/channel-cta";
 
 export function Hero() {
   return (
@@ -57,15 +57,7 @@ export function Hero() {
           <ButtonLink href="/work" variant="outline" size="lg">
             See the 13 live builds
           </ButtonLink>
-          <ButtonLink
-            href={whatsappHref()}
-            external
-            variant="ghost"
-            size="lg"
-            className="hidden sm:inline-flex"
-          >
-            <MessageCircle aria-hidden="true" /> Ask on WhatsApp
-          </ButtonLink>
+          <ChannelCta variant="ghost" size="lg" className="hidden sm:inline-flex" />
         </div>
 
         <dl className="mt-14 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-ink-100/10 pt-10 md:grid-cols-4">

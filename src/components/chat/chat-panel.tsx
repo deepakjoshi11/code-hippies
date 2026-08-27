@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { Bot, ChevronLeft, Loader2, MessageSquareText, Search, Send } from "lucide-react";
-import { site, whatsappHref } from "@/lib/site";
+import { primaryChannel } from "@/data/channels";
 import { cn } from "@/lib/utils";
 
 type Message = {
@@ -383,16 +383,7 @@ export function ChatPanel({
               ) : null}
 
               {m.refused ? (
-                <a
-                  href={whatsappHref(
-                    "Hi Deepak — the site assistant did not have an answer for me. Can I ask you directly?",
-                  )}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-2.5 inline-flex rounded-full bg-[#25D366] px-3 py-1.5 text-[0.75rem] font-semibold text-ink-950"
-                >
-                  {site.whatsappLabel}
-                </a>
+                <RefusalFallback />
               ) : null}
             </div>
           ))}
@@ -442,6 +433,38 @@ export function ChatPanel({
         </form>
       </div>
     </div>
+  );
+}
+
+/**
+ * Escape hatch shown when the assistant refuses. Uses whichever direct channel
+ * is configured and falls back to the brief form, so a refusal always ends in
+ * a way to reach a human.
+ */
+function RefusalFallback() {
+  const channel = primaryChannel(
+    "Hi Deepak — the site assistant did not have an answer for me. Can I ask you directly?",
+  );
+  if (!channel) {
+    return (
+      <Link
+        href="/contact"
+        className="mt-2.5 inline-flex rounded-full bg-brand-500 px-3 py-1.5 text-[0.75rem] font-semibold text-ink-950"
+      >
+        Send a project brief
+      </Link>
+    );
+  }
+  return (
+    <a
+      href={channel.href!}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="mt-2.5 inline-flex rounded-full px-3 py-1.5 text-[0.75rem] font-semibold text-ink-950"
+      style={{ backgroundColor: channel.color }}
+    >
+      Ask on {channel.label}
+    </a>
   );
 }
 

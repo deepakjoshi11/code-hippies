@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { services } from "@/data/services";
 import { caseStudies } from "@/data/case-studies";
-import { site, whatsappHref } from "@/lib/site";
+import { site } from "@/lib/site";
+import { buildChannels } from "@/data/channels";
 
 const year = new Date().getFullYear();
 
@@ -23,27 +24,30 @@ export function SiteFooter() {
             Deepak Joshi&rsquo;s engineering studio. Full-stack web, iOS and Android, and AI/LLM
             systems for startups and agencies.
           </p>
-          <div className="flex flex-wrap gap-3 text-sm">
-            <a
-              className="text-brand-400 underline underline-offset-4"
-              href={whatsappHref()}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              WhatsApp
-            </a>
-            <a className="text-ink-300 underline-offset-4 hover:text-ink-50 hover:underline" href={`mailto:${site.email}`}>
-              Email
-            </a>
-            <a
-              className="text-ink-300 underline-offset-4 hover:text-ink-50 hover:underline"
-              href={site.github.primary}
-              target="_blank"
-              rel="noopener noreferrer me"
-            >
-              GitHub
-            </a>
-          </div>
+          <ul className="flex flex-wrap gap-x-3 gap-y-2 text-sm">
+            {buildChannels().map((c) => (
+              <li key={c.id}>
+                <a
+                  className="text-ink-300 underline-offset-4 transition-colors hover:text-ink-50 hover:underline"
+                  href={c.href!}
+                  target={c.href!.startsWith("http") ? "_blank" : undefined}
+                  rel={c.href!.startsWith("http") ? "noopener noreferrer" : undefined}
+                >
+                  {c.label}
+                </a>
+              </li>
+            ))}
+            <li>
+              <a
+                className="text-ink-300 underline-offset-4 transition-colors hover:text-ink-50 hover:underline"
+                href={site.github.primary}
+                target="_blank"
+                rel="noopener noreferrer me"
+              >
+                GitHub
+              </a>
+            </li>
+          </ul>
         </div>
 
         <FooterColumn title="Services">
@@ -65,10 +69,13 @@ export function SiteFooter() {
 
         <FooterColumn title="Studio">
           <FooterLink href="/about">About Deepak Joshi</FooterLink>
+          <FooterLink href="/enterprise">For enterprise teams</FooterLink>
+          <FooterLink href="/partner">Technical partnership</FooterLink>
+          <FooterLink href="/hire">Ways to hire</FooterLink>
           <FooterLink href="/process">How projects run</FooterLink>
           <FooterLink href="/pricing">Engagement models</FooterLink>
           <FooterLink href="/blog">Blog</FooterLink>
-          <FooterLink href="/faq">FAQ</FooterLink>
+          <FooterLink href="/faq">FAQ &mdash; 50 questions</FooterLink>
           <FooterLink href="/contact">Start a project</FooterLink>
         </FooterColumn>
       </div>

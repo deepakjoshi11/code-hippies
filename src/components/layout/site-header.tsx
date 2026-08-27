@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
-import { primaryNav } from "@/lib/nav";
+import { primaryNav, secondaryNav } from "@/lib/nav";
 import { ButtonLink } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -103,7 +103,7 @@ export function SiteHeader() {
         className="border-t border-ink-100/10 bg-ink-950/95 backdrop-blur-xl lg:hidden"
       >
         <nav aria-label="Mobile" className="container-page flex flex-col gap-1 py-4">
-          {primaryNav.map((item) => (
+          {[...primaryNav, ...secondaryNav].map((item) => (
             <Link
               key={item.href}
               href={item.href}

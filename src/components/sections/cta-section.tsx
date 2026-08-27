@@ -1,6 +1,6 @@
-import { ArrowRight, MessageCircle } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { ButtonLink } from "@/components/ui/button";
-import { whatsappHref } from "@/lib/site";
+import { ChannelCta } from "@/components/ui/channel-cta";
 
 export function CtaSection({
   title = "Tell me what you're building.",
@@ -26,9 +26,7 @@ export function CtaSection({
               <ButtonLink href="/contact" size="lg">
                 Start a project <ArrowRight aria-hidden="true" />
               </ButtonLink>
-              <ButtonLink href={whatsappHref()} external variant="outline" size="lg">
-                <MessageCircle aria-hidden="true" /> Message on WhatsApp
-              </ButtonLink>
+              <ChannelCta variant="outline" size="lg" />
             </div>
           </div>
         </div>

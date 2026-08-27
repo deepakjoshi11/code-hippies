@@ -8,7 +8,7 @@ import { ArrowLeft, ArrowRight, CheckCircle2, Loader2 } from "lucide-react";
 import { leadSchema, type LeadInput } from "@/lib/schemas";
 import { budgetBands, projectTypes, timelineBands } from "@/data/pricing";
 import { Button } from "@/components/ui/button";
-import { site, whatsappHref } from "@/lib/site";
+import { primaryChannel } from "@/data/channels";
 import { cn } from "@/lib/utils";
 
 const STEPS = [
@@ -99,14 +99,7 @@ export function LeadForm({ defaultEngagement }: { defaultEngagement?: string }) 
           You&rsquo;ll get a reply within one business day — either with questions, or with a proposed
           time for a discovery call. If it is urgent, WhatsApp is faster.
         </p>
-        <a
-          href={whatsappHref()}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-6 inline-flex rounded-full bg-[#25D366] px-5 py-2.5 text-sm font-semibold text-ink-950"
-        >
-          {site.whatsappLabel}
-        </a>
+        <SuccessChannel />
       </div>
     );
   }
@@ -266,6 +259,23 @@ export function LeadForm({ defaultEngagement }: { defaultEngagement?: string }) 
         )}
       </div>
     </form>
+  );
+}
+
+/** Fastest follow-up route, when one is configured. */
+function SuccessChannel() {
+  const channel = primaryChannel("Hi Deepak — I just sent a project brief through your site.");
+  if (!channel) return null;
+  return (
+    <a
+      href={channel.href!}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="mt-6 inline-flex rounded-full px-5 py-2.5 text-sm font-semibold text-ink-950"
+      style={{ backgroundColor: channel.color }}
+    >
+      Message on {channel.label} for a faster reply
+    </a>
   );
 }
 

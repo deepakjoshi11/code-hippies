@@ -10,13 +10,10 @@ export const site = {
   country: "India",
   email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "hello@codehippies.com",
   /**
-   * Placeholder. Replace with the real WhatsApp number in international format,
-   * digits only (e.g. 919999999999) via NEXT_PUBLIC_WHATSAPP_NUMBER.
+   * Contact channels live in src/data/channels.ts — every one is env-driven and
+   * hidden until configured, so nothing here invents a number or a handle.
    */
-  whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "910000000000",
-  whatsappMessage:
-    "Hi Code Hippies — I found you through your website and I'd like to talk about a project.",
-  whatsappLabel: "Chat with Code Hippies",
+  contactLabel: "Talk to a developer",
   calLink: process.env.NEXT_PUBLIC_CAL_LINK ?? "",
   github: {
     primary: "https://github.com/deepakjoshi11",
@@ -26,10 +23,6 @@ export const site = {
   },
   dharmarthlabs: "https://dharmarthlabs.com",
 } as const;
-
-export function whatsappHref(message: string = site.whatsappMessage): string {
-  return `https://wa.me/${site.whatsappNumber}?text=${encodeURIComponent(message)}`;
-}
 
 export function absoluteUrl(path = "/"): string {
   return new URL(path, site.url).toString();

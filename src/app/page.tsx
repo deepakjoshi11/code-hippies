@@ -3,6 +3,9 @@ import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 
 import { Hero } from "@/components/sections/hero";
+import { AudienceSwitcher } from "@/components/sections/audience-switcher";
+import { CraftToAi } from "@/components/sections/craft-to-ai";
+import { PartnerSection } from "@/components/sections/partner-section";
 import { LogoStrip } from "@/components/sections/logo-strip";
 import { ServiceCards } from "@/components/sections/service-cards";
 import { CaseStudyCard } from "@/components/sections/case-study-card";
@@ -16,6 +19,7 @@ import { JsonLd } from "@/components/seo/json-ld";
 
 import { featuredCaseStudies } from "@/data/case-studies";
 import { faqs, homeFaqs } from "@/data/faq";
+import { craftToAi } from "@/data/positioning";
 import { faqSchema, graph } from "@/lib/schema";
 import { pageMetadata } from "@/lib/seo";
 
@@ -43,6 +47,28 @@ export default function HomePage() {
 
       <Hero />
       <LogoStrip />
+
+      <Section id="who-you-are" className="border-b border-ink-100/8">
+        <SectionHeader
+          eyebrow="Start where you are"
+          title="Same work. Three ways of explaining it."
+          description="You might be running a shop and dreading being talked down to. You might read diffs for a living. You might be signing off a budget that was going to fund headcount. Pick your version — the claims underneath are identical, and every one of them is checkable."
+        />
+        <div className="mt-10">
+          <AudienceSwitcher />
+        </div>
+      </Section>
+
+      <Section id="how-i-work" className="border-b border-ink-100/8">
+        <SectionHeader
+          eyebrow={craftToAi.eyebrow}
+          title={craftToAi.headline}
+          description={craftToAi.intro}
+        />
+        <div className="mt-10">
+          <CraftToAi />
+        </div>
+      </Section>
 
       <Section id="services">
         <SectionHeader
@@ -116,6 +142,22 @@ export default function HomePage() {
         <div className="mt-8">
           <ButtonLink href="/pricing" variant="outline">
             See engagement models <ArrowRight aria-hidden="true" />
+          </ButtonLink>
+        </div>
+      </Section>
+
+      <Section id="partner" className="border-t border-ink-100/8">
+        <SectionHeader
+          eyebrow="Bigger than one engineer?"
+          title="There is a team behind this when you need one"
+          description="Some work genuinely outgrows a single contractor — parallel workstreams, a productised build that should ship in days rather than months, or a technical partner with real stake in the outcome. That is Dharmarthlabs, the company I founded. Same person, with a team behind him."
+        />
+        <div className="mt-10">
+          <PartnerSection compact />
+        </div>
+        <div className="mt-8">
+          <ButtonLink href="/partner" variant="outline">
+            All partnership routes <ArrowRight aria-hidden="true" />
           </ButtonLink>
         </div>
       </Section>
