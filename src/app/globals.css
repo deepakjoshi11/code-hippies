@@ -1,0 +1,189 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink-950: oklch(0.145 0.012 265);
+  --color-ink-900: oklch(0.19 0.014 265);
+  --color-ink-800: oklch(0.245 0.016 265);
+  --color-ink-700: oklch(0.32 0.016 265);
+  --color-ink-500: oklch(0.55 0.014 265);
+  --color-ink-300: oklch(0.76 0.01 265);
+  --color-ink-100: oklch(0.93 0.006 265);
+  --color-ink-50: oklch(0.975 0.004 265);
+
+  --color-brand-50: oklch(0.96 0.03 165);
+  --color-brand-200: oklch(0.88 0.09 165);
+  --color-brand-400: oklch(0.78 0.15 165);
+  --color-brand-500: oklch(0.7 0.16 165);
+  --color-brand-600: oklch(0.6 0.15 165);
+  --color-brand-700: oklch(0.5 0.13 165);
+
+  --color-accent-400: oklch(0.78 0.15 60);
+  --color-accent-600: oklch(0.63 0.16 45);
+
+  --font-sans: var(--font-sans-stack);
+  --font-mono: ui-monospace, "SFMono-Regular", "Menlo", "Consolas", monospace;
+
+  --radius-card: 1.125rem;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:root {
+  --font-sans-stack: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --surface: var(--color-ink-950);
+  --surface-raised: var(--color-ink-900);
+  --border-subtle: color-mix(in oklab, var(--color-ink-100) 12%, transparent);
+  --text-primary: var(--color-ink-50);
+  --text-secondary: var(--color-ink-300);
+  --text-muted: oklch(0.68 0.012 265);
+}
+
+* {
+  border-color: var(--border-subtle);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--surface);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-synthesis-weight: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Lenis smooth scroll: disable native smooth so the two do not fight. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--color-brand-500) 40%, transparent);
+  color: var(--color-ink-50);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brand-400);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@utility container-page {
+  width: 100%;
+  margin-inline: auto;
+  max-width: 80rem;
+  padding-inline: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .container-page {
+    padding-inline: 2rem;
+  }
+}
+
+@utility text-balance-heading {
+  text-wrap: balance;
+}
+
+.grid-noise {
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, var(--color-ink-100) 5%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--color-ink-100) 5%, transparent) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+.prose-hippie {
+  color: var(--text-secondary);
+  line-height: 1.75;
+}
+.prose-hippie h2 {
+  color: var(--text-primary);
+  font-size: 1.6rem;
+  line-height: 1.25;
+  font-weight: 600;
+  margin-top: 2.75rem;
+  margin-bottom: 0.85rem;
+  letter-spacing: -0.01em;
+}
+.prose-hippie h3 {
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 0.6rem;
+}
+.prose-hippie p {
+  margin-bottom: 1.15rem;
+}
+.prose-hippie ul,
+.prose-hippie ol {
+  margin: 0 0 1.25rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.prose-hippie ul {
+  list-style: disc;
+}
+.prose-hippie ol {
+  list-style: decimal;
+}
+.prose-hippie a {
+  color: var(--color-brand-400);
+  text-underline-offset: 3px;
+  text-decoration: underline;
+}
+.prose-hippie code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background: color-mix(in oklab, var(--color-ink-100) 10%, transparent);
+  padding: 0.15em 0.4em;
+  border-radius: 5px;
+}
+.prose-hippie pre {
+  background: var(--color-ink-900);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 1rem 1.15rem;
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+}
+.prose-hippie pre code {
+  background: none;
+  padding: 0;
+}
+.prose-hippie blockquote {
+  border-left: 3px solid var(--color-brand-500);
+  padding-left: 1rem;
+  color: var(--text-primary);
+  margin-bottom: 1.25rem;
+}
+.prose-hippie strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
