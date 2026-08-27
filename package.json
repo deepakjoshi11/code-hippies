@@ -14,7 +14,8 @@
     "kb:build": "tsx scripts/build-knowledge-base.ts",
     "audit:ci": "npm audit --omit=dev --audit-level=high",
     "audit:quality": "node scripts/audit-quality.mjs",
-    "audit:dev": "npm audit --audit-level=high"
+    "audit:dev": "npm audit --audit-level=high",
+    "train:leads": "tsx scripts/train-lead-model.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "5.9.1",

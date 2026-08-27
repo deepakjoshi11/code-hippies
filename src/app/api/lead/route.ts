@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { isHoneypotTripped, leadSchema } from "@/lib/schemas";
+import { explainScore, scoreLead } from "@/lib/scoring/lead-score";
 import { clientKey, rateLimit } from "@/lib/security/rate-limit";
 import { verifyCsrf } from "@/lib/security/csrf";
 
@@ -46,8 +47,12 @@ export async function POST(request: Request) {
 
   const lead = parsed.data;
 
+  // Triage aid only. The score orders an inbox; it never rejects an enquiry,
+  // and it is not fitted on real outcomes yet — see src/lib/scoring.
+  const triage = scoreLead(lead);
+
   try {
-    await deliverLead(lead);
+    await deliverLead(lead, triage);
   } catch (error) {
     // Log server-side detail; never return it. A stack trace in a response is
     // a free architecture diagram.
@@ -68,11 +73,16 @@ export async function POST(request: Request) {
  * submissions. With nothing configured the lead is logged server-side so a
  * fresh deployment never silently discards an enquiry — see .env.example.
  */
-async function deliverLead(lead: Record<string, unknown>): Promise<void> {
+async function deliverLead(
+  lead: Record<string, unknown>,
+  triage: ReturnType<typeof scoreLead>,
+): Promise<void> {
   const webhook = process.env.LEAD_WEBHOOK_URL;
 
   const summary = [
     `New project brief — ${lead.projectType}`,
+    `Triage: ${explainScore(triage)}`,
+    "",
     `Name: ${lead.name}`,
     `Email: ${lead.email}`,
     lead.company ? `Company: ${lead.company}` : null,
@@ -92,7 +102,7 @@ async function deliverLead(lead: Record<string, unknown>): Promise<void> {
   const response = await fetch(webhook, {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({ text: summary, lead }),
+    body: JSON.stringify({ text: summary, lead, triage }),
     signal: AbortSignal.timeout(10_000),
   });
 
