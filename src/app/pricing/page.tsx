@@ -171,7 +171,7 @@ export default function PricingPage() {
               <p className="text-xs leading-relaxed text-ink-500">
                 Ranges, not promises. The number that binds is the one in the fixed-scope proposal
                 after discovery — see{" "}
-                <Link href="/process" className="text-brand-400 hover:underline">
+                <Link href="/process" className="text-brand-400 underline underline-offset-4">
                   the process
                 </Link>
                 .

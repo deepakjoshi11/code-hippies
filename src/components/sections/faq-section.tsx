@@ -56,7 +56,7 @@ export function FaqFooterNote() {
       Question not covered here? Ask the{" "}
       <span className="text-ink-200">AI assistant in the corner</span> — it answers from this site&rsquo;s
       knowledge base and tells you honestly when it does not know. Or{" "}
-      <Link href="/contact" className="text-brand-400 underline-offset-4 hover:underline">
+      <Link href="/contact" className="text-brand-400 underline underline-offset-4">
         send the brief directly
       </Link>
       .

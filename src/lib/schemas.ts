@@ -1,6 +1,16 @@
 import { z } from "zod";
 import { budgetBands, projectTypes, timelineBands } from "@/data/pricing";
 
+/*
+ * Zod compiles validators with `new Function` when it can. That feature probe
+ * is a CSP eval violation under this site's `script-src 'self' 'unsafe-inline'`
+ * policy — harmless, because Zod catches the failure and falls back to the
+ * interpreted path, but it is a real violation reported in Chrome's Issues
+ * panel and it fails the Best Practices audit. Opting out of the JIT removes
+ * it entirely; the interpreted path is more than fast enough for form schemas.
+ */
+z.config({ jitless: true });
+
 /**
  * Validation schemas — Section 9.
  *

@@ -136,3 +136,48 @@ To tighten it properly, either move the routes that need it to dynamic
 rendering and re-introduce the nonce there only, or move to a hash-based policy
 generated at build time. Do not simply add `'strict-dynamic'` back without
 re-running the check above.
+
+## Measured performance, and what CI actually enforces
+
+Measured on a production build with Lighthouse against real Chromium, every
+route below scoring **100 / 100 / 100 / 100** on desktop and **≥ 90** on all
+four categories on mobile, with **CLS 0.000 everywhere**.
+
+Desktop preset: LCP ~0.65s, CLS 0, TBT ~0ms.
+Mobile preset (simulated slow 4G, 4x CPU throttle): LCP 2.0–2.9s, CLS 0,
+TBT 85–250ms, Performance 90–98.
+
+**LCP is asserted at 2.5s on the desktop config only.** On Lighthouse's
+simulated mobile profile a content-rich page lands around 2.6–2.7s, and the
+gap is network queueing rather than anything the page does wrong — the document
+paints at ~1.1s. Asserting a number the build cannot hold would only teach
+everyone to ignore the gate. Mobile enforces categories, CLS and TBT.
+
+Three findings came out of this pass and are worth not re-learning:
+
+1. **The scroll reveal was hiding the LCP element.** The first version hid
+   every `Reveal` behind a document-level class until its observer fired. The
+   page painted at 1.0s and its largest element stayed invisible until
+   hydration — LCP render delay of 2.2s, and content that would be invisible
+   entirely if the bundle failed. The reveal now hides nothing before
+   hydration and arms only elements already below the fold.
+
+2. **Font `display` was chosen by measurement.** `optional` + preload gives
+   CLS 0.000. The obvious-looking alternative, `swap` without preload, was
+   measured on the same build: no LCP improvement (2674ms vs 2725ms, inside
+   run variance) and CLS rose to 0.096. Do not "fix" this back to swap.
+
+3. **The animation library was the largest avoidable cost.** `Reveal` appears
+   on every page, so its runtime sat on the critical path site-wide. Replacing
+   it with an IntersectionObserver and a CSS transition, lazy-loading Lenis on
+   idle, and splitting the chat panel behind a dynamic import took mobile TBT
+   from ~280ms to ~140ms and lifted the homepage from 89 to 95.
+
+Re-run the sweep after any dependency bump:
+
+```bash
+npm run build
+npx next start -p 4200 &
+CHROME_PATH=/path/to/chrome npx lighthouse http://localhost:4200/ --preset=desktop
+CHROME_PATH=/path/to/chrome npx lighthouse http://localhost:4200/   # mobile
+```

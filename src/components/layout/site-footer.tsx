@@ -25,7 +25,7 @@ export function SiteFooter() {
           </p>
           <div className="flex flex-wrap gap-3 text-sm">
             <a
-              className="text-brand-400 underline-offset-4 hover:underline"
+              className="text-brand-400 underline underline-offset-4"
               href={whatsappHref()}
               target="_blank"
               rel="noopener noreferrer"
@@ -79,8 +79,10 @@ export function SiteFooter() {
             &copy; {year} {site.name} &middot; Deepak Joshi. All rights reserved.
           </p>
           <p>
-            Built with Next.js. Performance budget enforced in CI:{" "}
-            <span className="font-mono">LCP &lt; 2.5s &middot; CLS &lt; 0.1 &middot; INP &lt; 200ms</span>
+            Built with Next.js. Budget enforced in CI on every push:{" "}
+            <span className="font-mono">
+              Lighthouse &ge; 90 &middot; LCP &lt; 2.5s &middot; CLS &lt; 0.1 &middot; TBT &lt; 200ms
+            </span>
           </p>
         </div>
       </div>

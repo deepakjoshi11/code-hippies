@@ -48,7 +48,6 @@ export function SiteHeader() {
         <Link
           href="/"
           className="flex items-center gap-2.5 text-[0.95rem] font-semibold tracking-tight text-ink-50"
-          aria-label="Code Hippies — home"
         >
           <span
             aria-hidden="true"

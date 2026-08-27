@@ -96,11 +96,11 @@ export default function FaqPage() {
         <FaqFooterNote />
         <p className="mt-3 text-sm text-ink-500">
           Looking for something more specific? The{" "}
-          <Link href="/services" className="text-brand-400 underline-offset-4 hover:underline">
+          <Link href="/services" className="text-brand-400 underline underline-offset-4">
             service pages
           </Link>{" "}
           each carry their own FAQ, and the{" "}
-          <Link href="/pricing" className="text-brand-400 underline-offset-4 hover:underline">
+          <Link href="/pricing" className="text-brand-400 underline underline-offset-4">
             pricing page
           </Link>{" "}
           explains how engagements are structured.

@@ -173,7 +173,7 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
                       href={study.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-brand-400 hover:underline"
+                      className="text-brand-400 underline underline-offset-4"
                     >
                       {study.displayUrl}
                     </a>
@@ -229,7 +229,7 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
               service ? (
                 <>
                   This project sits under{" "}
-                  <Link href={`/services/${service.slug}`} className="text-brand-400 underline-offset-4 hover:underline">
+                  <Link href={`/services/${service.slug}`} className="text-brand-400 underline underline-offset-4">
                     {service.name}
                   </Link>
                   . Here are the closest neighbours in the portfolio.

@@ -130,7 +130,7 @@ export default function HomePage() {
           <FaqSection items={homeFaqs} />
           <FaqFooterNote />
           <p className="mt-4 text-sm">
-            <Link href="/faq" className="text-brand-400 underline-offset-4 hover:underline">
+            <Link href="/faq" className="text-brand-400 underline underline-offset-4">
               Read all {faqs.length} questions &rarr;
             </Link>
           </p>

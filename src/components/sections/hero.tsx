@@ -82,11 +82,11 @@ export function Hero() {
 
         <p className="mt-8 text-sm text-ink-500">
           Not sure what you need yet?{" "}
-          <Link href="/faq" className="text-brand-400 underline-offset-4 hover:underline">
+          <Link href="/faq" className="text-brand-400 underline underline-offset-4">
             Read the FAQ
           </Link>{" "}
           or{" "}
-          <Link href="/pricing" className="text-brand-400 underline-offset-4 hover:underline">
+          <Link href="/pricing" className="text-brand-400 underline underline-offset-4">
             see how engagements are priced
           </Link>
           .

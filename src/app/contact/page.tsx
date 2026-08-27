@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import { CalendarClock, Mail, MessageCircle, ShieldCheck } from "lucide-react";
 
 import { LeadForm } from "@/components/forms/lead-form";
@@ -67,9 +66,7 @@ export default async function ContactPage({
       <Section className="pt-0">
         <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:gap-12">
           <div className="rounded-card border border-ink-100/10 bg-ink-900/50 p-6 md:p-8">
-            <Suspense fallback={<p className="text-sm text-ink-400">Loading the form…</p>}>
-              <LeadForm defaultEngagement={engagement} />
-            </Suspense>
+            <LeadForm defaultEngagement={engagement} />
           </div>
 
           <aside className="flex flex-col gap-4">
