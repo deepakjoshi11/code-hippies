@@ -10,8 +10,20 @@ import { cn } from "@/lib/utils";
  * Outbound links carry UTM parameters so the CMS on dharmarthlabs.com can
  * attribute the referral back to this site — see src/app/api/cms.
  */
-export function PartnerSection({ compact = false }: { compact?: boolean }) {
+export function PartnerSection({
+  compact = false,
+  headingLevel = "h3",
+}: {
+  compact?: boolean;
+  /**
+   * The document outline must not skip a level. On a page where this section
+   * sits directly under the h1 with no intervening section heading, pass "h2".
+   */
+  headingLevel?: "h2" | "h3";
+}) {
   const routes = compact ? partnerRoutes.filter((r) => r.featured) : partnerRoutes;
+  const Heading = headingLevel;
+  const SubHeading = headingLevel === "h2" ? "h3" : "h4";
 
   return (
     <div className="flex flex-col gap-8">
@@ -21,7 +33,9 @@ export function PartnerSection({ compact = false }: { compact?: boolean }) {
             <Card className={cn("h-full", route.featured ? "border-brand-400/25" : undefined)}>
               <CardBody className="flex h-full flex-col gap-4">
                 <Eyebrow>{route.audience}</Eyebrow>
-                <h3 className="text-xl font-semibold tracking-tight text-ink-50">{route.title}</h3>
+                <Heading className="text-xl font-semibold tracking-tight text-ink-50">
+                  {route.title}
+                </Heading>
                 <p className="text-sm leading-relaxed text-ink-300">{route.body}</p>
 
                 <ul className="flex flex-col gap-2.5">
@@ -51,9 +65,9 @@ export function PartnerSection({ compact = false }: { compact?: boolean }) {
 
       {compact ? null : (
         <div className="rounded-card border border-ink-100/10 bg-ink-900/40 p-6 md:p-7">
-          <h3 className="text-base font-semibold text-ink-50">
+          <SubHeading className="text-base font-semibold text-ink-50">
             When the honest answer is &ldquo;stay here&rdquo;
-          </h3>
+          </SubHeading>
           <p className="mt-2.5 max-w-3xl text-sm leading-relaxed text-ink-300">
             A referral that is wrong for you costs more trust than it earns, so here is when routing
             you to {dharmarthlabs.name} would be the wrong move and you should just work with me

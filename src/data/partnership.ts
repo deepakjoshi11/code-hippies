@@ -20,6 +20,21 @@ export const dharmarthlabs = {
     "Deepak Joshi founded Dharmarthlabs and works across both. Code Hippies is the individual engineering practice; Dharmarthlabs is the team and product company behind it.",
 } as const;
 
+/**
+ * Destination paths on dharmarthlabs.com.
+ *
+ * Defaults point ONLY at paths that exist on the live site today — verified by
+ * request, not assumed. Linking a prospect to a 404 is worse than linking them
+ * to a more general page, so each is overridable by environment variable for
+ * when the dedicated pages are built.
+ */
+const ROUTE_PATHS = {
+  productised: process.env.NEXT_PUBLIC_DL_PRODUCTS_PATH || "/services",
+  custom: process.env.NEXT_PUBLIC_DL_CUSTOM_PATH || "/contact",
+  techPartner: process.env.NEXT_PUBLIC_DL_PARTNERSHIP_PATH || "/contact",
+  enterprise: process.env.NEXT_PUBLIC_DL_ENTERPRISE_PATH || "/enterprise",
+} as const;
+
 export function dharmarthlabsHref(path = "/", utm = "codehippies"): string {
   const url = new URL(path, dharmarthlabs.url);
   url.searchParams.set("utm_source", utm);
@@ -55,8 +70,8 @@ export const partnerRoutes: PartnerRoute[] = [
       "Options selected up front, so the scope conversation is a form rather than a workshop",
       "Same engineering standards as a custom build, because it is the same people",
     ],
-    ctaLabel: "See the product catalogue",
-    ctaPath: "/products",
+    ctaLabel: "See what ships productised",
+    ctaPath: ROUTE_PATHS.productised,
     featured: true,
   },
   {
@@ -72,7 +87,7 @@ export const partnerRoutes: PartnerRoute[] = [
       "Architecture decisions documented and defensible",
     ],
     ctaLabel: "Submit a technical specification",
-    ctaPath: "/custom",
+    ctaPath: ROUTE_PATHS.custom,
   },
   {
     id: "tech-partner",
@@ -87,7 +102,7 @@ export const partnerRoutes: PartnerRoute[] = [
       "Diligence-ready documentation from the start, because investors will ask",
     ],
     ctaLabel: "Discuss a technical partnership",
-    ctaPath: "/partnerships",
+    ctaPath: ROUTE_PATHS.techPartner,
     featured: true,
   },
   {
@@ -103,7 +118,7 @@ export const partnerRoutes: PartnerRoute[] = [
       "Defined SLAs and escalation paths",
     ],
     ctaLabel: "Start an enterprise conversation",
-    ctaPath: "/enterprise",
+    ctaPath: ROUTE_PATHS.enterprise,
   },
 ];
 

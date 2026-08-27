@@ -104,7 +104,7 @@ export default function EnterprisePage() {
         />
         <div className="mt-8 flex flex-wrap gap-3">
           <ButtonLink href="/contact?engagement=enterprise" size="lg">
-            Start a procurement conversation <ArrowRight aria-hidden="true" />
+            Start a conversation <ArrowRight aria-hidden="true" />
           </ButtonLink>
           <ButtonLink href="/partner" variant="outline" size="lg">
             See the partnership route

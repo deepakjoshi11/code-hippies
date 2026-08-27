@@ -3,8 +3,15 @@ import Link from "next/link";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
+/*
+ * A long label with `whitespace-nowrap` is wider than a 360px viewport and
+ * pushes the entire page into horizontal scroll — caught on /enterprise by the
+ * responsive audit. Wrapping is allowed and centred instead: a two-line button
+ * is a cosmetic compromise, a horizontally scrolling page is a broken layout.
+ * Fixed heights become minimums so a wrapped label keeps its vertical padding.
+ */
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full font-medium transition-all duration-200 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  "inline-flex max-w-full items-center justify-center gap-2 text-balance rounded-full text-center font-medium transition-all duration-200 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       variant: {
@@ -17,9 +24,9 @@ const buttonVariants = cva(
         ghost: "text-ink-300 hover:text-ink-50 hover:bg-ink-100/8",
       },
       size: {
-        sm: "h-9 px-4 text-sm [&_svg]:size-4",
-        md: "h-11 px-6 text-[0.95rem] [&_svg]:size-4",
-        lg: "h-13 px-8 text-base [&_svg]:size-5",
+        sm: "min-h-9 px-4 py-2 text-sm [&_svg]:size-4",
+        md: "min-h-11 px-6 py-2.5 text-[0.95rem] [&_svg]:size-4",
+        lg: "min-h-13 px-6 py-3 text-base [&_svg]:size-5 sm:px-8",
       },
     },
     defaultVariants: { variant: "primary", size: "md" },

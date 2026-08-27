@@ -75,7 +75,7 @@ export default function PartnerPage() {
       </Section>
 
       <Section className="pt-0">
-        <PartnerSection />
+        <PartnerSection headingLevel="h2" />
       </Section>
 
       <CtaSection
