@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { Logo } from "@/components/ui/logo";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { primaryNav, secondaryNav } from "@/lib/nav";
@@ -49,12 +50,7 @@ export function SiteHeader() {
           href="/"
           className="flex items-center gap-2.5 text-[0.95rem] font-semibold tracking-tight text-ink-50"
         >
-          <span
-            aria-hidden="true"
-            className="grid size-8 place-items-center rounded-lg bg-gradient-to-br from-brand-400 to-accent-600 font-mono text-sm font-bold text-ink-950"
-          >
-            ch
-          </span>
+          <Logo size={32} className="size-8" />
           <span>
             Code Hippies
             <span className="ml-2 hidden text-ink-500 sm:inline">/ Deepak Joshi</span>

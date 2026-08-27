@@ -1,0 +1,51 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "buildCommand": "npm run kb:build && npm run build",
+  "installCommand": "npm ci",
+  "regions": ["bom1"],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=(), interest-cohort=(), payment=()"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=63072000; includeSubDomains; preload"
+        }
+      ]
+    },
+    {
+      "source": "/_next/static/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/(favicon.ico|icon.svg|logo.svg|logo-mark.svg|apple-icon.png)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800" }]
+    }
+  ],
+  "redirects": [
+    { "source": "/home", "destination": "/", "permanent": true },
+    { "source": "/portfolio", "destination": "/work", "permanent": true },
+    { "source": "/projects", "destination": "/work", "permanent": true },
+    { "source": "/case-studies", "destination": "/work", "permanent": true },
+    { "source": "/about-us", "destination": "/about", "permanent": true },
+    { "source": "/contact-us", "destination": "/contact", "permanent": true },
+    { "source": "/services/mobile", "destination": "/services/mobile-development", "permanent": true },
+    { "source": "/services/ai", "destination": "/services/ai-llm-engineering", "permanent": true },
+    { "source": "/services/seo", "destination": "/services/seo-performance", "permanent": true },
+    { "source": "/services/security", "destination": "/services/security-compliance", "permanent": true },
+    { "source": "/services/web", "destination": "/services/web-development", "permanent": true },
+    { "source": "/faqs", "destination": "/faq", "permanent": true },
+    { "source": "/pricing-plans", "destination": "/pricing", "permanent": true },
+    { "source": "/dharmarthlabs", "destination": "/partner", "permanent": false }
+  ]
+}

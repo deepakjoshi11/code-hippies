@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Logo } from "@/components/ui/logo";
 import { services } from "@/data/services";
 import { caseStudies } from "@/data/case-studies";
 import { site } from "@/lib/site";
@@ -12,12 +13,7 @@ export function SiteFooter() {
       <div className="container-page grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-4 lg:py-16">
         <div className="flex flex-col gap-4">
           <Link href="/" className="flex items-center gap-2.5 font-semibold text-ink-50">
-            <span
-              aria-hidden="true"
-              className="grid size-8 place-items-center rounded-lg bg-gradient-to-br from-brand-400 to-accent-600 font-mono text-sm font-bold text-ink-950"
-            >
-              ch
-            </span>
+            <Logo size={32} className="size-8" />
             Code Hippies
           </Link>
           <p className="max-w-xs text-sm leading-relaxed text-ink-300">
@@ -77,6 +73,7 @@ export function SiteFooter() {
           <FooterLink href="/blog">Blog</FooterLink>
           <FooterLink href="/faq">FAQ &mdash; 50 questions</FooterLink>
           <FooterLink href="/contact">Start a project</FooterLink>
+          <FooterLink href="/privacy">Privacy</FooterLink>
         </FooterColumn>
       </div>
 

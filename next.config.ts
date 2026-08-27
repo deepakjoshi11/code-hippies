@@ -11,7 +11,15 @@ const nextConfig: NextConfig = {
     ],
   },
   experimental: {
-    optimizePackageImports: ["lucide-react", "motion"],
+    optimizePackageImports: ["lucide-react"],
+  },
+  async rewrites() {
+    return [
+      // IndexNow requires its key served as plain text at /<key>.txt. Routing
+      // it through an API handler keeps the key in the environment rather than
+      // committed as a static file.
+      { source: "/:key([A-Za-z0-9-]{8,128}).txt", destination: "/api/indexnow-key/:key" },
+    ];
   },
 };
 

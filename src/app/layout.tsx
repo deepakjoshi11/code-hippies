@@ -8,6 +8,8 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { ContactDock } from "@/components/layout/contact-dock";
 import { SmoothScroll } from "@/components/layout/smooth-scroll";
 import { ChatWidget } from "@/components/chat/chat-widget";
+import { ConsentBanner } from "@/components/consent/consent-banner";
+import { Telemetry } from "@/components/consent/telemetry";
 import { JsonLd } from "@/components/seo/json-ld";
 import { graph, organizationSchema, personSchema, professionalServiceSchema, websiteSchema } from "@/lib/schema";
 import { site } from "@/lib/site";
@@ -80,6 +82,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SiteFooter />
         <ContactDock />
         <ChatWidget />
+        <ConsentBanner />
+        <Telemetry />
         {/* Vercel Analytics only resolves on Vercel; loading it elsewhere is a
             guaranteed 404 in the console and a false Lighthouse finding. */}
         {process.env.VERCEL ? <Analytics /> : null}
