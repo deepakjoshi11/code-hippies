@@ -7,7 +7,7 @@ import { NextResponse, type NextRequest } from "next/server";
  * scripts Next.js emits are allowed without resorting to a blanket
  * 'unsafe-inline' for scripts.
  */
-export function middleware(request: NextRequest) {
+export default function proxy(request: NextRequest) {
   const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
   const isDev = process.env.NODE_ENV === "development";
 
