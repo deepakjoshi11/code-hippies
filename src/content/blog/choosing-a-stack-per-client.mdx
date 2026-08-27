@@ -1,0 +1,76 @@
+---
+title: "Why my portfolio runs on six different stacks (and yours probably should not be one)"
+description: "Static HTML, WordPress, hand-written PHP, Astro, a Vite SPA and Next.js — all in one portfolio, all correct. The technology choice follows the constraint, not the preference."
+publishedAt: "2026-07-08"
+tags: ["Architecture", "Consulting", "Next.js", "WordPress"]
+readingTime: "6 min read"
+relatedService: "web-development"
+relatedCaseStudy: "nantinbaba"
+---
+
+Every developer has a favourite stack, and every developer's portfolio is built entirely in it. Mine is not, and the reason is the most useful thing I can tell you about how I scope work.
+
+Here is what is actually running:
+
+- **Next.js** for three regional Hindi news editions and an agency brand site
+- **Astro**, statically built, for a dietitian's consultation funnel
+- **WordPress** behind nginx for an English news portal
+- **Hand-written PHP 8.2** for three custom news properties
+- **A Vite + React SPA** for two marketing sites
+- **21 kilobytes of static HTML and Bootstrap** for an ashram
+
+Six answers, because there were six different questions.
+
+## The ashram could not afford a maintenance contract
+
+[Nantin Baba Ashram](/work/nantinbaba) is a community organisation. There is no budget line for an annual retainer, no in-house developer, and no realistic prospect of one appearing.
+
+Build that on a modern framework and you have handed them a liability. In eighteen months a major version lands, in two years the build breaks on a newer Node, and the site goes down at exactly the moment nobody is being paid to look at it.
+
+So it is static HTML with Bootstrap 5 and jQuery, on Vercel's free tier, at about 21 KB. There is no build step to rot and no dependency tree to patch. It will render correctly in a decade. That is a better engineering outcome than anything I could have built with a framework, and it took less time.
+
+The constraint was *no maintenance capacity*. The technology followed.
+
+## The publisher was never going to leave WordPress
+
+[NewsLive24](/work/newslive24) has a working editorial desk. They know the WordPress admin. They publish daily inside it.
+
+The right move is not to migrate them. Migrating a newsroom costs weeks of lost throughput, retraining, and a URL structure change that puts existing rankings at risk, in exchange for a stack the developer prefers.
+
+Instead the engineering happened around the CMS: structured data emitted per template so every story ships with a `NewsArticle` graph, `CollectionPage` and `ItemList` on section pages so Google can tell an index from an article, hreflang alternates, canonical discipline, GA4 through Tag Manager so measurement changes do not need a deploy, and ad inventory placed in templates rather than inline in article bodies so layout shift stays bounded.
+
+Editors publish exactly as they did before. The technical SEO is dramatically better. Nobody was retrained.
+
+The constraint was *an editorial team that must not be disrupted*. The technology followed.
+
+## The regional news network needed to be crawled instantly
+
+The three Kesari editions — [Uttarakhand](/work/uttaranchal-kesari), [Himachal](/work/himachal-kesari) and [Haryana](/work/haryana-kesari) — publish Hindi news where being indexed within minutes is the entire commercial proposition.
+
+That rules out client-side rendering immediately, and it rewards server rendering with structured publisher identity. So: Next.js, server-rendered Devanagari in the initial HTML, `NewsMediaOrganization` and `WebSite` JSON-LD on the document, generated sitemaps, behind Caddy and Cloudflare.
+
+There is a second constraint hiding in that project, and it is the more interesting one. Three mastheads, one platform. The obvious approach — clone the codebase per edition — means every fix has to be applied three times, and within a year the three copies have drifted. Running them as tenants of one platform means a new edition is configuration rather than a fork.
+
+The Haryana edition makes the point. It is deployed and search-discoverable, with its publisher identity already declared, rendering a deliberate empty state while the desk staffs up. When the first story is filed, it is filed into a site Google already knows exists.
+
+The constraint was *speed to index, across multiple brands*. The technology followed.
+
+## How to actually make this decision
+
+Four questions, asked before anyone opens an editor:
+
+**Who maintains this in two years?** If the answer is "nobody", choose boring, permanent technology. This dominates every other consideration. An unmaintainable clever solution is worse than a maintainable dull one.
+
+**Does it need to rank?** If yes, content goes in the HTML. Static generation or server rendering, not negotiable. If no — an internal tool, a dashboard, an authenticated app — a client-rendered SPA is a perfectly good answer and often the faster build.
+
+**What already exists that cannot move?** An editorial team, a hosting account, a payment integration, a database with ten years of history. These are constraints, not obstacles, and building around them is usually cheaper than replacing them.
+
+**How often does the content change?** Never: static. Daily: incremental regeneration. Per-visitor: server rendering. This one question determines your rendering strategy more reliably than any framework comparison.
+
+## The uncomfortable part
+
+Answering honestly sometimes means recommending against the interesting work. It means telling an ashram they need static HTML rather than a project I would enjoy more, and telling a publisher to stay on WordPress rather than commissioning a rebuild I would rather bill for.
+
+That is what makes the recommendation worth anything. A stack recommendation that always arrives at the same answer is a preference wearing a suit.
+
+If you want that conversation about your project — what the constraints actually are, and what they imply — [start here](/contact). The first call ends with a recommendation and an honest read on feasibility, whether or not we work together.

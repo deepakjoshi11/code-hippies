@@ -1,0 +1,116 @@
+---
+title: "The most important feature of a RAG chatbot is the refusal"
+description: "Everyone measures retrieval hit rate. Almost nobody measures whether the assistant correctly says 'I don't know' — which is the failure mode that actually costs you a customer."
+publishedAt: "2026-08-05"
+tags: ["AI", "LLM", "RAG", "Engineering"]
+readingTime: "8 min read"
+relatedService: "ai-llm-engineering"
+relatedCaseStudy: "fitwithnash"
+featured: true
+---
+
+A retrieval-augmented chatbot has two jobs. The first is to answer questions from your documents. The second is to refuse when your documents do not contain the answer.
+
+Teams build the first one and ship. Then a prospect asks the assistant on a pricing page whether the product is HIPAA compliant, the retrieval layer returns three chunks about data encryption because that is the closest thing it has, and the model — helpful, fluent, and completely unmoored — says yes.
+
+That is not a model quality problem. That is a missing refusal path.
+
+## Why grounding is not automatically enough
+
+The pitch for RAG is that the model answers from retrieved context instead of from memory. True as far as it goes. But retrieval always returns something. A vector search asked for the nearest neighbours will hand back the nearest neighbours whether or not any of them are relevant, and a similarity score of 0.31 looks exactly like a similarity score of 0.89 by the time it reaches the prompt.
+
+So the model receives three chunks that do not answer the question, plus an instruction to be helpful, and does what a fluent language model does: bridges the gap.
+
+Three things have to be true for a refusal to happen:
+
+1. Retrieval has to be able to return **nothing**, not just the least-bad thing available.
+2. The prompt has to make refusal an explicitly correct outcome, not a failure.
+3. The refusal path has to be **tested**, because it is the path nobody exercises by hand.
+
+## 1. Let retrieval return nothing
+
+Set a relevance floor and enforce it before you build the prompt:
+
+```ts
+const RELEVANCE_FLOOR = 0.28;
+
+const hits = await retrieve(question, { topK: 6 });
+const grounded = hits.filter((h) => h.score >= RELEVANCE_FLOOR);
+
+if (grounded.length === 0) {
+  return {
+    answer: NO_INFORMATION_RESPONSE,
+    sources: [],
+    refused: true,
+  };
+}
+```
+
+That early return is the single highest-value line in the system, and it never reaches the model at all. No tokens spent, no latency, no opportunity to improvise.
+
+The floor value is empirical, not universal. Pick it by running a set of questions you *know* are out of scope and looking at what scores they produce. If your out-of-scope questions score 0.4, your floor is wrong or your chunking is.
+
+## 2. Make refusal a correct outcome in the prompt
+
+Most system prompts describe the assistant's persona and then, almost apologetically, add "if you don't know, say so." That framing is backwards. Refusal should be defined as a success condition:
+
+```
+Answer ONLY from the numbered sources below.
+
+If the sources do not contain the answer, reply exactly:
+"I don't have that in my knowledge base — the fastest way to get a real
+answer is to message Deepak directly on WhatsApp."
+
+Saying you don't know when the sources don't cover it is a CORRECT answer,
+not a failure. Do not infer, do not generalise from similar cases, and do
+not use knowledge from outside the sources.
+
+Sources:
+[1] {title}: {chunk}
+[2] {title}: {chunk}
+```
+
+Two details matter more than the wording. Number the sources, so the model has to point at something specific rather than blend them. And give it the exact refusal text, so the refusal is deterministic and you can assert on it in a test.
+
+## 3. Test the refusals in CI
+
+This is the part that gets skipped. A golden question set with expected behaviour, run on every deploy:
+
+```ts
+const evalSet = [
+  { q: "What does a mobile app cost?",        expect: "answers" },
+  { q: "Do you build iOS apps?",              expect: "answers" },
+  { q: "What is your SOC 2 audit status?",    expect: "refuses" },
+  { q: "Can you get me a US work visa?",      expect: "refuses" },
+  { q: "Who won the 2026 election?",          expect: "refuses" },
+];
+
+for (const { q, expect: expected } of evalSet) {
+  const { refused } = await ask(q);
+  assert.equal(refused, expected === "refuses", `regression on: ${q}`);
+}
+```
+
+Half the set should be questions the system must refuse. When someone adds a document, widens the chunk size, or swaps the embedding model, this is what tells you the refusal boundary moved.
+
+Failing to refuse is a louder failure than failing to answer. A visitor who is told "I don't have that, here is how to reach a human" is mildly inconvenienced. A visitor who is told something false about your pricing, your compliance posture or your capabilities makes a decision on it.
+
+## The retrieval work is where the quality actually lives
+
+Once the refusal path exists, most remaining disappointment traces back to retrieval rather than generation:
+
+**Chunk on semantic boundaries, not character counts.** Splitting every 500 characters cuts sentences in half and produces chunks that mean nothing on their own. Split on headings and paragraphs, then merge undersized fragments.
+
+**Keep the document title on every chunk.** A chunk that reads "typically two to four weeks" is useless. The same chunk prefixed with "Service: Web development — Timelines" is answerable. Prepend the breadcrumb before embedding, not just before display.
+
+**Measure hit rate against real questions.** Write down twenty questions a real prospect would ask. For each, note which document *should* answer it. Then check whether retrieval actually surfaces that document in the top three. If it does not, the model was never going to save you.
+
+**Log what you could not answer.** Every refusal is a content gap with a timestamp. The assistant on this site writes them to a local log with no personal data attached, and that log is the most honest content roadmap I have — it is a list of questions real people asked that my own documentation does not cover.
+
+## What I will not claim
+
+Grounding, a relevance floor, an explicit refusal instruction and a CI eval set reduce fabrication substantially. They do not eliminate it, and anyone offering you a guarantee of zero hallucination is describing a marketing position, not an engineering property.
+
+What this architecture does give you is an honest failure mode. When the system does not know something, the correct behaviour is a visible refusal rather than a confident invention — and unlike a vague promise, that behaviour is testable, and it is tested on every deploy.
+
+The [assistant on this site](/services/ai-llm-engineering) runs exactly this design against a knowledge base built from its own service and case-study documents. Ask it something it does not cover. It will tell you.

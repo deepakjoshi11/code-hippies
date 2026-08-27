@@ -1,0 +1,103 @@
+---
+title: "The pre-launch security pass: nine checks, one afternoon"
+description: "Most breaches are boring. So is preventing them. The OWASP-derived checklist I run against every project before it goes to production."
+publishedAt: "2026-06-24"
+tags: ["Security", "OWASP", "Next.js", "CI/CD"]
+readingTime: "7 min read"
+relatedService: "security-compliance"
+relatedCaseStudy: "carbonmedia"
+---
+
+Security work has a reputation for being exotic. In practice, the things that get small and mid-sized applications compromised are dull and repetitive: unvalidated input, a mutating endpoint with no CSRF token, a public form with no rate limit, a secret that ended up in the browser bundle, a runtime three major versions past end of life.
+
+This is the pass I run before anything I build goes to production. It is not a penetration test — that comes from an independent firm and produces an attestation letter. It is the engineering review that makes the penetration test boring.
+
+## 1. Validate on the server, always
+
+Client-side validation is a user-experience feature. It tells someone their email is malformed before they submit. It protects nothing, because the client is not a trust boundary — anyone can post directly to your endpoint.
+
+Define the schema once and enforce it on both sides:
+
+```ts
+export const leadSchema = z.object({
+  name: z.string().trim().min(2).max(80),
+  email: z.string().trim().email().max(160),
+  message: z.string().trim().min(20).max(4000),
+  budget: z.enum(BUDGET_BANDS),
+});
+```
+
+The client uses it for instant feedback. The route handler parses with it again before anything touches storage. Same schema, one source of truth, no drift.
+
+## 2. Protect every mutating route against CSRF
+
+Any endpoint that changes state and relies on a cookie for identity needs a token the attacker's site cannot read. The double-submit pattern is enough for most applications: issue a random token in a `SameSite=Strict` cookie, require the same value in a request header, compare them on the server in constant time.
+
+`SameSite` alone gets you most of the way in modern browsers. It is not a reason to skip the token — defence in depth costs about twenty lines.
+
+## 3. Rate limit anything unauthenticated
+
+A contact form with no rate limit is a free email-sending service for whoever finds it. An AI chat endpoint with no rate limit is a free inference budget, billed to you.
+
+Limit by IP with a sliding window, return `429` with a `Retry-After` header, and set the limit at a number a real human will never hit. Five submissions an hour on a contact form is generous for a person and useless to a script.
+
+## 4. Set the security headers
+
+Six headers, most of them one line:
+
+- `Content-Security-Policy` — the one that takes real work. Start with a report-only policy in staging, watch what it flags, then enforce.
+- `Strict-Transport-Security` — `max-age=63072000; includeSubDomains; preload`.
+- `X-Frame-Options: DENY` — clickjacking, unless you genuinely need to be framed.
+- `X-Content-Type-Options: nosniff` — stops the browser guessing content types.
+- `Referrer-Policy: strict-origin-when-cross-origin` — keeps your URLs out of other people's logs.
+- `Permissions-Policy` — switch off camera, microphone and geolocation if you do not use them.
+
+In Next.js these belong in middleware, where they apply to every route including the ones you add later and forget about.
+
+## 5. Get the secrets out of the bundle
+
+In Next.js, any environment variable prefixed `NEXT_PUBLIC_` is compiled into the JavaScript sent to browsers. This is documented, well known, and still the single most common mistake I find.
+
+Check it directly rather than trusting your memory:
+
+```bash
+npm run build
+grep -ri "sk_live\|api_key\|secret\|password" .next/static/ | head
+```
+
+If anything comes back, that key is public and must be rotated, not just moved.
+
+## 6. Scan dependencies on every push
+
+```yaml
+- name: Dependency audit
+  run: npm audit --audit-level=high
+```
+
+That step fails the build on high and critical advisories. A monthly manual check means you are, on average, two weeks behind a published exploit — and the exploit was published because it works.
+
+## 7. Run a supported runtime
+
+This one is not glamorous and it matters more than most of the list. A stack on an end-of-life runtime is not slow, it is unpatched: no security fixes are being issued for it at all.
+
+One of the news properties in my portfolio runs PHP 8.2.30 rather than a 7.x version, specifically because a supported runtime is a security control. Check what yours is actually running — the answer is often older than anyone believes.
+
+## 8. Encode on output, not just on input
+
+Sanitising input is good. Encoding on output is what actually stops cross-site scripting, because it is the last thing that happens before content becomes markup.
+
+React escapes by default, which handles most of it. The exception is `dangerouslySetInnerHTML`, and it is named that for a reason. Every use of it needs a one-line comment saying where the HTML came from and why it is trusted. If the answer involves user input, it needs sanitising with a real library first.
+
+## 9. Check your error responses
+
+A stack trace in a production error response is a free architecture diagram. So is a login form that says "user not found" for one email and "incorrect password" for another — that is an account enumeration oracle.
+
+Log detail on the server. Return something generic to the client.
+
+## What this does not cover
+
+This is an engineering review, and it is honest about its limits. It does not produce a penetration test attestation — that requires an independent testing firm. It does not produce SOC 2 or ISO 27001 certification — that requires an accredited auditor, and no script or consultant can shortcut it. What it does is implement and document the technical controls an auditor will ask about, so that when you do commission the audit, you are not starting from zero.
+
+Anyone offering to automate the audit itself is describing the preparation and calling it the certificate.
+
+A [security engagement](/services/security-compliance) runs this pass properly, with reproducible findings and the fixes applied. It usually takes a week, and it is a great deal cheaper than the alternative.

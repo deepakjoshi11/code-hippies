@@ -1,0 +1,88 @@
+---
+title: "A performance budget nobody enforces is a number that drifts"
+description: "Core Web Vitals work that is not wired into CI regresses within two sprints. Here is the Lighthouse CI setup that fails the build instead."
+publishedAt: "2026-07-22"
+tags: ["Performance", "CI/CD", "Core Web Vitals", "Next.js"]
+readingTime: "6 min read"
+relatedService: "seo-performance"
+relatedCaseStudy: "indianews16"
+---
+
+Every performance engagement follows the same arc. Someone measures, someone optimises, the numbers get better, everyone is pleased. Six weeks later a marketing tag, a font, a hero video and an unoptimised image have arrived, and the site is back where it started.
+
+Nobody did anything wrong. The budget just was not enforced anywhere.
+
+## Pick three numbers and defend them
+
+The three that matter, because they are the ones Google measures:
+
+- **LCP under 2.5s** — how long until the main thing on the page appears.
+- **CLS under 0.1** — how much the layout jumps while loading.
+- **INP under 200ms** — how long the page takes to respond when someone taps.
+
+Those are the thresholds in the footer of this site, and they are checked on every push to this repository. Not because the number is sacred, but because a number that is checked is a number that holds.
+
+## Wire it into GitHub Actions
+
+Lighthouse CI runs a real Chrome against a production build and asserts against your budget:
+
+```yaml
+- name: Build
+  run: npm run build
+
+- name: Lighthouse CI
+  run: npx lhci autorun
+```
+
+With the assertions in `lighthouserc.json`:
+
+```json
+{
+  "ci": {
+    "collect": {
+      "startServerCommand": "npm run start",
+      "url": ["http://localhost:3000/", "http://localhost:3000/work"],
+      "numberOfRuns": 3
+    },
+    "assert": {
+      "assertions": {
+        "categories:performance":   ["error", { "minScore": 0.9 }],
+        "categories:accessibility": ["error", { "minScore": 0.9 }],
+        "categories:seo":           ["error", { "minScore": 0.9 }],
+        "largest-contentful-paint": ["error", { "maxNumericValue": 2500 }],
+        "cumulative-layout-shift":  ["error", { "maxNumericValue": 0.1 }]
+      }
+    }
+  }
+}
+```
+
+`numberOfRuns: 3` matters. A single Lighthouse run on a shared CI runner is noisy enough to fail a perfectly good build, and a flaky gate gets disabled within a month — which returns you to having no gate at all.
+
+## The four things that actually blow the budget
+
+In order of how often I find them:
+
+**Images at the wrong size.** A 3000px hero scaled down in CSS to 1200. The bytes are still downloaded. Next.js `<Image>` handles this if you let it; the failure is usually a background image in CSS, which the optimiser never sees.
+
+**Third-party scripts with no leash.** Analytics, chat, consent, ad tags, heat maps. Each one is someone else's JavaScript on your main thread. Load them with `next/script` and `strategy="afterInteractive"` or `"lazyOnload"`, and audit the list quarterly — there is always one nobody remembers adding.
+
+**Fonts that block or shift.** A web font without `display: swap` gives you invisible text; a web font without a metrics-matched fallback gives you CLS when it swaps in. `next/font` solves both, and it self-hosts, which also removes a DNS lookup and a third-party origin from your critical path.
+
+**Content that arrives with no space reserved.** Anything that loads after first paint and pushes the page down — embeds, ads, banners, late-arriving images. Reserve the box in CSS. This is the entire CLS story, and it is nearly always cheap to fix.
+
+## Measure what users get, not just what the lab says
+
+Lighthouse is a lab test on a simulated device. It catches regressions reliably, which is exactly what you want from a gate — but it is not what your users experienced. For that you need field data: Vercel Analytics, Plausible, or the Chrome UX Report through Search Console.
+
+Use both, for different jobs. Lab data in CI to stop regressions before they ship. Field data to know what is actually happening on the mid-range Android phone that most of your traffic is using.
+
+## The cheapest version of all this
+
+If a full engagement is not where you are, do these three things this week:
+
+1. Add Lighthouse CI to your pipeline with the assertions above. An afternoon.
+2. Find every third-party script and justify each one out loud. Delete the ones nobody can defend.
+3. Reserve space for anything that loads late. CLS is usually the fastest win available.
+
+If you want it done properly and kept that way — audit, remediation, and a budget wired into your pipeline so it holds after I leave — that is a [performance engagement](/services/seo-performance).

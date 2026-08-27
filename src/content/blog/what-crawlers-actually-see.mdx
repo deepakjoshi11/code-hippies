@@ -1,0 +1,98 @@
+---
+title: "What Google actually sees on your React site (and how to check in 30 seconds)"
+description: "A client-rendered page can be indexed eventually, sometimes. A server-rendered one is indexed reliably. Here is how to find out which one you shipped, using curl and nothing else."
+publishedAt: "2026-08-12"
+tags: ["SEO", "Next.js", "React", "Rendering"]
+readingTime: "7 min read"
+relatedService: "seo-performance"
+relatedCaseStudy: "uttaranchal-kesari"
+featured: true
+---
+
+Most SEO advice starts at keywords. That is starting three steps too late. If a crawler cannot read your content without executing JavaScript, keyword work is decorating a room nobody can enter.
+
+Here is the check that matters, and it takes half a minute.
+
+## The 30-second test
+
+```bash
+curl -sL https://your-site.com/ | grep -o "<h1[^>]*>[^<]*" | head
+```
+
+If your headline comes back, your content is in the HTML. If you get nothing — or worse, a single `<div id="root"></div>` — then everything on that page is being assembled in the browser, and you are relying on the crawler to run your bundle, wait for your API calls, and index whatever ends up on screen.
+
+Google's renderer will often do exactly that. **Often** is the problem. It is a second pass, it is queued, and it is not guaranteed on the schedule you need for a news story or a product launch.
+
+You can be more thorough:
+
+```bash
+curl -sL https://your-site.com/ | wc -c        # total HTML weight
+curl -sL https://your-site.com/ | grep -c "<a "  # crawlable links
+```
+
+I ran exactly this across every site in [my portfolio](/work) while writing the case studies. The results are instructive. A dense news homepage returns 90 anchor elements and 28 images in the initial response — every section one hop from the front page, for readers and crawlers alike. A single-page marketing app returns a 1 KB shell with one `<div id="root">` and zero links. Both are correct choices for what they are. The mistake is shipping the second one and expecting the first one's search performance.
+
+## The three rendering strategies, and when each is right
+
+**Static generation.** The page is built once at deploy and served as a file. Nothing is faster and nothing is more reliably indexed. Use it for anything that does not change per-request: marketing pages, documentation, blog posts, service pages. The [consultation funnel](/work/fitwithnash) in my portfolio is a static Astro build on Vercel and its whole document is essentially content.
+
+**Incremental static regeneration.** Static, but the page rebuilds in the background after a set interval or an explicit revalidation. This is the correct default for content that changes on a schedule rather than per-visitor — article pages, category listings, anything CMS-driven.
+
+**Server-side rendering.** HTML is generated per request. Necessary when the response genuinely depends on who is asking. It costs you a server round trip on every view, so use it when you need it, not by default.
+
+**Client-side rendering** is not a fourth option for indexable content. It is the right answer for what comes *after* the indexable content: dashboards, editors, authenticated app surfaces. Nobody needs to rank a settings page.
+
+## The pattern that quietly breaks indexing
+
+In the Next.js App Router, a component is a Server Component until something makes it a Client Component. Adding `"use client"` at the top of a component pulls it and everything below it into the browser bundle. That is fine and often necessary — but people reach for it at the wrong altitude.
+
+The failure looks like this:
+
+```tsx
+// app/blog/[slug]/page.tsx
+"use client";              // ← the entire article is now client-rendered
+
+export default function Post({ params }) {
+  const [post, setPost] = useState(null);
+  useEffect(() => { fetch(`/api/posts/${params.slug}`).then(/* … */); }, []);
+  return <article>{post?.body}</article>;
+}
+```
+
+Someone needed a tooltip, or a share button, or a reading-progress bar. The quickest way to get a hook was to mark the page as a client component. Now the article body is fetched in the browser and the served HTML contains nothing.
+
+The fix is to move the boundary down, not up:
+
+```tsx
+// app/blog/[slug]/page.tsx — stays a Server Component
+import { getPost } from "@/lib/blog";
+import { ShareButton } from "./share-button";   // this file has "use client"
+
+export default async function Post({ params }) {
+  const { slug } = await params;
+  const post = getPost(slug);
+  return (
+    <article>
+      <h1>{post.title}</h1>
+      <ShareButton slug={slug} />
+      <div dangerouslySetInnerHTML={{ __html: post.html }} />
+    </article>
+  );
+}
+```
+
+The interactive leaf is a client component. The content around it is server-rendered. Both requirements are satisfied and the article is in the HTML.
+
+## Where the boundary belongs, as a rule
+
+Ask one question of every `"use client"` you are about to write: *does the content need to be in the HTML for a crawler or for the first paint?* If yes, the directive belongs on a smaller component further down the tree. In practice this means your page files almost never carry it, and your buttons, menus, carousels and form fields almost always do.
+
+The same principle covers the third-party scripts that quietly become client boundaries — chat widgets, analytics, consent banners. Load them with `next/script` and the right strategy rather than importing them into a layout, and they stop dragging the tree with them.
+
+## What to actually do this week
+
+1. Run the curl check on your five most important templates — home, a category page, a product or article page, a service page, the contact page.
+2. For each one that comes back empty, find the highest `"use client"` in that route's tree and ask whether it needs to be there.
+3. Once your content is in the HTML, verify what Google is doing with it: URL Inspection in Search Console shows you the rendered HTML it actually indexed, which is the only opinion that counts.
+
+If you want the whole thing measured properly — rendering audit per template, structured data, and a Core Web Vitals budget enforced in CI so it does not drift back — that is exactly what an [SEO and performance engagement](/services/seo-performance) covers.
