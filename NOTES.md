@@ -107,3 +107,32 @@ raises the rate limit — a token with no scopes is sufficient.
 renders the pages. It runs in CI before lint, so a service or case study edited
 in `src/data` is reflected in what the assistant knows on the same deploy. Never
 hand-edit files in `/knowledge-base`; they are build output.
+
+## The CSP tradeoff, stated explicitly
+
+`script-src` is `'self' 'unsafe-inline'` rather than a nonce with
+`'strict-dynamic'`. This was not laziness — the nonce policy was implemented
+first, and it does not work here.
+
+Next.js can only inject a per-request nonce into a response it renders per
+request. Almost every route on this site is statically generated, which is the
+single largest SEO decision the site makes and is not up for negotiation. Over
+static output, a nonce policy silently blocks Next.js's own inline hydration
+bootstrap (`self.__next_f.push(...)`) and the page goes down in a real browser
+while looking fine to `curl`. Verified directly:
+
+```bash
+npm run build && npm start
+curl -s http://localhost:3000/ | grep -o 'nonce="[^"]*"'   # no output — no nonce emitted
+curl -s http://localhost:3000/ | grep -c '<script>'         # inline bootstrap present
+```
+
+The compensating controls are the ones that actually close the path from an
+injected string to executed code: this site renders no user-supplied HTML,
+`object-src` is `'none'`, `base-uri` is `'self'`, `frame-ancestors` is `'none'`
+and `form-action` is `'self'`.
+
+To tighten it properly, either move the routes that need it to dynamic
+rendering and re-introduce the nonce there only, or move to a hash-based policy
+generated at build time. Do not simply add `'strict-dynamic'` back without
+re-running the check above.

@@ -3,19 +3,27 @@ import { NextResponse, type NextRequest } from "next/server";
 /**
  * Security headers — Section 9.
  *
- * A per-request nonce is generated and threaded into the CSP so inline
- * scripts Next.js emits are allowed without resorting to a blanket
- * 'unsafe-inline' for scripts.
+ * On the CSP script-src policy: a per-request nonce with 'strict-dynamic'
+ * would be stronger, but Next.js can only inject a nonce into a response it
+ * renders per request — and almost every route here is statically generated,
+ * which is the single largest SEO decision this site makes. A nonce policy
+ * over static output silently blocks Next.js's own inline hydration bootstrap
+ * and takes the page down.
+ *
+ * So the honest tradeoff is taken deliberately: static rendering is kept, and
+ * script-src allows same-origin scripts plus the framework's inline bootstrap.
+ * The compensating controls are the ones that actually matter here — this site
+ * renders no user-supplied HTML, object-src is 'none', base-uri is locked to
+ * 'self', frame-ancestors is 'none' and form-action is 'self', so the usual
+ * routes from an injected string to code execution are closed. See NOTES.md.
  */
-export default function proxy(request: NextRequest) {
-  const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
+export default function proxy(_request: NextRequest) {
   const isDev = process.env.NODE_ENV === "development";
 
   const csp = [
     `default-src 'self'`,
-    // 'strict-dynamic' lets the nonced Next.js bootstrap load its own chunks.
-    // Dev needs 'unsafe-eval' for React Refresh; production does not get it.
-    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https: ${isDev ? "'unsafe-eval'" : ""}`,
+    // Dev needs 'unsafe-eval' for React Refresh; production never gets it.
+    `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
     // Tailwind and Next.js inject inline style attributes; styles are same-origin otherwise.
     `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com`,
     `font-src 'self' https://fonts.gstatic.com data:`,
@@ -31,11 +39,7 @@ export default function proxy(request: NextRequest) {
     .filter(Boolean)
     .join("; ");
 
-  const requestHeaders = new Headers(request.headers);
-  requestHeaders.set("x-nonce", nonce);
-  requestHeaders.set("content-security-policy", csp);
-
-  const response = NextResponse.next({ request: { headers: requestHeaders } });
+  const response = NextResponse.next();
 
   response.headers.set("content-security-policy", csp);
   response.headers.set("x-frame-options", "DENY");
