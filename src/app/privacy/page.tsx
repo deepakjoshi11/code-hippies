@@ -11,7 +11,7 @@ import { ConsentControls } from "@/components/consent/consent-controls";
 export const metadata: Metadata = pageMetadata({
   title: "Privacy — What Is Collected, and What Is Not",
   description:
-    "Exactly what this site collects, when, and why. No advertising networks, no data sold, nothing that identifies you without consent. Change your choices here at any time.",
+    "Exactly what this site collects, when, and why. Nothing that identifies you without consent, no data sold, and ad scripts never requested unless you accept them.",
   path: "/privacy",
   keywords: ["privacy policy", "cookie policy", "GDPR DPDP compliance"],
   ogTitle: "What this site collects, and what it does not",
@@ -19,7 +19,7 @@ export const metadata: Metadata = pageMetadata({
 
 const NEVER = [
   "Your IP address is never stored. It is used in memory to rate-limit the contact form and then discarded.",
-  "No advertising or ad-tech networks. Nothing here is shared with one.",
+  "No advertising script is loaded unless you accept the advertising category. Declining means it is never requested at all — not loaded in a limited mode.",
   "No cross-site tracking, no fingerprinting, no data broker, nothing sold. Ever.",
   "No precise location. Country is the most granular geography recorded, and only with attribution consent.",
   "No profile that outlives your visit. The session id lives in your tab and dies when you close it.",
@@ -67,7 +67,7 @@ export default function PrivacyPage() {
                 The three categories
               </h2>
               <ul className="mt-5 flex flex-col gap-4">
-                {(["essential", "analytics", "attribution"] as const).map((key) => (
+                {(["essential", "analytics", "attribution", "advertising"] as const).map((key) => (
                   <li
                     key={key}
                     className="rounded-card border border-ink-100/10 bg-ink-900/50 p-5"

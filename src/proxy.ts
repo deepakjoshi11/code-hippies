@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { requiredOrigins } from "@/lib/analytics/providers";
 
 /**
  * Security headers — Section 9.
@@ -20,16 +21,25 @@ import { NextResponse, type NextRequest } from "next/server";
 export default function proxy(_request: NextRequest) {
   const isDev = process.env.NODE_ENV === "development";
 
+  /*
+   * The CSP widens ONLY for measurement providers that are actually
+   * configured. An unset provider never loosens the policy — deriving the
+   * allowlist from configuration, rather than hard-coding every origin an ad
+   * stack might one day use, keeps the default deployment tight.
+   */
+  const thirdParty = requiredOrigins();
+  const extra = thirdParty.length > 0 ? ` ${thirdParty.join(" ")}` : "";
+
   const csp = [
     `default-src 'self'`,
     // Dev needs 'unsafe-eval' for React Refresh; production never gets it.
-    `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
+    `script-src 'self' 'unsafe-inline'${extra}${isDev ? " 'unsafe-eval'" : ""}`,
     // Tailwind and Next.js inject inline style attributes; styles are same-origin otherwise.
     `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com`,
     `font-src 'self' https://fonts.gstatic.com data:`,
     `img-src 'self' blob: data: https:`,
-    `connect-src 'self' https://vitals.vercel-insights.com https://va.vercel-scripts.com`,
-    `frame-src 'self' https://cal.com https://app.cal.com`,
+    `connect-src 'self' https://vitals.vercel-insights.com https://va.vercel-scripts.com${extra}`,
+    `frame-src 'self' https://cal.com https://app.cal.com${extra}`,
     `form-action 'self'`,
     `frame-ancestors 'none'`,
     `base-uri 'self'`,

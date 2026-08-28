@@ -18,7 +18,7 @@ export function ConsentControls() {
     window.setTimeout(() => setSaved(false), 2500);
   };
 
-  const toggle = (key: "analytics" | "attribution") => {
+  const toggle = (key: "analytics" | "attribution" | "advertising") => {
     const base = state ?? denyAll();
     apply({ ...base, [key]: !base[key], decidedAt: new Date().toISOString() });
   };
@@ -34,7 +34,7 @@ export function ConsentControls() {
           </p>
         ) : (
           <ul className="flex flex-col gap-3">
-            {(["analytics", "attribution"] as const).map((key) => (
+            {(["analytics", "attribution", "advertising"] as const).map((key) => (
               <li key={key} className="flex items-start justify-between gap-3">
                 <span className="min-w-0">
                   <span className="block text-sm font-medium text-ink-100">

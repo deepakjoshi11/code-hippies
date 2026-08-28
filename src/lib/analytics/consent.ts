@@ -23,9 +23,14 @@
  */
 
 export const CONSENT_COOKIE = "ch_consent";
-export const CONSENT_VERSION = 1;
+/**
+ * Bumping this invalidates every stored consent decision and re-asks. It MUST
+ * be bumped whenever a category is added — silently treating an old "yes" as
+ * covering a new kind of processing is precisely what consent law forbids.
+ */
+export const CONSENT_VERSION = 2;
 
-export type ConsentCategory = "essential" | "analytics" | "attribution";
+export type ConsentCategory = "essential" | "analytics" | "attribution" | "advertising";
 
 export type ConsentState = {
   version: number;
@@ -35,6 +40,13 @@ export type ConsentState = {
   analytics: boolean;
   /** Referrer, campaign and channel attribution, coarse (country) geography. */
   attribution: boolean;
+  /**
+   * Third-party advertising and audience measurement (Google Ad Manager,
+   * AdSense, Comscore). Separate from analytics on purpose: these send data to
+   * companies other than this site, which is a materially different decision
+   * and must be consented to separately under GDPR and the DPDP Act.
+   */
+  advertising: boolean;
   /** ISO timestamp of the decision, so the record is auditable. */
   decidedAt: string;
 };
@@ -44,6 +56,7 @@ export const DENIED: ConsentState = {
   essential: true,
   analytics: false,
   attribution: false,
+  advertising: false,
   decidedAt: "",
 };
 
@@ -53,6 +66,7 @@ export function grantAll(): ConsentState {
     essential: true,
     analytics: true,
     attribution: true,
+    advertising: true,
     decidedAt: new Date().toISOString(),
   };
 }
@@ -71,6 +85,7 @@ export function parseConsent(raw: string | undefined | null): ConsentState | nul
       essential: true,
       analytics: Boolean(parsed.analytics),
       attribution: Boolean(parsed.attribution),
+      advertising: Boolean(parsed.advertising),
       decidedAt: typeof parsed.decidedAt === "string" ? parsed.decidedAt : "",
     };
   } catch {
@@ -103,4 +118,17 @@ export const consentCopy: Record<ConsentCategory, { label: string; body: string;
     body:
       "Which link, search or channel brought you here, and your country — never a precise location. It tells me which of my work is actually reaching people. Nothing is sold, and nothing is shared with an ad network.",
   },
+  advertising: {
+    label: "Advertising and audience measurement",
+    body:
+      "This is the only category that sends anything to a company other than this site. It allows Google Ad Manager, AdSense and Comscore, which fund the free learning material. Decline and the ad scripts are never loaded at all — not loaded-but-limited, never requested. Every article stays fully readable either way.",
+  },
 };
+
+/** Bumped whenever a new category is added, so consent is re-asked rather than assumed. */
+export const CONSENT_CATEGORIES: ConsentCategory[] = [
+  "essential",
+  "analytics",
+  "attribution",
+  "advertising",
+];

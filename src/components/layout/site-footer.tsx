@@ -70,6 +70,7 @@ export function SiteFooter() {
           <FooterLink href="/hire">Ways to hire</FooterLink>
           <FooterLink href="/process">How projects run</FooterLink>
           <FooterLink href="/pricing">Engagement models</FooterLink>
+          <FooterLink href="/learn">Learn (free)</FooterLink>
           <FooterLink href="/blog">Blog</FooterLink>
           <FooterLink href="/faq">FAQ &mdash; 50 questions</FooterLink>
           <FooterLink href="/contact">Start a project</FooterLink>

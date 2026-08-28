@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
 
-import { consentCopy, denyAll, grantAll } from "@/lib/analytics/consent";
+import { CONSENT_CATEGORIES, CONSENT_VERSION, consentCopy, denyAll, grantAll } from "@/lib/analytics/consent";
 import { cn } from "@/lib/utils";
 import { useConsent } from "./use-consent";
 
@@ -23,6 +23,7 @@ export function ConsentBanner() {
   const [expanded, setExpanded] = useState(false);
   const [analytics, setAnalytics] = useState(true);
   const [attribution, setAttribution] = useState(true);
+  const [advertising, setAdvertising] = useState(true);
 
   // Held back briefly so the banner never competes with first paint, and
   // mounted client-only so it can never affect the server HTML or LCP.
@@ -43,10 +44,11 @@ export function ConsentBanner() {
   };
   const saveChoice = () => {
     save({
-      version: 1,
+      version: CONSENT_VERSION,
       essential: true,
       analytics,
       attribution,
+      advertising,
       decidedAt: new Date().toISOString(),
     });
     setDismissed(true);
@@ -62,9 +64,9 @@ export function ConsentBanner() {
     >
       <p className="text-sm font-medium text-ink-50">A straight answer about cookies</p>
       <p className="mt-2 text-[0.82rem] leading-relaxed text-ink-300">
-        Nothing that identifies you is collected unless you say yes. No advertising networks, no
-        data sold, no profile that outlives your visit. Reject and the site works exactly the same —
-        I just learn less about which of my work is reaching people.
+        Nothing that identifies you is collected unless you say yes, and nothing is ever sold.
+        Reject and every page works exactly the same — the ad scripts are simply never requested,
+        and I just learn less about which of my work is reaching people.
       </p>
 
       <button
@@ -82,10 +84,18 @@ export function ConsentBanner() {
 
       {expanded ? (
         <ul className="mt-3 flex flex-col gap-2.5 border-t border-ink-100/10 pt-3">
-          {(["essential", "analytics", "attribution"] as const).map((key) => {
+          {CONSENT_CATEGORIES.map((key) => {
             const copy = consentCopy[key];
-            const checked = key === "essential" ? true : key === "analytics" ? analytics : attribution;
-            const setter = key === "analytics" ? setAnalytics : setAttribution;
+            const checked =
+              key === "essential"
+                ? true
+                : key === "analytics"
+                  ? analytics
+                  : key === "attribution"
+                    ? attribution
+                    : advertising;
+            const setter =
+              key === "analytics" ? setAnalytics : key === "attribution" ? setAttribution : setAdvertising;
             return (
               <li key={key}>
                 <label className="flex cursor-pointer gap-3">

@@ -4,6 +4,7 @@ export const primaryNav = [
   { label: "Enterprise", href: "/enterprise" },
   { label: "Partner", href: "/partner" },
   { label: "Pricing", href: "/pricing" },
+  { label: "Learn", href: "/learn" },
   { label: "Blog", href: "/blog" },
   { label: "About", href: "/about" },
   { label: "FAQ", href: "/faq" },

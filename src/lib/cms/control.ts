@@ -52,6 +52,7 @@ export function cmsSnapshot() {
       "/pricing",
       "/about",
       "/faq",
+      "/learn",
       "/blog",
       "/contact",
       "/privacy",

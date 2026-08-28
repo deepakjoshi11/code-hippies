@@ -36,6 +36,7 @@ export function allIndexableUrls(): string[] {
     "/pricing",
     "/about",
     "/faq",
+    "/learn",
     "/blog",
     "/contact",
     "/privacy",

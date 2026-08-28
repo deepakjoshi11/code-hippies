@@ -28,7 +28,7 @@ const PAGES = [
   "/", "/work", "/work/uttaranchal-kesari", "/work/nantinbaba",
   "/services", "/services/ai-llm-engineering", "/process", "/pricing",
   "/about", "/faq", "/blog", "/blog/rag-that-refuses-to-answer", "/contact",
-  "/enterprise", "/partner", "/hire", "/privacy",
+  "/enterprise", "/partner", "/hire", "/privacy", "/learn",
 ];
 
 let failures = 0;
