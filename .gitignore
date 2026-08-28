@@ -13,3 +13,8 @@ next-env.d.ts
 *.tsbuildinfo
 .lighthouseci
 /data/chat-gaps.log
+
+# Vercel CLI appends `.env*`; keep .env.example tracked — it is the
+# documentation for every variable and must stay in the repository.
+.env*
+!.env.example
