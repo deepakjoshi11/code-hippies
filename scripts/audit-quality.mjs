@@ -106,6 +106,28 @@ for (const path of PAGES) {
 }
 console.log(`  ${PAGES.length} pages checked`);
 
+// ------------------------------------------------- offline case studies ----
+// A case study marked offline must say so on its page and must NOT render an
+// "Open the live site" button. This is checked against rendered HTML because
+// the guard is a render-time branch — a unit test on the data would have
+// passed while the page still shipped a dead button, which is exactly what
+// happened once.
+console.log("\n=== Offline case-study rendering");
+{
+  const { caseStudies: studies } = await import("../src/data/case-studies.ts").catch(() => ({ caseStudies: [] }));
+  const offline = (studies ?? []).filter((c) => c.status === "offline");
+  for (const study of offline) {
+    const html = await (await fetch(`${BASE}/work/${study.slug}`)).text();
+    if (html.includes("Open the live site")) {
+      fail(`/work/${study.slug} is offline but still renders an "Open the live site" button`);
+    }
+    if (!html.includes("no longer online")) {
+      fail(`/work/${study.slug} is offline but does not tell the reader so`);
+    }
+  }
+  console.log(`  ${offline.length} offline study/studies checked`);
+}
+
 // -------------------------------------------------- accessibility + layout ----
 const browser = await chromium.launch({
   ...(CHROME ? { executablePath: CHROME } : {}),

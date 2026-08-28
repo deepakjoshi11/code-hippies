@@ -88,10 +88,19 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
             {study.summary}
           </p>
 
+          {study.offlineNote ? (
+            <p className="mt-6 max-w-3xl rounded-card border border-accent-600/25 bg-accent-600/6 p-4 text-sm leading-relaxed text-ink-300">
+              <strong className="font-semibold text-ink-100">This site is no longer online.</strong>{" "}
+              {study.offlineNote}
+            </p>
+          ) : null}
+
           <div className="mt-8 flex flex-wrap gap-3">
-            <ButtonLink href={study.url} external size="md">
-              Open the live site <ExternalLink aria-hidden="true" />
-            </ButtonLink>
+            {isLive(study) ? (
+              <ButtonLink href={study.url} external size="md">
+                Open the live site <ExternalLink aria-hidden="true" />
+              </ButtonLink>
+            ) : null}
             {service ? (
               <ButtonLink href={`/services/${service.slug}`} variant="outline" size="md">
                 {service.name} <ArrowUpRight aria-hidden="true" />
