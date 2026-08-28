@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { buildChannels, primaryChannel, whatsappHref } from "@/data/channels";
+import { caseStudies, liveCaseStudies } from "@/data/case-studies";
+import { proofMetrics } from "@/data/proof";
 import { audienceTracks, craftToAi } from "@/data/positioning";
 import { partnerRoutes, dharmarthlabsHref, stayHereInstead } from "@/data/partnership";
 import { cmsSnapshot, controlSchema } from "@/lib/cms/control";
@@ -22,6 +24,14 @@ describe("contact channels", () => {
 
   it("returns no primary channel when nothing is configured, so callers fall back", () => {
     expect(primaryChannel()).toBeNull();
+  });
+});
+
+describe("proof metrics", () => {
+  it("never claims more reachable sites than there are", () => {
+    const detail = proofMetrics[0]!.detail;
+    expect(detail).toContain(String(liveCaseStudies().length));
+    expect(proofMetrics[0]!.value).toBe(String(caseStudies.length));
   });
 });
 

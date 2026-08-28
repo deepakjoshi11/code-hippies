@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowUpRight, ExternalLink } from "lucide-react";
-import type { CaseStudy } from "@/data/case-studies";
+import { isLive, type CaseStudy } from "@/data/case-studies";
 import { Card, CardBody } from "@/components/ui/card";
 import { Reveal } from "@/components/ui/reveal";
 import { InlineCode } from "@/components/ui/inline-code";
@@ -69,16 +69,25 @@ export function CaseStudyCard({
                 aria-hidden="true"
               />
             </span>
-            <a
-              href={study.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="relative z-10 flex min-w-0 items-center gap-1.5 font-mono text-xs text-ink-500 transition-colors hover:text-ink-100"
-            >
-              <span className="truncate">{study.displayUrl}</span>
-              <ExternalLink className="size-3.5 shrink-0" aria-hidden="true" />
-              <span className="sr-only">(opens the live site in a new tab)</span>
-            </a>
+            {isLive(study) ? (
+              <a
+                href={study.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative z-10 flex min-w-0 items-center gap-1.5 font-mono text-xs text-ink-500 transition-colors hover:text-ink-100"
+              >
+                <span className="truncate">{study.displayUrl}</span>
+                <ExternalLink className="size-3.5 shrink-0" aria-hidden="true" />
+                <span className="sr-only">(opens the live site in a new tab)</span>
+              </a>
+            ) : (
+              <span className="flex min-w-0 items-center gap-1.5 font-mono text-xs text-ink-500">
+                <span className="truncate line-through decoration-ink-700">{study.displayUrl}</span>
+                <span className="shrink-0 rounded bg-ink-100/8 px-1.5 py-0.5 not-italic text-[0.65rem] text-ink-400">
+                  offline
+                </span>
+              </span>
+            )}
           </div>
         </CardBody>
       </Card>

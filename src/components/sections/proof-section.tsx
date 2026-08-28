@@ -1,6 +1,6 @@
 import { ExternalLink } from "lucide-react";
 import { testimonials } from "@/data/proof";
-import { caseStudies } from "@/data/case-studies";
+import { liveCaseStudies } from "@/data/case-studies";
 import { Card, CardBody } from "@/components/ui/card";
 import { Reveal } from "@/components/ui/reveal";
 import { InlineCode } from "@/components/ui/inline-code";
@@ -37,7 +37,9 @@ export function ProofSection() {
     );
   }
 
-  const evidence = caseStudies.slice(0, 6);
+  // Only reachable sites belong here: the entire point is that the reader can
+  // open one and check the claim.
+  const evidence = liveCaseStudies().slice(0, 6);
 
   return (
     <div className="flex flex-col gap-6">

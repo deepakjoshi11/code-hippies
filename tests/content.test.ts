@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { caseStudies, getCaseStudy } from "@/data/case-studies";
+import { caseStudies, getCaseStudy, isLive, liveCaseStudies } from "@/data/case-studies";
 import { services, getService } from "@/data/services";
 import { faqs } from "@/data/faq";
 import { getAllPosts } from "@/lib/blog";
@@ -15,6 +15,24 @@ describe("case studies", () => {
     for (const c of caseStudies) {
       expect(c.url.startsWith("https://"), `${c.slug} must be https`).toBe(true);
     }
+  });
+
+  it("marks any unreachable site offline and explains why, rather than deleting it", () => {
+    // A dead "open the live site" link breaks the falsifiability argument the
+    // whole portfolio rests on. Offline studies keep their record but must
+    // carry an explanation instead of an invitation to click.
+    for (const c of caseStudies) {
+      if (isLive(c)) {
+        expect(c.offlineNote, `${c.slug} is live and should not carry an offline note`).toBeUndefined();
+      } else {
+        expect(c.offlineNote, `${c.slug} is offline and must explain why`).toBeTruthy();
+        expect(c.offlineNote!.length).toBeGreaterThan(60);
+      }
+    }
+  });
+
+  it("still has a majority of reachable sites — otherwise the claim is hollow", () => {
+    expect(liveCaseStudies().length).toBeGreaterThan(caseStudies.length / 2);
   });
 
   it("pairs an engineering layer with a layman layer on every study", () => {

@@ -12,6 +12,17 @@ export type CaseStudy = {
   name: string;
   url: string;
   displayUrl: string;
+  /**
+   * Whether the site is currently reachable.
+   *
+   * The whole premise of these case studies is that every claim is checkable
+   * by opening the link, so a dead link is not a cosmetic problem — it breaks
+   * the argument. When a site goes offline the work stays in the portfolio,
+   * but the card stops inviting a click it cannot honour and says why.
+   */
+  status?: "live" | "offline";
+  /** Shown in place of the live link when status is "offline". */
+  offlineNote?: string;
   category: "News & Publishing" | "Marketing & Agency" | "Health & Coaching" | "Community & Non-profit";
   year: string;
   /** One-line positioning used on cards. */
@@ -501,6 +512,9 @@ export const caseStudies: CaseStudy[] = [
     name: "Nantin Baba Ashram",
     url: "https://www.nantinbaba.org/",
     displayUrl: "nantinbaba.org",
+    status: "offline",
+    offlineNote:
+      "The domain currently returns a Vercel DEPLOYMENT_NOT_FOUND error — the hosting was taken down after handover, which is the organisation's decision to make. The build and the signals recorded below were verified while it was live; they are kept here rather than quietly deleted.",
     category: "Community & Non-profit",
     year: "2025",
     summary: "A deliberately tiny static Hindi site for an ashram — 21 KB, no build step, no maintenance.",
@@ -534,6 +548,15 @@ export const caseStudies: CaseStudy[] = [
     accentTo: "oklch(0.78 0.15 145)",
   },
 ];
+
+/** Case studies whose live URL currently resolves. */
+export function liveCaseStudies(): CaseStudy[] {
+  return caseStudies.filter((c) => c.status !== "offline");
+}
+
+export function isLive(study: CaseStudy): boolean {
+  return study.status !== "offline";
+}
 
 export function getCaseStudy(slug: string): CaseStudy | undefined {
   return caseStudies.find((c) => c.slug === slug);

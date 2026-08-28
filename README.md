@@ -1,21 +1,36 @@
 <div align="center">
 
-<img src="./public/logo-mark.svg" alt="Code Hippies" width="72" height="72" />
+<img src="./public/logo-mark.svg" alt="Code Hippies logo — Deepak Joshi full-stack and AI engineering studio" width="76" height="76" />
 
-# Code Hippies
+# Code Hippies — Deepak Joshi
 
-**Deepak Joshi** — full-stack, mobile and AI/LLM engineer
-*ex-Deloitte USI · Founder, [Dharmarthlabs](https://dharmarthlabs.com)*
+### Full-Stack, Mobile & AI/LLM Engineer · India · Available for hire
 
-Portfolio and lead-generation platform.
-The site is the work sample: everything it argues software should do, it does to itself.
+**[codehippies.com](https://codehippies.com)** &nbsp;·&nbsp; ex-Deloitte USI &nbsp;·&nbsp; Founder, [Dharmarthlabs](https://dharmarthlabs.com)
 
 [![CI](https://github.com/deepakjoshi11/code-hippies/actions/workflows/ci.yml/badge.svg)](https://github.com/deepakjoshi11/code-hippies/actions/workflows/ci.yml)
 [![Search distribution](https://github.com/deepakjoshi11/code-hippies/actions/workflows/distribution.yml/badge.svg)](https://github.com/deepakjoshi11/code-hippies/actions/workflows/distribution.yml)
-
-`Lighthouse 100/100/100/100` · `WCAG 2.1 AA — 0 violations` · `CLS 0.000` · `300 tests` · `0 vulnerabilities`
+[![Next.js 16](https://img.shields.io/badge/Next.js-16-000?logo=nextdotjs&logoColor=white)](https://nextjs.org)
+[![TypeScript strict](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Lighthouse 100](https://img.shields.io/badge/Lighthouse-100%2F100%2F100%2F100-0cce6b)](https://developer.chrome.com/docs/lighthouse)
+[![WCAG 2.1 AA](https://img.shields.io/badge/WCAG%202.1%20AA-0%20violations-0cce6b)](https://www.w3.org/WAI/WCAG21/quickref/)
 
 </div>
+
+---
+
+**Code Hippies** is the engineering studio of **Deepak Joshi** — a senior
+full-stack, mobile and AI/LLM engineer based in India, building production
+software for startups, agencies and enterprise teams worldwide. This repository
+is the source code of [codehippies.com](https://codehippies.com), the portfolio
+and lead-generation platform for that practice.
+
+Hire for: **React & Next.js development**, **iOS and Android apps**,
+**retrieval-grounded AI/LLM systems**, **technical SEO and Core Web Vitals**,
+and **OWASP application-security review**.
+
+> The site is the work sample. Everything it argues software should do, it does
+> to itself — and every claim in it is independently checkable.
 
 ---
 
@@ -23,10 +38,10 @@ The site is the work sample: everything it argues software should do, it does to
 
 Most portfolios assert competence. This one is falsifiable.
 
-Every technology claim about the 13 client sites was **read off the live HTTP
-response** — headers, served HTML, embedded JSON-LD — and the verification
-command is documented so anyone can re-run it. Nothing is inferred, and where
-a signal could not be observed it is simply absent.
+Every technology claim about the **13 client sites** was **read off the
+live HTTP response** — headers, served HTML, embedded JSON-LD — and the
+verification command is documented so anyone can re-run it. Nothing is
+inferred; where a signal could not be observed, it is simply absent.
 
 There are **no invented testimonials**. The array is empty, with a comment
 explaining why, and the proof section renders verifiable engineering evidence
@@ -35,48 +50,100 @@ unconfigured channels hide themselves rather than shipping a dead link.
 
 ---
 
-## Stack
+## Live production work
+
+Thirteen sites shipped to production, each with a case study pairing the
+engineering detail with a plain-language explanation of what it does for the
+business. Twelve are reachable right now — the thirteenth was taken offline
+after handover and is marked as such rather than quietly removed.
+
+| Project | Sector | Stack signals verified on the live response |
+| --- | --- | --- |
+| [Uttaranchal Kesari](https://www.uttaranchalkesari.com) | Hindi news, Uttarakhand | Next.js · Caddy · NewsMediaOrganization JSON-LD |
+| [Himachal Kesari](https://www.himachalkesari.com) | Hindi news, Himachal | Next.js · Cloudflare · multi-tenant platform |
+| [Haryana Kesari](https://www.haryanakesari.com) | Hindi news, Haryana | Next.js · Caddy · search-ready before launch |
+| [NewsLive24](https://www.newslive24.in) | English news, India | WordPress · nginx · NewsArticle · GA4 · AdSense |
+| [ReadyNews](https://readynews.in) | News portal | Custom PHP · Cloudflare · versioned assets |
+| [IndiaNews16](https://indianews16.com) | News portal | Custom PHP · 90 crawlable links from the homepage |
+| [CarbonMedia](https://carbonmedia.in) | Multi-vertical news | PHP 8.2 · supported runtime as a security control |
+| [FitWithNash](https://consult.fitwithnash.com) | Health coaching | Astro · Vercel · Person/Service/FAQPage schema |
+| [Core Media Solutions](https://coremediasolutions.in) | Agency | Service + OfferCatalog + FAQPage structured data |
+| [Influence Axis](https://influenceaxis.in) | Agency | Next.js · LiteSpeed · single-h1 outline |
+| [ScaleWell](https://scalewelldigitalsolutions.in) | Agency | React · Vite · Tailwind · 1 KB HTML shell |
+| [Belong Digital](https://belongdigitalsolutions.in) | Agency | React · Vite · full Open Graph / Twitter cards |
+| Nantin Baba Ashram *(offline)* | Non-profit | 21 KB static HTML · no build step · no maintenance |
+
+Six different stacks, on purpose. An ashram that cannot carry a maintenance
+contract gets static HTML that still works in a decade. A newsroom that will
+not leave WordPress gets engineering done *around* the CMS. Regional editions
+that need stories crawlable in seconds get server-rendered Next.js. **The
+technology follows the constraint, not the preference.**
+
+---
+
+## Tech stack
 
 | Layer | Choice | Why |
 | --- | --- | --- |
-| Framework | Next.js 16, App Router, RSC | Content in the initial HTML — the single largest SEO decision |
+| Framework | Next.js 16, App Router, React Server Components | Content in the initial HTML — the single largest SEO decision |
 | Language | TypeScript strict, `noUncheckedIndexedAccess` | Index access is a real source of production bugs |
 | Styling | Tailwind CSS v4, design tokens | A rebrand is a token change, not a component sweep |
 | Motion | IntersectionObserver + CSS, Lenis on idle | An animation runtime on every page cost ~150ms TBT |
 | Content | MDX with frontmatter | The blog is content, not hardcoded JSX |
 | Forms | react-hook-form + Zod | One schema, enforced again server-side |
 | AI | Local retrieval index + Anthropic API | Works with no key; never ungrounded |
+| Analytics | Consent-gated, first-party | No ad networks, no data sold, no IP stored |
 | CI/CD | GitHub Actions → Lighthouse CI → Vercel | A budget nobody checks is a number that drifts |
+
+Also worked with: **Vue/Nuxt**, **Astro**, **Node/NestJS**, **Python
+FastAPI/Django**, **Go**, **PHP 8.2+**, **Swift/SwiftUI**, **Kotlin**,
+**React Native**, **Flutter**, **PostgreSQL**, **Redis**, **Docker**.
 
 ---
 
-## What's in here
+## Features
 
-**13 case studies** — one per live production site, each pairing an engineering
-layer with a plain-language layer, listing the exact signals observed on the
-live response.
+**13 case studies** — engineering layer + plain-language layer, listing the
+exact signals observed on each live response.
 
-**5 service pages** — each targeting one realistic long-tail phrase, with its
-own FAQ and `Service` structured data.
+**5 service pages** — each targeting one realistic long-tail search phrase,
+with its own FAQ and `Service` structured data.
 
 **A 50-question FAQ** across nine categories, emitted as `FAQPage` JSON-LD and
-loaded into the assistant as a browsable, searchable set.
+loaded into the AI assistant as a browsable, searchable set.
 
 **A retrieval-grounded AI assistant** with a three-layer pipeline — curated
 answer → retrieval → refusal — so common questions are answered verbatim and
-anything outside the knowledge base is declined rather than guessed at.
+anything outside the knowledge base is *declined rather than guessed at*.
 
 **A multi-channel contact dock** — WhatsApp, Instagram, Messenger, Telegram,
-email, phone, Cal.com, plus Fiverr/Upwork/Freelancer/Toptal for buyers who
-want escrow. Every channel env-driven and hidden until configured.
+email, phone, Cal.com, plus Fiverr/Upwork/Freelancer/Toptal for buyers who want
+escrow protection. Every channel env-driven and hidden until configured.
 
 **An audience switcher** writing the same claims three ways: for a
 non-technical buyer, an engineer assessing judgement, and someone weighing this
 against headcount.
 
-**A partnership funnel** routing work that is genuinely bigger than one
-engineer to Dharmarthlabs — including a *"when you should stay here instead"*
-block, because a wrong referral costs more trust than it earns.
+**A partnership funnel** routing work genuinely bigger than one engineer to
+Dharmarthlabs — including a *"when you should stay here instead"* block,
+because a wrong referral costs more trust than it earns.
+
+---
+
+## Engineering standards
+
+| Metric | Result |
+| --- | --- |
+| Lighthouse desktop | **100 / 100 / 100 / 100** |
+| Lighthouse mobile | **≥ 90** all four categories |
+| Cumulative Layout Shift | **0.000** on every route |
+| WCAG 2.1 A/AA (axe-core) | **0 violations**, 17 pages × 2 breakpoints |
+| Tests | **300 passing** across 7 suites |
+| Dependency vulnerabilities | **0** |
+| Responsive | 360 / 390 / 768 / 1024 / 1440px, no overflow |
+
+Enforced in CI on every push — a performance budget that nobody checks is a
+number that drifts.
 
 ---
 
@@ -133,6 +200,8 @@ for secret-shaped strings and fails on a hit.
 ## Quick start
 
 ```bash
+git clone https://github.com/deepakjoshi11/code-hippies.git
+cd code-hippies
 npm ci
 npm run kb:build        # generate the assistant's knowledge base
 npm run dev
@@ -172,18 +241,20 @@ should-refuse question above the relevance floor; this is what catches it.
 
 ---
 
-## CI/CD
+## Deployment
+
+Deployed on **Vercel**, auto-updating from `main` on every push. Preview
+deployments on every branch and pull request.
 
 Every push runs: install → knowledge base → lint → typecheck → 300 tests →
 build → `npm audit` → client-bundle secret scan → Lighthouse budgets on desktop
-and mobile. `main` deploys to Vercel.
+and mobile.
 
-Budget: all four Lighthouse categories ≥ 90, LCP < 2.5s, CLS < 0.1, TBT < 200ms.
-Three runs per URL — a single run on a shared runner is noisy enough to fail a
-good build, and a flaky gate gets disabled within a month.
+`distribution.yml` submits every URL to **IndexNow** (Bing, Yandex, Seznam,
+Naver) every 72 hours — free, no account, forever. It skips cleanly when its
+secrets are absent.
 
-`distribution.yml` submits every URL to IndexNow (Bing, Yandex, Seznam, Naver)
-every 72 hours, free and forever. It skips cleanly when its secrets are absent.
+Full setup in **[`DEPLOY.md`](./DEPLOY.md)**.
 
 ---
 
@@ -215,6 +286,31 @@ only with consent.
 This gathers less than a covert setup would. It also survives a GDPR or DPDP
 complaint, and it is the version an enterprise prospect can read without
 concern — which is worth more than the extra rows.
+
+---
+
+## Hire Deepak Joshi
+
+Available for **fixed-scope projects**, **monthly retainers** and **staff
+augmentation** — remote from India, working with clients across India, the
+Gulf, the UK and North America.
+
+**[Start a project →](https://codehippies.com/contact)** &nbsp;·&nbsp;
+[Services](https://codehippies.com/services) &nbsp;·&nbsp;
+[Case studies](https://codehippies.com/work) &nbsp;·&nbsp;
+[For enterprise teams](https://codehippies.com/enterprise) &nbsp;·&nbsp;
+[Ways to hire](https://codehippies.com/hire) &nbsp;·&nbsp;
+[FAQ](https://codehippies.com/faq)
+
+Prefer a platform that holds the money in escrow until you approve the work?
+That is a reasonable thing to want on a first engagement — the marketplace
+options are on [codehippies.com/hire](https://codehippies.com/hire).
+
+<div align="center">
+
+**[codehippies.com](https://codehippies.com)**
+
+</div>
 
 ---
 

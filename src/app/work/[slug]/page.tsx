@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowUpRight, CheckCircle2, ExternalLink } from "lucide-react";
 
-import { caseStudies, getCaseStudy, getRelated } from "@/data/case-studies";
+import { caseStudies, getCaseStudy, getRelated, isLive } from "@/data/case-studies";
 import { getService } from "@/data/services";
 import { CaseStudyCard } from "@/components/sections/case-study-card";
 import { CtaSection } from "@/components/sections/cta-section";
@@ -171,15 +171,20 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
                   <Eyebrow>Verified on the live site</Eyebrow>
                   <p className="text-xs leading-relaxed text-ink-500">
                     Each signal below was read directly from the response headers or served HTML at{" "}
-                    <a
-                      href={study.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-brand-400 underline underline-offset-4"
-                    >
-                      {study.displayUrl}
-                    </a>
+                    {isLive(study) ? (
+                      <a
+                        href={study.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-brand-400 underline underline-offset-4"
+                      >
+                        {study.displayUrl}
+                      </a>
+                    ) : (
+                      <span className="font-mono text-ink-400">{study.displayUrl}</span>
+                    )}
                     . Nothing here is inferred.
+                    {isLive(study) ? null : " These were recorded while the site was live."}
                   </p>
                   <ul className="flex flex-col gap-2.5">
                     {study.verified.map((signal) => (

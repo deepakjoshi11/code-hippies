@@ -1,4 +1,4 @@
-import { caseStudies } from "@/data/case-studies";
+import { caseStudies, isLive } from "@/data/case-studies";
 
 /**
  * Proof strip. These are live URLs, not logos — every one is clickable and
@@ -28,7 +28,7 @@ export function LogoStrip() {
         </div>
       </div>
       <ul className="sr-only">
-        {caseStudies.map((c) => (
+        {caseStudies.filter(isLive).map((c) => (
           <li key={c.slug}>
             <a href={c.url} rel="noopener noreferrer">
               {c.name} — {c.displayUrl}

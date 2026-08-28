@@ -46,8 +46,8 @@ export function Hero() {
           USI, founder of Dharmarthlabs, and the engineer behind{" "}
           <strong className="font-semibold text-ink-100">Code Hippies</strong>. Full-stack web, iOS
           and Android apps, and AI systems that answer from your data instead of inventing answers.
-          Thirteen live production sites you can open right now — every technical claim on this page
-          is verifiable in the response headers.
+          Thirteen sites shipped to production, and every technical claim about them was read off
+          the live response — so you can check the work rather than take my word for it.
         </p>
 
         <div className="mt-9 flex flex-wrap items-center gap-3">

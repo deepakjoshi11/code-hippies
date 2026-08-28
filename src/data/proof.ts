@@ -1,4 +1,4 @@
-import { caseStudies } from "./case-studies";
+import { caseStudies, liveCaseStudies } from "./case-studies";
 
 /**
  * Proof metrics. Every number here is computed from, or directly observed in,
@@ -10,8 +10,8 @@ const countStack = (needle: string) =>
 export const proofMetrics = [
   {
     value: String(caseStudies.length),
-    label: "production sites live",
-    detail: "Every one publicly reachable and independently verifiable — links below.",
+    label: "sites shipped to production",
+    detail: `${liveCaseStudies().length} are reachable right now and independently verifiable — links below.`,
   },
   {
     value: String(countStack("Next.js")),

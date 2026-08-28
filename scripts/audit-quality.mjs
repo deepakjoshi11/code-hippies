@@ -60,6 +60,13 @@ console.log("=== Link integrity");
   // The canonical origin is not registered during development, so links to it
   // are expected to 404 locally and are not counted as failures.
   const origin = new URL(BASE).origin;
+  // Case studies explicitly marked offline in src/data/case-studies.ts are
+  // reported but do not fail the build — the page already tells the reader the
+  // site is down, so the link is documented history rather than a broken promise.
+  const { caseStudies } = await import("../src/data/case-studies.ts").catch(() => ({ caseStudies: [] }));
+  const knownOffline = new Set(
+    (caseStudies ?? []).filter((c) => c.status === "offline").map((c) => new URL(c.url).host),
+  );
   const checkable = [...external].filter((u) => !u.startsWith("https://codehippies.com") && !u.startsWith(origin));
   const results = await Promise.all(checkable.map(async (url) => {
     try {
@@ -68,7 +75,15 @@ console.log("=== Link integrity");
     } catch (e) { return [url, "ERR " + String(e.message).slice(0, 30)]; }
   }));
   for (const [url, status] of results) {
-    if (typeof status !== "number" || status >= 400) fail(`external ${url} -> ${status}`);
+    if (typeof status !== "number" || status >= 400) {
+      let host = "";
+      try { host = new URL(url).host; } catch { /* keep empty */ }
+      if (knownOffline.has(host)) {
+        console.log(`  note  known-offline case study still down: ${url} -> ${status}`);
+        continue;
+      }
+      fail(`external ${url} -> ${status}`);
+    }
   }
   console.log(`  ${results.length} external links checked`);
 }
