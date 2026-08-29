@@ -269,6 +269,9 @@ Full setup in **[`DEPLOY.md`](./DEPLOY.md)**.
 | [`docs/WIREFRAMES.md`](./docs/WIREFRAMES.md) | Layout, breakpoints, responsive rules |
 | [`public/BRAND-ASSETS.md`](./public/BRAND-ASSETS.md) | Dropping in your logo and favicon |
 | [`.env.example`](./.env.example) | Every variable, annotated. All optional. |
+| [`SECURITY.md`](./SECURITY.md) | Reporting a vulnerability, scope, controls already in place |
+| [`CHANGELOG.md`](./CHANGELOG.md) | Release history and known limitations |
+| [`CLAUDE.md`](./CLAUDE.md) | Conventions for AI-assisted sessions in this repo |
 
 ---
 
@@ -316,4 +319,12 @@ options are on [codehippies.com/hire](https://codehippies.com/hire).
 
 ## Licence
 
-All rights reserved. © Code Hippies / Deepak Joshi.
+**All rights reserved** — see [`LICENSE`](./LICENSE). This repository is public
+so the claims on codehippies.com can be verified, not so it can be reused.
+
+Reading, cloning, running it locally and quoting excerpts with attribution are
+all fine. Redeploying it as your own site, or reusing the written content and
+brand, is not. Permission is usually given when asked —
+[just ask](https://codehippies.com/contact).
+
+© 2026 Deepak Joshi / Code Hippies.

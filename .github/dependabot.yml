@@ -1,0 +1,45 @@
+version: 2
+
+updates:
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Asia/Kolkata
+    open-pull-requests-limit: 5
+    labels: ["dependencies"]
+    commit-message:
+      prefix: "chore"
+      include: scope
+    groups:
+      # Grouped so a routine week is one reviewable PR rather than fifteen.
+      # Patch and minor updates for these move together in practice anyway.
+      next:
+        patterns: ["next", "eslint-config-next", "@next/*"]
+      react:
+        patterns: ["react", "react-dom", "@types/react", "@types/react-dom"]
+      tooling:
+        patterns: ["eslint*", "typescript", "vitest", "@vitest/*", "tsx"]
+        update-types: ["minor", "patch"]
+      tailwind:
+        patterns: ["tailwindcss", "@tailwindcss/*", "tailwind-merge"]
+    ignore:
+      # Majors are deliberately manual: this project asserts Lighthouse and
+      # accessibility budgets that a framework major can move, and that needs a
+      # human running the audit rather than a bot merging on green unit tests.
+      - dependency-name: "next"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: monthly
+    labels: ["dependencies", "ci"]
+    commit-message:
+      prefix: "chore"

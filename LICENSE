@@ -1,0 +1,34 @@
+Copyright (c) 2026 Deepak Joshi (Code Hippies). All rights reserved.
+
+This repository is published for reference — to demonstrate engineering
+practice and to let anyone verify the claims made on codehippies.com. It is
+NOT open source, and no licence to reuse it is granted by its being public.
+
+PERMITTED, without asking:
+
+  - Reading, cloning and running the code locally.
+  - Quoting excerpts with attribution, for review, commentary, teaching or
+    research.
+  - Reusing the general techniques and approaches demonstrated here. Ideas are
+    not owned; the specific expression of them in this repository is.
+
+NOT PERMITTED without prior written permission:
+
+  - Redistributing this repository, in whole or in substantial part.
+  - Deploying it, modified or unmodified, as your own site or product.
+  - Reusing the written content — case studies, service copy, blog articles,
+    FAQ answers — in any form.
+  - Reusing the Code Hippies name, logo or brand assets.
+
+The written content and brand are the point of the site, and copying them
+would misrepresent someone else's work as your own. The code is here so it can
+be checked, not so it can be lifted.
+
+Permission is usually given when asked. Contact: https://codehippies.com/contact
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

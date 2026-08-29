@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Start a project
+    url: https://codehippies.com/contact
+    about: Hiring enquiries go through the brief form, not the issue tracker.
+  - name: Report a security vulnerability
+    url: https://github.com/deepakjoshi11/code-hippies/security/advisories/new
+    about: Please report privately rather than in a public issue.
+  - name: Ask the site assistant
+    url: https://codehippies.com/faq
+    about: 50 common questions, answered — and an assistant that says when it does not know.

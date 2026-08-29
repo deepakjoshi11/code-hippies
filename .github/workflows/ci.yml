@@ -137,43 +137,10 @@ jobs:
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
 
-  deploy:
-    name: Deploy to Vercel
-    runs-on: ubuntu-latest
-    needs: [verify, security, lighthouse]
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    timeout-minutes: 15
-    environment:
-      name: production
-      url: ${{ steps.deploy.outputs.url }}
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build knowledge base
-        run: npm run kb:build
-
-      - name: Deploy
-        id: deploy
-        run: |
-          if [ -z "${VERCEL_TOKEN}" ]; then
-            echo "::notice::VERCEL_TOKEN is not configured; skipping deploy."
-            echo "url=" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          npx vercel@latest pull --yes --environment=production --token="$VERCEL_TOKEN"
-          npx vercel@latest build --prod --token="$VERCEL_TOKEN"
-          URL=$(npx vercel@latest deploy --prebuilt --prod --token="$VERCEL_TOKEN")
-          echo "url=$URL" >> "$GITHUB_OUTPUT"
-          echo "Deployed to $URL"
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+# Deployment is handled by Vercel's native GitHub integration, which is
+# connected to this repository: a push to `main` deploys to production and any
+# other branch or pull request gets a preview URL automatically.
+#
+# There is deliberately no deploy job here. Running one alongside the Git
+# integration produces two deployments per push — doubling build minutes and
+# making it ambiguous which one is actually serving traffic.

@@ -1,0 +1,49 @@
+name: Content correction
+description: A factual claim on the site is wrong or out of date
+labels: ["content", "accuracy"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This site's whole premise is that every technical claim is checkable.
+        If one is wrong, that matters more than a visual bug — thank you for
+        reporting it.
+
+  - type: input
+    id: page
+    attributes:
+      label: Which page
+      placeholder: https://codehippies.com/work/uttaranchal-kesari
+    validations:
+      required: true
+
+  - type: textarea
+    id: claim
+    attributes:
+      label: The claim as written
+      description: Quote it exactly.
+    validations:
+      required: true
+
+  - type: textarea
+    id: correction
+    attributes:
+      label: What is actually true
+      description: |
+        If you can, include how to verify it — a `curl` command, a response
+        header, a screenshot. The method used for the existing claims is in
+        `NOTES.md`.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind of correction
+      options:
+        - A technology claim about a client site is wrong
+        - A linked site is offline or has moved
+        - A statement about services, pricing or process is inaccurate
+        - Something else
+    validations:
+      required: true

@@ -1,0 +1,66 @@
+name: Bug report
+description: Something is broken or behaving incorrectly
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        If this is a **security** issue, please do not file it here — see
+        [SECURITY.md](../blob/main/SECURITY.md) for private reporting.
+
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you saw, as precisely as you can put it.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected instead
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Go to /work
+        2. Resize to 360px
+        3. …
+    validations:
+      required: true
+
+  - type: input
+    id: url
+    attributes:
+      label: Page URL
+      placeholder: https://codehippies.com/work
+
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where did you see it
+      options:
+        - Production (codehippies.com)
+        - Vercel preview deployment
+        - Local development
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: Browser and device
+      placeholder: "Chrome 141, Pixel 7, Android 15"
+
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues for a duplicate
+          required: true
