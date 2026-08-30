@@ -82,9 +82,18 @@ the same domain is how mail goes missing.
 | `TXT` | `@` | `forward-email=hello:codehippies11@gmail.com,contact:codehippies11@gmail.com,deepak:codehippies11@gmail.com,security:codehippies11@gmail.com` | 3600 |
 | `TXT` | `@` | `v=spf1 include:spf.forwardemail.net include:_spf.google.com ~all` | 3600 |
 | `TXT` | `_dmarc` | `v=DMARC1; p=none; rua=mailto:codehippies11@gmail.com; fo=1` | 3600 |
+| `TXT` | `@` | `google-site-verification=4z-bWzOR4n_xaSW5hdacjR9G1EnVmwttS8Db0vDkyoc` | 3600 |
 
-Both apex `TXT` records must exist **as separate records** — do not merge them
-into one string. SPF and the forwarding config are read by different systems.
+All three apex `TXT` records must exist **as separate records** — do not merge
+them into one string. SPF, the forwarding config and Google's verification are
+read by three different systems, and a merged string satisfies none of them.
+
+The Google record is optional but worth adding. The site already serves a
+`<meta name="google-site-verification">` on every route, which is enough to
+verify the **URL-prefix** property `https://codehippies.com`. The DNS record
+verifies the **Domain** property instead, which covers the apex, `www` and any
+future subdomain in one place, and survives a redesign that drops the meta tag.
+Neither method grants Google any access beyond reading what is already public.
 
 #### CAA — optional
 

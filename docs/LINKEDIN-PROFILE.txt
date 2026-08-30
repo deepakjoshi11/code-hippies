@@ -265,7 +265,7 @@ Based in India, working with clients internationally.
 
 Portfolio and verified case studies: https://codehippies.com
 Free learning track for developers moving into AI-era engineering:
-https://learn.codehippies.com
+https://codehippies.com/learn
 
 Open to: freelance and contract engineering, AI/LLM consulting, and technical
 partnerships. hello@codehippies.com
@@ -284,7 +284,7 @@ partnerships. hello@codehippies.com
      Pin, in this order:
        1. https://codehippies.com          — "Code Hippies — portfolio and
                                               verified case studies"
-       2. https://learn.codehippies.com    — "Free: become an AI-era software
+       2. https://codehippies.com/learn    — "Free: become an AI-era software
                                               professional"
        3. https://github.com/codehippies11 — "Code Hippies on GitHub"
 
@@ -355,32 +355,125 @@ partnerships. hello@codehippies.com
 
 2.9  CONTACT INFO
      Website 1: https://codehippies.com          (type: Company)
-     Website 2: https://learn.codehippies.com    (type: Other)
+     Website 2: https://codehippies.com/learn    (type: Other)
      Website 3: https://github.com/deepakjoshi11 (type: Portfolio)
      Email:     hello@codehippies.com
 
 
 --------------------------------------------------------------------------------
-SECTION 3 — KEYWORD BANK
+SECTION 3 — EXTERNAL LINKS TO ADD
 --------------------------------------------------------------------------------
 
-Primary — must appear in Headline AND About:
+Every URL below was checked live before being listed here. Do not add a link
+to this list without checking it the same way — a dead link on a profile is
+worse than a missing one, and LinkedIn does not tell you when one rots.
+
+3.1  VERIFIED LIVE — add these
+
+  https://codehippies.com
+      The site. Featured slot 1, Contact info "Company", Company Page website.
+      Verified: HTTP 200.
+
+  https://codehippies.com/learn
+      Free learning tracks. Featured slot 2, Contact info "Other".
+      NOTE: this is a PATH, not a subdomain. There is no
+      learn.codehippies.com and linking one would 404.
+      It has its own sitemap at /sitemap-learn.xml, submitted separately in
+      Search Console and Bing, so traffic to it is measurable on its own.
+
+  https://codehippies.com/work
+      Twelve live case studies. Good target for a post link.
+
+  https://github.com/codehippies11
+      Studio GitHub. Featured slot 3.
+
+  https://github.com/deepakjoshi11
+      Personal GitHub. Contact info "Portfolio".
+
+  https://dharmarthlabs.com
+      Founder credential. Link from the Dharmarthlabs Experience entry.
+
+  https://hackindia.org/2026/ai-for-marketers-hackathon/teams/codehippies
+      HackIndia team page. Verified 2026-08-30: HTTP 200, robots
+      "index, follow", title "CodeHippies - AI for Marketers Hackathon Team |
+      HackIndia", body names both Code Hippies and Deepak Joshi.
+      Worth adding as a post or a Featured link — it is third-party
+      corroboration of the name, which is worth more than another self-link.
+
+3.2  THE RECIPROCAL LINKS THAT ACTUALLY MOVE THE NEEDLE
+
+  Search engines resolve an entity by seeing the same identity asserted from
+  several independent places that point at each other. One-way links are
+  weaker. Three worth closing:
+
+  a) HackIndia team page -> codehippies.com
+     Currently it links only to GitHub (HackIndiaXYZ org). If that team
+     profile has a website field, put codehippies.com in it. This is the
+     single highest-value external action available, because it is the only
+     link here from a domain you do not control.
+
+  b) LinkedIn -> site, and site -> LinkedIn
+     Once the profile and Company Page exist, add both URLs to
+     src/data/channels.ts so the site links back. The site already links out
+     to GitHub and Dharmarthlabs; LinkedIn is the gap.
+
+  c) GitHub profiles -> codehippies.com
+     Set the website field on both github.com/codehippies11 and
+     github.com/deepakjoshi11. Free, thirty seconds, and GitHub profile
+     pages carry real authority.
+
+3.3  DO NOT LINK
+
+  - learn.codehippies.com — does not exist.
+  - Any Fiverr or Upwork gig URL that is not currently published. The FAQ
+    mentions working on those platforms; only link a profile that is live.
+  - hello@codehippies.com as a "website". It is an email; it belongs in the
+    email field.
+
+
+--------------------------------------------------------------------------------
+SECTION 3b — KEYWORD BANK
+--------------------------------------------------------------------------------
+
+How to use this: primary keywords must appear in the Headline AND the About,
+because those two fields carry the most weight in LinkedIn search. Secondary
+keywords should appear once each, naturally, across About, Experience and
+Skills — a keyword repeated five times ranks no better and reads worse.
+
+PRIMARY — Headline and About, both:
   full stack developer, AI engineer, Next.js developer, React developer,
   mobile app developer, LLM engineer
 
-Secondary — spread naturally across About, Experience, Skills:
+SECONDARY — once each, spread naturally:
   TypeScript, Node.js, iOS developer, Android developer, RAG systems,
   retrieval augmented generation, AI chatbot development, technical SEO,
   Core Web Vitals, web performance, application security, OWASP,
-  software consultant, freelance developer India, production software
+  software consultant, freelance developer India, production software,
+  Astro, Tailwind CSS, PostgreSQL, Vercel, structured data, JSON-LD
 
-Brand / entity — exact string, every time:
+BRAND / ENTITY — exact string every time, no variants:
   Code Hippies, codehippies.com, Deepak Joshi, Dharmarthlabs
+  ("CodeHippies", "code hippies" and "Code-Hippies" fragment the signal.
+   The GitHub handles are codehippies11 and deepakjoshi11 — those are
+   handles, not the brand name, and are the one exception.)
 
-Long-tail, for posts rather than the profile:
-  hire Next.js developer India, RAG chatbot development, LLM integration
-  consultant, AI engineer for startups, production-ready web application
+CREDENTIAL — recruiters filter on these literally:
+  Deloitte, Deloitte USI, ex-Deloitte, founder
 
+LONG-TAIL — for posts and the Services description, not the profile body:
+  hire Next.js developer India, RAG chatbot development,
+  LLM integration consultant, AI engineer for startups,
+  production-ready web application, grounded AI assistant,
+  Core Web Vitals optimisation, freelance AI engineer
+
+SEARCHES THIS PROFILE SHOULD WIN:
+  "Code Hippies"                    — brand, should be rank 1
+  "Deepak Joshi Code Hippies"       — the association, rank 1
+  "Deepak Joshi developer"          — competitive, aim for page 1
+  "Next.js developer India"         — competitive
+  "RAG developer India"             — low volume, winnable
+  "AI visibility developer"         — very low volume, winnable, and it is
+                                      what /learn is actually about
 
 --------------------------------------------------------------------------------
 SECTION 4 — WHAT NOT TO WRITE
