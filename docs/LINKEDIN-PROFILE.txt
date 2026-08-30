@@ -1,0 +1,438 @@
+================================================================================
+CODE HIPPIES — LINKEDIN SETUP PACK
+Company Page + personal profile copy, SEO-optimised, ready to paste.
+
+Every factual claim below is drawn from src/data/ in the codehippies.com
+repository, which is itself built from live HTTP verification of each client
+site. Nothing here is invented. If you edit this file, keep it that way.
+
+Last updated: 2026-08-30
+================================================================================
+
+
+--------------------------------------------------------------------------------
+SECTION 0 — HOW THE CROSS-LINKING WORKS (read this first)
+--------------------------------------------------------------------------------
+
+You asked for the Deepak Joshi <-> Code Hippies link to be SEO-effective but
+subtle. Those two goals are in tension, and the resolution is structural rather
+than textual.
+
+The mistake to avoid: repeating "Deepak Joshi, professionally known as Code
+Hippies globally" in five places. It reads as keyword stuffing to a human, and
+LinkedIn's own search ranking discounts repetition within a profile. It makes
+you look like you are trying.
+
+What actually works instead — entity association:
+
+  1. STRUCTURED FIELDS DO THE HEAVY LIFTING.
+     LinkedIn's Experience section creates a machine-readable link between a
+     person and a Company Page. When your personal profile lists "Code Hippies"
+     as an employer and that entry resolves to the actual Company Page, the
+     association is established in LinkedIn's graph. No prose needed. This is
+     the single highest-value action in this document and it is a dropdown,
+     not a sentence.
+
+  2. SAY THE ALIAS ONCE, PROPERLY, IN THE ONE PLACE IT IS EXPECTED.
+     The first line of your About section. One clean sentence. Search engines
+     weight early body text; humans read the first line and stop. Saying it
+     once with confidence reads as fact. Saying it four times reads as anxiety.
+
+  3. LET THE OTHER MENTIONS BE INCIDENTAL.
+     Everywhere else the name appears, it should appear because the sentence
+     needed it — "the Code Hippies studio ships...", "built under Code
+     Hippies" — not because you are placing a keyword. If you can delete the
+     brand name and the sentence still makes sense, you placed it well; if the
+     sentence collapses, it was load-bearing and it stays.
+
+  4. CONSISTENCY BEATS FREQUENCY.
+     Use the exact string "Code Hippies" everywhere — same spacing, same
+     capitalisation — across LinkedIn, GitHub, the website and the email
+     signature. Entity resolution works on exact matches. "CodeHippies",
+     "code hippies" and "Code-Hippies" fragment the signal.
+
+A note on "globally". Your brief said "professionally called code hippies
+globally". The honest version of that is that you work with clients
+internationally from India — which src/data/bio.ts already states as "Based in
+India — working globally". The copy below uses that framing. A claim that the
+name is globally *recognised* is not something either of us can support yet,
+and on a profile that recruiters and clients verify, an unsupportable claim is
+a liability rather than an asset. Once there is a portfolio of international
+clients to point at, this gets easier to say and truer at the same time.
+
+
+--------------------------------------------------------------------------------
+SECTION 1 — THE COMPANY PAGE: Code Hippies
+--------------------------------------------------------------------------------
+
+Create at: linkedin.com/company/setup/new
+
+1.1  NAME
+     Code Hippies
+
+1.2  PUBLIC URL  (choose carefully — changing it later breaks inbound links)
+     linkedin.com/company/codehippies
+
+1.3  WEBSITE
+     https://codehippies.com
+
+1.4  INDUSTRY
+     Software Development
+     (Second choice if unavailable: IT Services and IT Consulting)
+
+1.5  COMPANY SIZE
+     1-10 employees
+
+1.6  COMPANY TYPE
+     Self-Employed  — or Privately Held if you prefer the framing
+
+1.7  TAGLINE  (limit ~120 characters — this shows under the name in search)
+
+     Ship software a business can actually run on. Web, iOS, Android and
+     retrieval-grounded AI systems.
+
+     [118 characters. Front-loads the promise, then the service keywords.]
+
+1.8  OVERVIEW / ABOUT  (limit ~2,000 characters — paste as-is)
+
+Code Hippies is the engineering studio of Deepak Joshi, building production
+software for startups and agencies that need something they can run a business
+on rather than a prototype that demos well.
+
+The work spans three areas.
+
+Web development — Next.js and React applications, server-rendered where search
+visibility matters, static where it does not need to be anything more. Twelve
+client sites are live and independently verifiable; every technical claim on
+codehippies.com was read off a live HTTP response rather than assumed from a
+framework's documentation.
+
+Mobile development — native iOS and Android applications, and cross-platform
+builds where the constraint justifies it.
+
+AI and LLM engineering — retrieval-grounded assistants that answer from
+documents a business controls. These systems cite what they retrieved and
+refuse when the retrieval is weak, which makes the failure mode visible instead
+of silent. The evaluation harness runs in CI and includes questions the
+assistant is supposed to decline. The assistant on codehippies.com is built
+exactly this way, and visitors are invited to try to break it.
+
+Alongside these: technical SEO and Core Web Vitals work, and security and
+compliance review — OWASP-informed, with the reasoning written down rather than
+asserted.
+
+How the studio works. Discovery happens before a price. The price is fixed
+against a written scope. Changes get quoted rather than quietly absorbed. Every
+project ships with a CI pipeline, a security review and a handover document,
+included rather than billed as an extra — a habit formed at Deloitte USI, where
+the cost of a change nobody can trace becomes obvious quickly.
+
+Deepak is also the founder of Dharmarthlabs, which means he has been the client
+as well as the contractor, and scopes work accordingly.
+
+Based in India. Working with clients internationally.
+
+Portfolio, verified case studies and a free learning track: https://codehippies.com
+
+     [~1,960 characters.]
+
+1.9  SPECIALTIES / KEYWORDS  (LinkedIn allows up to 20 — use all 20)
+
+     Web Development
+     Next.js Development
+     React Development
+     Full-Stack Development
+     iOS App Development
+     Android App Development
+     Mobile App Development
+     AI Engineering
+     LLM Engineering
+     RAG Systems
+     Retrieval-Augmented Generation
+     AI Chatbot Development
+     TypeScript
+     Node.js
+     Technical SEO
+     Core Web Vitals
+     Web Performance Optimization
+     Application Security
+     API Development
+     Software Consulting
+
+1.10 LOCATION
+     India  (add your city — a located page outranks an unlocated one in
+     regional search, and clients filter by it)
+
+1.11 LOGO AND COVER
+     Logo: 300x300 px minimum, square. Use the Code Hippies brand mark.
+     Cover: 1128x191 px.
+     Name the files descriptively before upload — code-hippies-logo.png beats
+     IMG_4471.png. LinkedIn does not expose alt text on company logos, so the
+     filename is the only signal you control.
+
+
+--------------------------------------------------------------------------------
+SECTION 2 — THE PERSONAL PROFILE: Deepak Joshi
+--------------------------------------------------------------------------------
+
+2.1  NAME FIELD
+     First: Deepak
+     Last: Joshi
+
+     Do NOT write "Deepak Joshi | Code Hippies" in the name field. LinkedIn
+     removes decorated names, it looks unprofessional to recruiters, and the
+     Experience entry in 2.6 establishes the same association more durably.
+
+2.2  CUSTOM PROFILE URL
+     linkedin.com/in/deepakjoshi-codehippies
+
+     This is the one place the two names sit together permanently, and it is a
+     URL rather than prose — so it carries the association everywhere the link
+     is shared without ever reading as a keyword. Set it under
+     Edit public profile & URL.
+
+2.3  HEADLINE  (limit 220 characters — the single highest-SEO field on LinkedIn)
+
+     Pick one.
+
+     A — recommended, service-led:
+     Full-Stack, Mobile & AI Engineer at Code Hippies | Next.js, React, iOS,
+     Android | Retrieval-grounded LLM systems | Ex-Deloitte USI | Founder,
+     Dharmarthlabs
+
+     B — outcome-led:
+     I build software businesses can run on — Next.js, React, iOS, Android and
+     AI systems that answer from your data | Code Hippies | Ex-Deloitte USI
+
+     C — shortest, cleanest:
+     Full-Stack & AI Engineer | Code Hippies | Next.js, React, iOS, Android,
+     LLM/RAG systems | Ex-Deloitte USI
+
+     Why A: it puts the searchable role first, the brand second, the stack
+     third, and the credential last. LinkedIn search indexes this field
+     heavily, and "Ex-Deloitte USI" is a genuine filter recruiters apply.
+
+2.4  ABOUT  (limit ~2,600 characters — first ~300 show before "see more",
+     so the alias sentence must land in the first two lines)
+
+I am Deepak Joshi. I build software under the name Code Hippies — the studio
+name most of my clients and collaborators know me by.
+
+I ship production systems for startups and agencies: full-stack web
+applications, iOS and Android apps, and AI systems that answer from your data
+instead of inventing answers.
+
+WHAT I ACTUALLY DO
+
+Web — Next.js and React, server-rendered where search visibility matters,
+static where the problem does not need more. Twelve client sites are live and
+publicly verifiable, from regional Hindi news platforms serving Uttarakhand,
+Himachal and Haryana, to a consultation funnel for a private dietitian, to a
+21-kilobyte static site for an ashram that could not carry a maintenance
+contract. Different stacks, because those were different problems. The
+technology follows the constraint, not my preference.
+
+Mobile — native iOS and Android.
+
+AI and LLM engineering, which is where most of my current attention goes —
+retrieval-grounded assistants that answer from documents a business controls,
+cite what they retrieved, and refuse when retrieval is weak. That refusal path
+matters: it turns a silent wrong answer into a visible "I don't know". The
+evaluation harness runs in CI and includes questions the system is supposed to
+decline.
+
+HOW I WORK
+
+I started at Deloitte USI, which is where I learned what "production" actually
+costs — the review gates, the audit trails, the fact that a change nobody can
+trace is a change nobody can defend. That is why a CI pipeline, a security
+review and a handover document are part of every project rather than something
+you pay extra for.
+
+I am also the founder of Dharmarthlabs, so I have been on the other side of the
+table: paying for engineering, waiting on delivery, discovering which shortcuts
+cost more later. It changed how I scope. Discovery before a price. Fixed price
+against a written scope. Changes quoted, not quietly absorbed.
+
+STACK
+
+TypeScript, JavaScript, Next.js, React, Node.js, Astro, PHP, Python, Swift,
+Kotlin, Java, Tailwind CSS, PostgreSQL, Vercel, Cloudflare, Docker, CI/CD,
+RAG and LLM systems, technical SEO, Core Web Vitals, OWASP application
+security.
+
+Based in India, working with clients internationally.
+
+Portfolio and verified case studies: https://codehippies.com
+Free learning track for developers moving into AI-era engineering:
+https://learn.codehippies.com
+
+Open to: freelance and contract engineering, AI/LLM consulting, and technical
+partnerships. hello@codehippies.com
+
+     [~2,480 characters.]
+
+     THE SUBTLE LINK, ANNOTATED:
+     Line 1 does the entire job — "I build software under the name Code
+     Hippies — the studio name most of my clients and collaborators know me
+     by." It is one sentence, it is true, it is in the first 300 characters
+     where LinkedIn truncates, and it reads as a person explaining themselves
+     rather than a brand asserting itself. Every later mention of the studio
+     is incidental. Do not add more.
+
+2.5  FEATURED SECTION
+     Pin, in this order:
+       1. https://codehippies.com          — "Code Hippies — portfolio and
+                                              verified case studies"
+       2. https://learn.codehippies.com    — "Free: become an AI-era software
+                                              professional"
+       3. https://github.com/codehippies11 — "Code Hippies on GitHub"
+
+     Featured links are dofollow from an authoritative domain and they render
+     with your custom title. This is the highest-value link placement on the
+     profile.
+
+2.6  EXPERIENCE  — the structural link, and the most important step here
+
+     Entry 1:
+       Title:     Founder & Lead Engineer
+       Company:   Code Hippies        <- SELECT THE COMPANY PAGE FROM THE
+                                         DROPDOWN. Do not free-type it. If it
+                                         does not appear, the Page from
+                                         Section 1 is not published yet.
+                                         Publish it first, then come back.
+       Type:      Self-employed
+       Location:  India (Remote)
+       Description:
+         Engineering studio shipping production web, mobile and AI systems for
+         startups and agencies.
+
+         - Twelve client sites live and independently verifiable — Next.js and
+           React platforms, Astro and static builds, WordPress and custom PHP
+           CMS work.
+         - Multi-tenant regional news platforms serving Uttarakhand, Himachal
+           and Haryana, with structured data and AdSense integration.
+         - Retrieval-grounded LLM assistants with a refusal path and a CI
+           evaluation harness, so fabrication is reduced and made visible
+           rather than silently passed to the user.
+         - Technical SEO and Core Web Vitals work: measured, not asserted.
+         - Every engagement includes a CI pipeline, a security review and a
+           handover document.
+
+     Entry 2:
+       Title:     Founder
+       Company:   Dharmarthlabs
+       Website:   https://dharmarthlabs.com
+
+     Entry 3:
+       Company:   Deloitte USI
+       [Fill in your real title and dates. This is the credential recruiters
+       filter on — do not leave it out, and do not embellish it.]
+
+2.7  SKILLS  (LinkedIn ranks the top 3 — order matters)
+
+     Pin these three:
+       1. Full-Stack Development
+       2. Artificial Intelligence (AI)
+       3. Next.js
+
+     Then add:
+       React.js, TypeScript, JavaScript, Node.js, Astro, Tailwind CSS,
+       iOS Development, Android Development, Swift, Kotlin, Java, PHP, Python,
+       Large Language Models (LLM), Retrieval-Augmented Generation (RAG),
+       Prompt Engineering, Machine Learning, REST APIs, PostgreSQL, Git,
+       Docker, CI/CD, Web Performance, Search Engine Optimization (SEO),
+       Application Security, OWASP, Technical Architecture, Agile Methodologies
+
+2.8  OPEN TO WORK
+     Enable "Providing services" (visible publicly, no green banner).
+     Services: Web Development, Mobile Application Development, Software
+     Engineering, IT Consulting, SEO, Custom Software Development.
+
+     This surfaces the profile in LinkedIn's service-provider directory, which
+     is a separate search index from the main one. Free, and most people
+     never switch it on.
+
+2.9  CONTACT INFO
+     Website 1: https://codehippies.com          (type: Company)
+     Website 2: https://learn.codehippies.com    (type: Other)
+     Website 3: https://github.com/deepakjoshi11 (type: Portfolio)
+     Email:     hello@codehippies.com
+
+
+--------------------------------------------------------------------------------
+SECTION 3 — KEYWORD BANK
+--------------------------------------------------------------------------------
+
+Primary — must appear in Headline AND About:
+  full stack developer, AI engineer, Next.js developer, React developer,
+  mobile app developer, LLM engineer
+
+Secondary — spread naturally across About, Experience, Skills:
+  TypeScript, Node.js, iOS developer, Android developer, RAG systems,
+  retrieval augmented generation, AI chatbot development, technical SEO,
+  Core Web Vitals, web performance, application security, OWASP,
+  software consultant, freelance developer India, production software
+
+Brand / entity — exact string, every time:
+  Code Hippies, codehippies.com, Deepak Joshi, Dharmarthlabs
+
+Long-tail, for posts rather than the profile:
+  hire Next.js developer India, RAG chatbot development, LLM integration
+  consultant, AI engineer for startups, production-ready web application
+
+
+--------------------------------------------------------------------------------
+SECTION 4 — WHAT NOT TO WRITE
+--------------------------------------------------------------------------------
+
+The site's entire premise is that every claim it makes is checkable. A LinkedIn
+profile that breaks that premise undermines the site it points at, because the
+same person is being assessed in both places.
+
+Do not write:
+  - Client counts, revenue figures, traffic numbers or performance percentages
+    that were not measured. No "increased traffic by 300%".
+  - Testimonials or client quotes. None have been collected. The testimonials
+    array on the site is deliberately empty; keep the profile consistent.
+  - "Award-winning", "industry-leading", "world-class", "10x". Unverifiable,
+    and they read as filler to exactly the technical readers you want.
+  - Years of experience you cannot evidence.
+  - Any claim that the AI assistant cannot hallucinate. It is
+    retrieval-grounded with a refusal path, which reduces fabrication
+    substantially and makes the failure mode visible. That is the accurate
+    claim and it is a stronger one, because it survives scrutiny.
+  - Technologies you have not shipped. The Skills section is the first thing a
+    technical interviewer probes.
+
+Safe to say, because it is verifiable today:
+  - Twelve client sites live and publicly checkable.
+  - Ex-Deloitte USI.
+  - Founder of Dharmarthlabs.
+  - The specific stacks listed in the case studies.
+  - The retrieval-grounded assistant with a refusal path and CI evaluation.
+
+
+--------------------------------------------------------------------------------
+SECTION 5 — ORDER OF OPERATIONS
+--------------------------------------------------------------------------------
+
+  1. Create and PUBLISH the Company Page (Section 1). Nothing else links
+     correctly until this exists.
+  2. Set the custom profile URL (2.2).
+  3. Headline (2.3), then About (2.4).
+  4. Experience entry selecting the Company Page from the dropdown (2.6).
+     ** This is the step that creates the actual person-to-brand link. **
+  5. Skills, ordered, with the top three pinned (2.7).
+  6. Featured links (2.5).
+  7. Contact info (2.9).
+  8. Enable Providing Services (2.8).
+  9. From the Company Page, add yourself as an admin, then post once linking
+     to codehippies.com so the Page is not empty on first visit.
+
+  Then, from the website side: add the LinkedIn URLs to
+  src/data/channels.ts so the site links back. A reciprocal link between a
+  domain you control and a LinkedIn profile strengthens entity resolution in
+  both directions, and it is the last piece of the association.
+
+================================================================================
