@@ -24,9 +24,24 @@ export const proofMetrics = [
     detail: "Schema.org JSON-LD emitted in the served HTML, not injected client-side.",
   },
   {
-    value: "21 KB",
-    label: "lightest page shipped",
-    detail: "nantinbaba.org — static HTML, no framework runtime, no maintenance contract.",
+    /**
+     * Not a portfolio count like the other three — this one is about how the
+     * work is held to a standard. It replaced a "21 KB lightest page" metric
+     * that pointed at the one case study whose site is no longer reachable,
+     * which made the weakest link the loudest number.
+     *
+     * The claim is checkable two ways: read lighthouserc.json in the public
+     * repository, or run Lighthouse against this page yourself.
+     *
+     * Deliberately says nothing about LCP. The desktop config asserts it at
+     * 2.5s but the mobile config sets it to off, because on Lighthouse's
+     * simulated slow-4G a content-rich page lands around 2.6s — so a combined
+     * claim would be false for half the runs.
+     */
+    value: "90+",
+    label: "Lighthouse floor, enforced in CI",
+    detail:
+      "Performance, accessibility, best practices and SEO — all four asserted on desktop and on throttled mobile, three runs each, every push. Below 90 on any one and the build fails.",
   },
 ] as const;
 

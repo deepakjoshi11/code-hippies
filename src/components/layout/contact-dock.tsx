@@ -104,8 +104,18 @@ export function ContactDock() {
         aria-label={open ? "Close contact options" : "Contact Deepak — choose a channel"}
         data-testid="contact-dock-trigger"
         className={cn(
-          "group fixed right-4 z-50 grid size-14 place-items-center rounded-full text-ink-950 shadow-[0_8px_30px_rgba(37,211,102,0.35)] transition-[transform,box-shadow] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.04] focus-visible:scale-[1.04] md:right-6",
-          open ? "bg-ink-100" : "bg-[#25D366] motion-safe:animate-[wa-breathe_3.2s_ease-in-out_infinite]",
+          "group fixed right-4 z-50 grid size-14 place-items-center rounded-full shadow-[0_8px_30px_rgba(37,211,102,0.35)] transition-[transform,box-shadow] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.04] focus-visible:scale-[1.04] md:right-6",
+          /*
+           * The foreground has to travel with the background, not sit above the
+           * conditional. WhatsApp green is a fixed brand colour while `ink-950`
+           * is semantic, so a single shared `text-ink-950` was only ever correct
+           * while the theme ran dark: the light theme flipped it to near-white
+           * and put white on green at 1.95:1. The open state keeps the token,
+           * because there both sides move together.
+           */
+          open
+            ? "bg-ink-100 text-ink-950"
+            : "bg-[#25D366] text-[#0b141a] motion-safe:animate-[wa-breathe_3.2s_ease-in-out_infinite]",
         )}
         style={{ bottom: "calc(1rem + env(safe-area-inset-bottom, 0px))" }}
       >
@@ -126,7 +136,9 @@ export function ContactDock() {
 
         <span
           className={cn(
-            "pointer-events-none absolute right-full mr-2 whitespace-nowrap rounded-full bg-[#25D366] px-4 py-2 text-sm font-semibold text-ink-950 shadow-[0_8px_30px_rgba(37,211,102,0.35)] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+            // #0b141a is WhatsApp's own ink: 9.38:1 on their green, and fixed,
+            // so it cannot invert with the theme the way a token would.
+            "pointer-events-none absolute right-full mr-2 whitespace-nowrap rounded-full bg-[#25D366] px-4 py-2 text-sm font-semibold text-[#0b141a] shadow-[0_8px_30px_rgba(37,211,102,0.35)] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
             showLabel ? "translate-x-0 opacity-100" : "translate-x-2 opacity-0",
           )}
         >

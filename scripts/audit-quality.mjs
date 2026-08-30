@@ -134,8 +134,12 @@ const browser = await chromium.launch({
   args: ["--no-sandbox", "--disable-dev-shm-usage"],
 });
 
+// 412px is Lighthouse's mobile emulation width, and the CI budget asserts
+// color-contrast there. Auditing only 390 and 1440 let a real failure through:
+// the WhatsApp dock's label is white-on-green at 1.95:1 and neither local width
+// rendered it. Check what CI checks.
 console.log("\n=== axe-core WCAG 2.1 A/AA");
-for (const width of [390, 1440]) {
+for (const width of [390, 412, 1440]) {
   const ctx = await browser.newContext({ viewport: { width, height: 900 } });
   const page = await ctx.newPage();
   for (const path of PAGES) {
