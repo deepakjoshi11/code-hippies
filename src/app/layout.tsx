@@ -44,6 +44,7 @@ export const metadata: Metadata = {
   publisher: site.name,
   category: "technology",
   formatDetection: { telephone: false, address: false, email: false },
+  verification: { google: site.googleSiteVerification },
   robots: {
     index: true,
     follow: true,

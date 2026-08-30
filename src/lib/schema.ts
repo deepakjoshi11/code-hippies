@@ -29,7 +29,7 @@ export function personSchema(): Json {
       "Technical SEO",
       "Application security",
     ],
-    sameAs: [site.github.primary, site.github.studio, site.dharmarthlabs],
+    sameAs: [site.github.primary, site.github.studio, site.dharmarthlabs, site.profiles.hackindia],
   };
 }
 
@@ -45,7 +45,7 @@ export function organizationSchema(): Json {
     email: site.email,
     areaServed: "Worldwide",
     address: { "@type": "PostalAddress", addressCountry: "IN" },
-    sameAs: [site.github.primary, site.github.studio, site.dharmarthlabs],
+    sameAs: [site.github.primary, site.github.studio, site.dharmarthlabs, site.profiles.hackindia],
   };
 }
 
