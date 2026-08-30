@@ -8,10 +8,13 @@ export default function manifest(): MetadataRoute.Manifest {
     description: site.description,
     start_url: "/",
     display: "standalone",
-    background_color: "#0b0d12",
-    theme_color: "#0b0d12",
+    // Follows the page, which is light. A dark splash that flashes to a white
+    // app is worse than no splash colour at all.
+    background_color: "#ffffff",
+    theme_color: "#ffffff",
     icons: [
-      { src: "/icon.svg", sizes: "any", type: "image/svg+xml", purpose: "any" },
+      { src: "/icon.png", sizes: "512x512", type: "image/png", purpose: "any" },
+      { src: "/apple-icon.png", sizes: "180x180", type: "image/png", purpose: "any" },
     ],
   };
 }

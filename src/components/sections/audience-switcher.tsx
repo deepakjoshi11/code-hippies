@@ -34,7 +34,7 @@ export function AudienceSwitcher() {
             className={cn(
               "rounded-full border px-4 py-2.5 text-sm font-medium transition-colors",
               active === track.id
-                ? "border-brand-400/50 bg-brand-500/12 text-brand-200"
+                ? "border-brand-400/50 bg-brand-500/12 text-brand-700"
                 : "border-ink-100/12 text-ink-300 hover:border-ink-100/25 hover:text-ink-50",
             )}
           >

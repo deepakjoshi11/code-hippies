@@ -19,7 +19,7 @@ export const metadata: Metadata = pageMetadata({
     "Next.js case studies India",
     "news website development case study",
   ],
-  ogTitle: "13 live production sites. Open any of them.",
+  ogTitle: "12 live production sites, and one archived. Open any of them.",
 });
 
 const categories = [...new Set(caseStudies.map((c) => c.category))];

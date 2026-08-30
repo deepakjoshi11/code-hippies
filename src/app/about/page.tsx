@@ -204,7 +204,7 @@ export default async function AboutPage() {
         <SectionHeader
           eyebrow="The record"
           title="What is actually in production"
-          description="Thirteen live sites across news publishing, marketing, health coaching and community work. Every technical claim on each case study was read off the live response."
+          description="Twelve live sites and one archived, across news publishing, marketing, health coaching and community work. Every technical claim on each case study was read off the live response."
         />
         <ul className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {caseStudies.map((c, i) => (

@@ -47,7 +47,7 @@ export const audienceTracks: AudienceTrack[] = [
     ],
     objection: {
       q: "How do I know you will not disappear like the last one?",
-      a: "Because everything is in your name from day one — the domain, the accounts, the code. Thirteen sites I have built are live right now and you can click every one of them. And if you want the safety of a platform that holds your money in escrow until you are happy, I work on Fiverr and Upwork too. You do not have to trust me on faith.",
+      a: "Because everything is in your name from day one — the domain, the accounts, the code. Twelve of the thirteen sites I have built are live right now and you can click every one of them; the thirteenth is archived and its case study says so. And if you want the safety of a platform that holds your money in escrow until you are happy, I work on Fiverr and Upwork too. You do not have to trust me on faith.",
     },
     cta: { label: "Tell me what you need, in your own words", href: "/contact" },
   },

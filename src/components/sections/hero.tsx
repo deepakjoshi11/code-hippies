@@ -1,26 +1,61 @@
+import fs from "node:fs";
+import path from "node:path";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { ButtonLink } from "@/components/ui/button";
 import { proofMetrics, trustSignals } from "@/data/proof";
+import { caseStudies, liveCaseStudies } from "@/data/case-studies";
 import { ChannelCta } from "@/components/ui/channel-cta";
 
+/**
+ * The blur placeholder is generated at build time alongside the image, not
+ * pasted in, so replacing the photograph cannot leave a stale thumbnail of the
+ * old one behind. Read on the server — this is a server component.
+ */
+const heroBlur = fs
+  .readFileSync(path.join(process.cwd(), "public", "hero-blur.txt"), "utf8")
+  .trim();
+
 export function Hero() {
+  const live = liveCaseStudies().length;
+  const shipped = caseStudies.length;
+
   return (
-    <section className="relative overflow-hidden border-b border-ink-100/8">
+    /**
+     * The one dark band on a light site. `surface-dark` swaps the ink and brand
+     * ramps for this subtree, so every child below reads as it always did —
+     * `text-ink-300` is simply light here instead of dark.
+     */
+    <section className="surface-dark relative isolate -mt-16 overflow-hidden bg-ink-950 pt-16 md:-mt-18 md:pt-18">
+      <Image
+        src="/hero-deepak-coding.jpg"
+        alt=""
+        aria-hidden="true"
+        fill
+        priority
+        fetchPriority="high"
+        sizes="100vw"
+        placeholder="blur"
+        blurDataURL={heroBlur}
+        className="-z-10 object-cover object-[62%_center] opacity-70 md:opacity-90"
+      />
+      {/*
+        Two scrims rather than one. The horizontal pass keeps the left column
+        dark enough for body text at every width; the vertical pass darkens the
+        top so the transparent header stays legible over the photograph. Both
+        are measured against axe rather than eyeballed.
+      */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 grid-noise opacity-60 [mask-image:radial-gradient(70%_60%_at_50%_0%,black,transparent)]"
+        className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-r from-ink-950 via-ink-950/92 to-ink-950/70 md:to-ink-950/45"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-40 left-1/2 h-[38rem] w-[64rem] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(16,185,129,0.16),transparent)]"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -bottom-56 right-0 h-[32rem] w-[42rem] rounded-full bg-[radial-gradient(closest-side,rgba(234,88,12,0.12),transparent)]"
+        className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-ink-950/85 via-transparent to-ink-950"
       />
 
-      <div className="container-page relative pb-16 pt-16 md:pb-24 md:pt-24">
+      <div className="container-page relative pb-16 pt-16 md:pb-24 md:pt-28">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-xs text-ink-300">
           <span className="inline-flex items-center gap-2 rounded-full border border-brand-400/25 bg-brand-500/8 px-3 py-1.5 font-medium text-brand-200">
             <span aria-hidden="true" className="size-1.5 rounded-full bg-brand-400" />
@@ -45,9 +80,10 @@ export function Hero() {
           I&rsquo;m <strong className="font-semibold text-ink-100">Deepak Joshi</strong> — ex-Deloitte
           USI, founder of Dharmarthlabs, and the engineer behind{" "}
           <strong className="font-semibold text-ink-100">Code Hippies</strong>. Full-stack web, iOS
-          and Android apps, and AI systems that answer from your data instead of inventing answers.
-          Thirteen sites shipped to production, and every technical claim about them was read off
-          the live response — so you can check the work rather than take my word for it.
+          and Android apps, and AI systems that answer from your data instead of inventing answers.{" "}
+          {shipped} sites shipped to production and {live} live right now, with every technical
+          claim about them read off the live response — so you can check the work rather than take
+          my word for it.
         </p>
 
         <div className="mt-9 flex flex-wrap items-center gap-3">
@@ -55,7 +91,7 @@ export function Hero() {
             Start a project <ArrowRight aria-hidden="true" />
           </ButtonLink>
           <ButtonLink href="/work" variant="outline" size="lg">
-            See the 13 live builds
+            See the {live} live builds
           </ButtonLink>
           <ChannelCta variant="ghost" size="lg" className="hidden sm:inline-flex" />
         </div>

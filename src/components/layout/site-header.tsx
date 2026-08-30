@@ -36,6 +36,15 @@ export function SiteHeader() {
     };
   }, [open]);
 
+  /**
+   * The home hero is the only dark band on the site, and the header floats over
+   * it while the page is at the top. Borrowing the hero's palette for those few
+   * hundred pixels keeps the nav readable without a second set of classes:
+   * `surface-dark` flips the ink ramp for this subtree only. Once scrolled, the
+   * header has its own light glass background and reverts to the page palette.
+   */
+  const overDarkHero = pathname === "/" && !scrolled && !open;
+
   return (
     <header
       className={cn(
@@ -43,6 +52,7 @@ export function SiteHeader() {
         scrolled || open
           ? "border-ink-100/10 bg-ink-950/85 backdrop-blur-xl"
           : "border-transparent bg-transparent",
+        overDarkHero && "surface-dark",
       )}
     >
       <div className="container-page flex h-16 items-center justify-between gap-4 md:h-18">

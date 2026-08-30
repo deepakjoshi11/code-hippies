@@ -17,7 +17,7 @@ import { Section, SectionHeader } from "@/components/ui/section";
 import { ButtonLink } from "@/components/ui/button";
 import { JsonLd } from "@/components/seo/json-ld";
 
-import { featuredCaseStudies } from "@/data/case-studies";
+import { featuredCaseStudies, liveCaseStudies } from "@/data/case-studies";
 import { faqs, homeFaqs } from "@/data/faq";
 import { craftToAi } from "@/data/positioning";
 import { faqSchema, graph } from "@/lib/schema";
@@ -26,7 +26,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata: Metadata = pageMetadata({
   title: "Deepak Joshi — Full-stack, Mobile & AI/LLM Engineer",
   description:
-    "Deepak Joshi builds production web apps, iOS and Android apps and grounded AI systems for startups and agencies. 13 live builds you can verify yourself.",
+    "Deepak Joshi builds production web apps, iOS and Android apps and grounded AI systems for startups and agencies. 12 live builds you can verify yourself.",
   path: "/",
   keywords: [
     "Deepak Joshi developer",
@@ -89,7 +89,7 @@ export default function HomePage() {
       <Section id="work" className="border-t border-ink-100/8">
         <SectionHeader
           eyebrow="Selected work"
-          title="Thirteen live sites. Open any of them right now."
+          title={`${liveCaseStudies().length} live sites. Open any of them right now.`}
           description="Each case study pairs what was actually engineered with what it does for the business — and lists the exact signals observed on the live response, so nothing here needs to be taken on trust."
         />
         <ul className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
