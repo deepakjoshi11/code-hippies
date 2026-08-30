@@ -20,16 +20,26 @@
 
 export const brandAssets = {
   /**
-   * Set to true once you drop your own public/logo.svg in. Until then the
-   * generated monogram renders, which is a valid mark rather than a gap.
+   * The real marks are committed, so these default ON and the env vars exist
+   * only to force the generated placeholders back (set to "false").
+   *
+   * Two distinct marks, deliberately:
+   *   logo / logoMark  Deepak Joshi portrait — the site logo, in header and
+   *                    footer. Its alt text is where the founder's name is
+   *                    indexed now that it is out of the header wordmark.
+   *   icon / ogImage   Code Hippies monkey mark — favicon and social cards,
+   *                    where the studio brand is what should be recognised.
+   *
+   * Both are circular PNGs with transparent corners, so neither carries a
+   * black square into a light theme.
    */
-  hasCustomLogo: process.env.NEXT_PUBLIC_HAS_CUSTOM_LOGO === "true",
+  hasCustomLogo: process.env.NEXT_PUBLIC_HAS_CUSTOM_LOGO !== "false",
   hasPortrait: process.env.NEXT_PUBLIC_HAS_PORTRAIT === "true",
-  hasOgImage: process.env.NEXT_PUBLIC_HAS_OG_IMAGE === "true",
+  hasOgImage: process.env.NEXT_PUBLIC_HAS_OG_IMAGE !== "false",
 
-  logo: "/logo.svg",
-  logoMark: "/logo-mark.svg",
-  icon: "/icon.svg",
+  logo: "/logo.png",
+  logoMark: "/logo-mark.png",
+  icon: "/icon.png",
   appleIcon: "/apple-icon.png",
   ogImage: "/og-image.png",
   portrait: "/portrait.jpg",
@@ -45,6 +55,11 @@ export const brandColors = {
 export const brandMark = {
   /** Two characters shown in the generated monogram. */
   initials: "ch",
-  /** Screen-reader name for the mark wherever it appears. */
-  alt: "Code Hippies",
+  /**
+   * Screen-reader and SEO name for the site logo. The header wordmark reads
+   * "Code Hippies" alone, so this alt text is what carries "Deepak Joshi"
+   * into the indexable markup — it is describing the portrait, so it is
+   * accurate as alt text rather than keyword stuffing.
+   */
+  alt: "Deepak Joshi — founder of Code Hippies",
 } as const;

@@ -26,7 +26,7 @@ export function Logo({
         width={size}
         height={size}
         priority={priority}
-        className={cn("rounded-lg object-contain", className)}
+        className={cn("rounded-full object-cover", className)}
       />
     );
   }

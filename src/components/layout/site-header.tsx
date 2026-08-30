@@ -50,11 +50,8 @@ export function SiteHeader() {
           href="/"
           className="flex items-center gap-2.5 text-[0.95rem] font-semibold tracking-tight text-ink-50"
         >
-          <Logo size={32} className="size-8" />
-          <span>
-            Code Hippies
-            <span className="ml-2 hidden text-ink-500 sm:inline">/ Deepak Joshi</span>
-          </span>
+          <Logo size={32} className="size-8" priority />
+          <span>Code Hippies</span>
         </Link>
 
         <nav aria-label="Primary" className="hidden items-center gap-1 lg:flex">

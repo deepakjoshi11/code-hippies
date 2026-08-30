@@ -11,7 +11,9 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/api/"],
       },
     ],
-    sitemap: absoluteUrl("/sitemap.xml"),
+    // Two sitemaps, listed separately so Google and Bing discover and report
+    // the studio and the free learning section independently.
+    sitemap: [absoluteUrl("/sitemap.xml"), absoluteUrl("/sitemap-learn.xml")],
     host: site.url,
   };
 }

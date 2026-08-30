@@ -149,7 +149,13 @@ export default function LearnPage() {
                     </div>
 
                     <h3 className="text-xl font-semibold tracking-tight text-ink-50">
-                      {track.title}
+                      {track.status === "published" ? (
+                        <Link href={`/learn/${track.slug}`} className="hover:text-brand-300">
+                          {track.title}
+                        </Link>
+                      ) : (
+                        track.title
+                      )}
                     </h3>
                     <p className="max-w-3xl text-sm leading-relaxed text-ink-300">{track.summary}</p>
 

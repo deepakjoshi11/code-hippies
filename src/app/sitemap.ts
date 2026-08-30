@@ -4,6 +4,14 @@ import { caseStudies } from "@/data/case-studies";
 import { services } from "@/data/services";
 import { getAllPosts } from "@/lib/blog";
 
+/**
+ * The main site sitemap: everything that sells the studio.
+ *
+ * /learn is deliberately absent — it is published as its own sitemap at
+ * /sitemap-learn.xml so the free learning material can be submitted and
+ * tracked separately in Search Console and Bing Webmaster Tools. Indexing
+ * problems in one section then never hide inside the other's numbers.
+ */
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
@@ -19,7 +27,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       { path: "/pricing", changeFrequency: "monthly", priority: 0.8 },
       { path: "/about", changeFrequency: "monthly", priority: 0.8 },
       { path: "/faq", changeFrequency: "monthly", priority: 0.8 },
-      { path: "/learn", changeFrequency: "monthly", priority: 0.85 },
       { path: "/blog", changeFrequency: "weekly", priority: 0.8 },
       { path: "/contact", changeFrequency: "yearly", priority: 0.9 },
       { path: "/privacy", changeFrequency: "yearly", priority: 0.3 },

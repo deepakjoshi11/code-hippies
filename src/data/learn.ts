@@ -156,3 +156,12 @@ export const learningTracks: LearningTrack[] = [
 export function getTrack(slug: string): LearningTrack | undefined {
   return learningTracks.find((t) => t.slug === slug);
 }
+
+/**
+ * Tracks that have their own page. A track earns one by being written — a
+ * stub page for a planned track is thin content, which costs more in ranking
+ * than the extra URL gains.
+ */
+export function publishedTracks(): LearningTrack[] {
+  return learningTracks.filter((t) => t.status === "published");
+}
