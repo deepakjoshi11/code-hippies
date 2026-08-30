@@ -35,9 +35,14 @@ answers queries for the domain.
 | Host | Status |
 | --- | --- |
 | `codehippies.com` | ✅ **Live** — A record already points at Vercel, returns the site |
-| `www.codehippies.com` | ❌ Still points at `cdn3.wixdns.net`, returns a Wix error |
+| `www.codehippies.com` | ✅ **Live** — CNAME points at Vercel; 308-redirects to the apex |
 
 Vercel confirms the apex: `"configuredBy":"A"`, `"misconfigured":false`.
+
+`www` is configured in Vercel as a **308 redirect to `codehippies.com`**, path
+preserved (`/work` → `/work`). Without it both hosts served the full site and
+every page existed at two URLs. The apex is canonical everywhere — `sitemap.xml`,
+`robots.txt` `Host:`, `<link rel="canonical">` and `og:url` all agree.
 
 ### The complete record set for Wix
 
@@ -75,7 +80,7 @@ the same domain is how mail goes missing.
 | Type | Host | Value | TTL |
 | --- | --- | --- | --- |
 | `TXT` | `@` | `forward-email=hello:codehippies@gmail.com,contact:codehippies@gmail.com,deepak:codehippies@gmail.com,security:codehippies@gmail.com` | 3600 |
-| `TXT` | `@` | `v=spf1 a include:spf.forwardemail.net include:_spf.google.com ~all` | 3600 |
+| `TXT` | `@` | `v=spf1 include:spf.forwardemail.net include:_spf.google.com ~all` | 3600 |
 | `TXT` | `_dmarc` | `v=DMARC1; p=none; rua=mailto:codehippies@gmail.com; fo=1` | 3600 |
 
 Both apex `TXT` records must exist **as separate records** — do not merge them
@@ -118,27 +123,39 @@ as mail being delivered.
 [Forward Email](https://forwardemail.net) — open source, and configurable
 entirely through DNS with no account to create.
 
-**The records are already in the Vercel zone.** They activate the moment the
-nameservers move (§2). Nothing else to set up.
+**DNS is served by Wix** (`ns8`/`ns9.wixdns.net`) — the nameserver move in §2
+did not happen, so these records must be entered in the Wix DNS manager. The
+copies in the Vercel zone are inert and are not what the internet reads.
+
+**Current live state:** MX, forwarding, SPF and DMARC are all live in Wix, but
+with `hello:` as the only alias, and the SPF is missing
+`include:_spf.google.com`. Verify with `dig` before trusting this table.
 
 ### What is configured
 
 | Type | Name | Value |
 | --- | --- | --- |
-| `MX` | `@` | `mx1.forwardemail.net` (priority 0) |
-| `MX` | `@` | `mx2.forwardemail.net` (priority 0) |
+| `MX` | `@` | `mx1.forwardemail.net` (priority 10) |
+| `MX` | `@` | `mx2.forwardemail.net` (priority 20) |
 | `TXT` | `@` | `forward-email=hello:…,contact:…,deepak:…,security:…` |
-| `TXT` | `@` | `v=spf1 a include:spf.forwardemail.net include:_spf.google.com ~all` |
+| `TXT` | `@` | `v=spf1 include:spf.forwardemail.net include:_spf.google.com ~all` |
 | `TXT` | `_dmarc` | `v=DMARC1; p=none; rua=mailto:codehippies@gmail.com; fo=1` |
 
-Working addresses, all landing in the same Gmail inbox:
+Addresses, all landing in the same Gmail inbox:
 
-- `hello@codehippies.com` — the general address, used across the site
-- `contact@codehippies.com`
-- `deepak@codehippies.com`
-- `security@codehippies.com` — referenced in `SECURITY.md`
+- `hello@codehippies.com` — ✅ **live**; the general address, used across the
+  site and in `SECURITY.md`
+- `contact@`, `deepak@`, `security@` — ⚠️ **not live.** The Wix TXT record
+  currently reads `forward-email=hello:codehippies@gmail.com` only, so mail to
+  these bounces. Extend the record to enable them:
 
-Adding another is a one-line edit to the `forward-email=` record.
+  ```
+  forward-email=hello:codehippies@gmail.com,contact:codehippies@gmail.com,deepak:codehippies@gmail.com,security:codehippies@gmail.com
+  ```
+
+Adding another is a one-line edit to the `forward-email=` record. Nothing in
+the repo may advertise an address that is not in it — a published contact that
+bounces is worse than no published contact.
 
 ### Why these specific values
 
