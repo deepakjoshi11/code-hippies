@@ -114,6 +114,106 @@ coordination. Keeping DNS at Wix and pointing only an `A` record would work
 too, but leaves the zone split across two providers — which is how records get
 lost during the next change.
 
+## 2b. Email on the domain
+
+### The thing to get right first
+
+`codehippies@gmail.com` is a **free consumer Gmail address**. DNS records on
+`codehippies.com` cannot make mail arrive at a `@gmail.com` mailbox, and
+Google's free Gmail does not accept mail for custom domains.
+
+Pointing `codehippies.com` MX at `gmail-smtp-in.l.google.com` — which looks
+right, and which a lot of guides suggest — makes **every email to the domain
+bounce**. Those servers only accept mail addressed to `@gmail.com`.
+
+So there are two separate things, and only one of them needs DNS:
+
+| Goal | Needs DNS? | Status |
+| --- | --- | --- |
+| Show `codehippies@gmail.com` as the contact address on the site | No | **Done** — set as `NEXT_PUBLIC_CONTACT_EMAIL` |
+| Receive mail at `hello@codehippies.com` | Yes | Pick an option below |
+
+### Option A — free forwarding (recommended to start)
+
+A forwarding service accepts mail for `@codehippies.com` and forwards it to
+your Gmail. You reply from Gmail. No mailbox to pay for, no migration.
+
+Free providers that work with DNS at Vercel: **ImprovMX**, **Forward Email**.
+(Cloudflare Email Routing is also free and excellent, but it requires DNS to be
+hosted at Cloudflare, which conflicts with putting nameservers on Vercel.)
+
+Sign up, add `codehippies.com`, then add the records the provider gives you in
+**Vercel → Project → Settings → Domains → codehippies.com → DNS Records**.
+For ImprovMX they are:
+
+```
+MX   @   10   mx1.improvmx.com
+MX   @   20   mx2.improvmx.com
+TXT  @        v=spf1 include:spf.improvmx.com ~all
+```
+
+Set the alias `hello@codehippies.com → codehippies@gmail.com` in the provider's
+dashboard.
+
+**Sending as `hello@codehippies.com` from Gmail** is a separate step and works
+with either option: Gmail → Settings → Accounts → *Send mail as* → Add another
+email address. Gmail sends a confirmation link to the address, which the
+forwarder delivers to your inbox.
+
+### Option B — Google Workspace (real mailboxes, paid)
+
+Roughly $6/user/month. You get an actual `hello@codehippies.com` mailbox with
+Gmail's interface, Drive, Calendar and admin controls. Worth it once email
+volume is real or you have staff.
+
+Workspace gives you the exact records during setup. They look like this, but
+**use the ones from your own admin console** — the verification TXT is unique
+to your account:
+
+```
+MX   @   1    smtp.google.com
+TXT  @        v=spf1 include:_spf.google.com ~all
+TXT  @        google-site-verification=<your own value>
+```
+
+### Either way, add DMARC
+
+Once mail flows, add a DMARC record. It tells receiving servers what to do with
+mail that fails authentication, and it is what stops someone spoofing your
+domain:
+
+```
+TXT  _dmarc   v=DMARC1; p=none; rua=mailto:codehippies@gmail.com
+```
+
+Start at `p=none` (monitor only, nothing is rejected). Once the reports show
+your legitimate mail passing, tighten to `p=quarantine` and then `p=reject`.
+Going straight to `p=reject` before you know what is sending is how people
+silently lose their own email.
+
+### Where to add these records
+
+**In Vercel, not Wix** — once the nameservers move (§2), the Wix DNS panel no
+longer controls this zone. Vercel → Project → Settings → Domains →
+`codehippies.com` → DNS Records.
+
+### Verify before trusting it
+
+```bash
+# MX should list your provider, not Wix and not gmail.com's own servers
+curl -s -H "accept: application/dns-json" \
+  "https://cloudflare-dns.com/dns-query?name=codehippies.com&type=MX" | jq -r '.Answer[].data'
+
+# SPF and DMARC
+curl -s -H "accept: application/dns-json" \
+  "https://cloudflare-dns.com/dns-query?name=codehippies.com&type=TXT" | jq -r '.Answer[].data'
+curl -s -H "accept: application/dns-json" \
+  "https://cloudflare-dns.com/dns-query?name=_dmarc.codehippies.com&type=TXT" | jq -r '.Answer[].data'
+```
+
+Then send a real test message from an outside address and confirm it arrives.
+DNS resolving is not the same as mail being delivered.
+
 ## 3. Environment variables
 
 Vercel → Project → **Settings → Environment Variables**. Everything is optional;
@@ -192,6 +292,8 @@ GitHub integration handles deployment and the job skips with a notice.
 ## 7. Pre-launch checklist
 
 - [x] `NEXT_PUBLIC_SITE_URL` set to https://codehippies.com
+- [x] `NEXT_PUBLIC_CONTACT_EMAIL` set to codehippies@gmail.com
+- [ ] Domain email chosen and MX/SPF/DMARC added in Vercel (see §2b), if you want hello@codehippies.com
 - [ ] Nameservers switched at Wix to ns1/ns2.vercel-dns.com (see §2)
 - [ ] At least one contact channel configured
 - [ ] `LEAD_WEBHOOK_URL` set, and a test brief received
