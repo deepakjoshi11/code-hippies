@@ -78,7 +78,7 @@ export default async function AboutPage() {
         </dl>
       </Section>
 
-      <Section className="pt-0">
+      <Section className="pt-0 md:pt-0">
         <div className="grid gap-12 lg:grid-cols-[1.5fr_1fr] lg:gap-16">
           <div className="prose-hippie max-w-2xl">
             {bio.paragraphs.map((paragraph, i) => (

@@ -115,7 +115,7 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
           />
         </Section>
 
-        <Section className="py-0">
+        <Section className="py-0 md:py-0">
           <div className="grid gap-4 md:grid-cols-2">
             <Card>
               <CardBody className="flex flex-col gap-3">

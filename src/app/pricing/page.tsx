@@ -60,7 +60,7 @@ export default function PricingPage() {
         />
       </Section>
 
-      <Section className="pt-0">
+      <Section className="pt-0 md:pt-0">
         <ul className="grid gap-4 lg:grid-cols-3">
           {engagementModels.map((model, i) => (
             <Reveal as="li" key={model.slug} delay={i * 0.06}>

@@ -96,7 +96,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
         </div>
       </Section>
 
-      <Section className="py-0">
+      <Section className="py-0 md:py-0">
         <div className="grid gap-4 lg:grid-cols-[1.4fr_1fr]">
           <Card>
             <CardBody className="flex flex-col gap-5">

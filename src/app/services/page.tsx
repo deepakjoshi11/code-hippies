@@ -56,7 +56,7 @@ export default function ServicesIndexPage() {
         />
       </Section>
 
-      <Section className="pt-0">
+      <Section className="pt-0 md:pt-0">
         <ServiceCards headingLevel="h2" />
       </Section>
 

@@ -45,7 +45,7 @@ export default function PrivacyPage() {
         />
       </Section>
 
-      <Section className="pt-0">
+      <Section className="pt-0 md:pt-0">
         <div className="grid gap-10 lg:grid-cols-[1.4fr_1fr] lg:gap-14">
           <div className="flex min-w-0 flex-col gap-10">
             <div>

@@ -14,6 +14,8 @@ export function Card({ className, ...props }: React.HTMLAttributes<HTMLDivElemen
 }
 
 export function CardBody({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  // Same variant gotcha as Section: an unprefixed padding override from a
+  // caller loses to `md:p-7` from 768px up, so overrides need `md:` too.
   return <div className={cn("p-6 md:p-7", className)} {...props} />;
 }
 

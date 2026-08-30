@@ -81,7 +81,7 @@ export default function BlogIndexPage() {
         </ul>
       </Section>
 
-      <Section className="pt-0">
+      <Section className="pt-0 md:pt-0">
         <ul className="grid gap-4 md:grid-cols-2">
           {posts.map((post, i) => (
             <Reveal as="li" key={post.slug} delay={i * 0.05}>

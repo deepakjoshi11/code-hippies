@@ -52,7 +52,7 @@ export function ProofSection() {
         {evidence.map((c, i) => (
           <Reveal as="li" key={c.slug} delay={i * 0.05} className="min-w-0">
             <Card className="h-full">
-              <CardBody className="flex h-full flex-col gap-3 p-5">
+              <CardBody className="flex h-full flex-col gap-3 p-5 md:p-5">
                 <a
                   href={c.url}
                   target="_blank"

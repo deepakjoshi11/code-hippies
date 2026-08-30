@@ -61,7 +61,7 @@ export default function WorkIndexPage() {
         </ul>
       </Section>
 
-      <Section className="pt-0">
+      <Section className="pt-0 md:pt-0">
         <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {caseStudies.map((study, i) => (
             <CaseStudyCard key={study.slug} study={study} index={i} headingLevel="h2" />

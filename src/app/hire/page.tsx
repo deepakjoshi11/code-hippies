@@ -67,7 +67,7 @@ export default function HirePage() {
         />
       </Section>
 
-      <Section className="pt-0">
+      <Section className="pt-0 md:pt-0">
         <div className="grid gap-4 lg:grid-cols-3">
           <Card className="border-brand-400/25">
             <CardBody className="flex h-full flex-col gap-4">

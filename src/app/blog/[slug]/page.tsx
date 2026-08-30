@@ -99,7 +99,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           </div>
         </Section>
 
-        <Section className="py-0">
+        <Section className="py-0 md:py-0">
           <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_18rem] lg:gap-14">
             <div className="prose-hippie min-w-0 max-w-3xl">
               <MDXRemote source={post.content} components={mdxComponents} />

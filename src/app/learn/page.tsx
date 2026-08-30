@@ -17,7 +17,7 @@ import { absoluteUrl } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Learn — AI Visibility & Modern Engineering, Free",
+  title: "Learn AI Visibility & Engineering, Free",
   description:
     "Free material on AI visibility, retrieval-grounded AI, Core Web Vitals and pre-launch security. No sign-up, no upsell, no certification — the notes I actually use, written down.",
   path: "/learn",
@@ -75,7 +75,7 @@ export default function LearnPage() {
         </p>
       </Section>
 
-      <Section className="border-t border-ink-100/8 pt-14">
+      <Section className="border-t border-ink-100/8 pt-14 md:pt-14">
         <SectionHeader
           eyebrow="The discipline this site is built around"
           title={aiVisibility.title}

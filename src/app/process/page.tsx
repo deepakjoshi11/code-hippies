@@ -63,7 +63,7 @@ export default function ProcessPage() {
         />
       </Section>
 
-      <Section className="pt-0">
+      <Section className="pt-0 md:pt-0">
         <div className="grid gap-4 md:grid-cols-3">
           {[
             {

@@ -16,7 +16,7 @@ import { pageMetadata } from "@/lib/seo";
 import { absoluteUrl } from "@/lib/site";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Enterprise Engineering — One Senior Engineer, Modern Tooling",
+  title: "Enterprise Engineering Without a Team",
   description:
     "What one senior engineer with modern tooling genuinely delivers, what it does not cover, and the governance an enterprise procurement review actually asks for. Stated plainly, both ways.",
   path: "/enterprise",
@@ -112,7 +112,7 @@ export default function EnterprisePage() {
         </div>
       </Section>
 
-      <Section className="pt-0">
+      <Section className="pt-0 md:pt-0">
         <div className="grid gap-4 md:grid-cols-2">
           <Card className="border-brand-400/25">
             <CardBody className="flex flex-col gap-4">

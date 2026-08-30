@@ -92,7 +92,7 @@ export default function FaqPage() {
         );
       })}
 
-      <Section className="border-t border-ink-100/8 py-12">
+      <Section className="border-t border-ink-100/8 py-12 md:py-12">
         <FaqFooterNote />
         <p className="mt-3 text-sm text-ink-500">
           Looking for something more specific? The{" "}

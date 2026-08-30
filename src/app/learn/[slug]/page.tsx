@@ -110,7 +110,7 @@ export default async function LearnTrackPage({ params }: { params: Promise<{ slu
         </p>
       </Section>
 
-      <Section className="py-0">
+      <Section className="py-0 md:py-0">
         <Card>
           <CardBody className="flex flex-col gap-5">
             <Eyebrow>What you will be able to do</Eyebrow>
@@ -158,7 +158,7 @@ export default async function LearnTrackPage({ params }: { params: Promise<{ slu
         </Section>
       )}
 
-      <Section className="pt-4">
+      <Section className="pt-4 md:pt-4">
         <ButtonLink href="/learn" variant="secondary">
           All learning tracks
         </ButtonLink>

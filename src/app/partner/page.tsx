@@ -74,7 +74,7 @@ export default function PartnerPage() {
         </div>
       </Section>
 
-      <Section className="pt-0">
+      <Section className="pt-0 md:pt-0">
         <PartnerSection headingLevel="h2" />
       </Section>
 

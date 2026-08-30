@@ -2,6 +2,19 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Eyebrow } from "./card";
 
+/**
+ * Standard vertical rhythm for a page section.
+ *
+ * Gotcha worth knowing before you override the padding: the default carries an
+ * `md:` variant, and tailwind-merge only resolves conflicts *within* a variant.
+ * So `className="pt-0"` cancels `py-20` at mobile but loses to `md:py-28` from
+ * 768px up, silently leaving the padding it was written to remove. Any padding
+ * override must restate itself at `md` — `pt-0 md:pt-0`.
+ *
+ * This shipped as ~112px of dead space above the content on most pages before
+ * anyone noticed, because it is invisible on a phone and looks like design on a
+ * desktop.
+ */
 export function Section({
   className,
   children,
