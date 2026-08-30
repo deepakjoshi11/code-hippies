@@ -61,7 +61,7 @@ use `cname.vercel-dns.com` instead — Vercel accepts both.
 A second A record `64.29.17.1` may be added alongside the first for redundancy.
 Optional; one is sufficient.
 
-#### Email — forwarding to codehippies@gmail.com
+#### Email — forwarding to codehippies11@gmail.com
 
 | Type | Host | Priority | Value | TTL |
 | --- | --- | --- | --- | --- |
@@ -79,9 +79,9 @@ the same domain is how mail goes missing.
 
 | Type | Host | Value | TTL |
 | --- | --- | --- | --- |
-| `TXT` | `@` | `forward-email=hello:codehippies@gmail.com,contact:codehippies@gmail.com,deepak:codehippies@gmail.com,security:codehippies@gmail.com` | 3600 |
+| `TXT` | `@` | `forward-email=hello:codehippies11@gmail.com,contact:codehippies11@gmail.com,deepak:codehippies11@gmail.com,security:codehippies11@gmail.com` | 3600 |
 | `TXT` | `@` | `v=spf1 include:spf.forwardemail.net include:_spf.google.com ~all` | 3600 |
-| `TXT` | `_dmarc` | `v=DMARC1; p=none; rua=mailto:codehippies@gmail.com; fo=1` | 3600 |
+| `TXT` | `_dmarc` | `v=DMARC1; p=none; rua=mailto:codehippies11@gmail.com; fo=1` | 3600 |
 
 Both apex `TXT` records must exist **as separate records** — do not merge them
 into one string. SPF and the forwarding config are read by different systems.
@@ -119,7 +119,7 @@ as mail being delivered.
 ## 2b. Email on the domain — done
 
 `hello@codehippies.com` and three other addresses forward into
-`codehippies@gmail.com`, free and permanently, using
+`codehippies11@gmail.com`, free and permanently, using
 [Forward Email](https://forwardemail.net) — open source, and configurable
 entirely through DNS with no account to create.
 
@@ -139,18 +139,18 @@ with `hello:` as the only alias, and the SPF is missing
 | `MX` | `@` | `mx2.forwardemail.net` (priority 20) |
 | `TXT` | `@` | `forward-email=hello:…,contact:…,deepak:…,security:…` |
 | `TXT` | `@` | `v=spf1 include:spf.forwardemail.net include:_spf.google.com ~all` |
-| `TXT` | `_dmarc` | `v=DMARC1; p=none; rua=mailto:codehippies@gmail.com; fo=1` |
+| `TXT` | `_dmarc` | `v=DMARC1; p=none; rua=mailto:codehippies11@gmail.com; fo=1` |
 
 Addresses, all landing in the same Gmail inbox:
 
 - `hello@codehippies.com` — ✅ **live**; the general address, used across the
   site and in `SECURITY.md`
 - `contact@`, `deepak@`, `security@` — ⚠️ **not live.** The Wix TXT record
-  currently reads `forward-email=hello:codehippies@gmail.com` only, so mail to
+  currently reads `forward-email=hello:codehippies11@gmail.com` only, so mail to
   these bounces. Extend the record to enable them:
 
   ```
-  forward-email=hello:codehippies@gmail.com,contact:codehippies@gmail.com,deepak:codehippies@gmail.com,security:codehippies@gmail.com
+  forward-email=hello:codehippies11@gmail.com,contact:codehippies11@gmail.com,deepak:codehippies11@gmail.com,security:codehippies11@gmail.com
   ```
 
 Adding another is a one-line edit to the `forward-email=` record. Nothing in
@@ -159,7 +159,7 @@ bounces is worse than no published contact.
 
 ### Why these specific values
 
-**No catch-all.** A catch-all (`forward-email=codehippies@gmail.com` with no
+**No catch-all.** A catch-all (`forward-email=codehippies11@gmail.com` with no
 alias prefix) accepts mail to *any* address at the domain, which spammers find
 and exploit within weeks. Named aliases only.
 
@@ -232,12 +232,21 @@ route is fine. Verify it rather than assume it.
 ### One honest trade-off
 
 On Forward Email's free plan the forwarding configuration lives in a **public
-TXT record**, so `codehippies@gmail.com` is visible to anyone who queries your
+TXT record**, so `codehippies11@gmail.com` is visible to anyone who queries your
 DNS. Their paid plan hides it.
 
-In this case it changes nothing: that address is already published on the
-contact page, in the footer and in `llms.txt`. If you later want it private,
-their paid plan or Google Workspace both solve it.
+This is a real exposure, not a cosmetic one. The site publishes
+`hello@codehippies.com` everywhere — the contact page, the footer and
+`llms.txt` — and never the gmail address, so DNS is the only place the two are
+linked. Anyone running `dig TXT codehippies.com` sees the private inbox behind
+the public alias, and address harvesters do exactly that.
+
+The `_dmarc` `rua=` address is public for the same reason, and DMARC reports
+also arrive at it.
+
+If that matters, Forward Email's paid plan hides the mapping, and Google
+Workspace removes the forwarding hop entirely. Neither is required for the
+setup to work.
 
 ### Verify once nameservers have moved
 
@@ -330,8 +339,10 @@ GitHub integration handles deployment and the job skips with a notice.
 ## 7. Pre-launch checklist
 
 - [x] `NEXT_PUBLIC_SITE_URL` set to https://codehippies.com
-- [x] `NEXT_PUBLIC_CONTACT_EMAIL` set to codehippies@gmail.com
-- [x] Domain email configured — MX, SPF, DMARC and forwarding aliases in Vercel (§2b)
+- [x] `NEXT_PUBLIC_CONTACT_EMAIL` set to hello@codehippies.com (verified in the
+      rendered page, not just the dashboard) — the gmail address is the private
+      forwarding destination and is never shown on the site
+- [x] Domain email configured — MX, SPF, DMARC and forwarding aliases in **Wix** (§2b)
 - [ ] After Wix records are live: send a real test email to hello@codehippies.com
 - [ ] Gmail "Send mail as" configured for hello@codehippies.com (see §2b)
 - [ ] Outgoing mail scored at mail-tester.com
