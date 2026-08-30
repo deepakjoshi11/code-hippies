@@ -136,9 +136,10 @@ entirely through DNS with no account to create.
 did not happen, so these records must be entered in the Wix DNS manager. The
 copies in the Vercel zone are inert and are not what the internet reads.
 
-**Current live state:** MX, forwarding, SPF and DMARC are all live in Wix, but
-with `hello:` as the only alias, and the SPF is missing
-`include:_spf.google.com`. Verify with `dig` before trusting this table.
+**Current live state (verified 2026-08-30):** MX, all four forwarding aliases,
+SPF and DMARC are live in Wix and match this document. SPF resolves in 6 of the
+10 permitted DNS lookups, leaving headroom for another sender. Re-verify with
+`dig` rather than trusting this line — it ages.
 
 ### What is configured
 
@@ -150,17 +151,13 @@ with `hello:` as the only alias, and the SPF is missing
 | `TXT` | `@` | `v=spf1 include:spf.forwardemail.net include:_spf.google.com ~all` |
 | `TXT` | `_dmarc` | `v=DMARC1; p=none; rua=mailto:codehippies11@gmail.com; fo=1` |
 
-Addresses, all landing in the same Gmail inbox:
+Addresses, all live and landing in the same Gmail inbox
+(`codehippies11@gmail.com`), verified against DNS on 2026-08-30:
 
-- `hello@codehippies.com` — ✅ **live**; the general address, used across the
-  site and in `SECURITY.md`
-- `contact@`, `deepak@`, `security@` — ⚠️ **not live.** The Wix TXT record
-  currently reads `forward-email=hello:codehippies11@gmail.com` only, so mail to
-  these bounces. Extend the record to enable them:
-
-  ```
-  forward-email=hello:codehippies11@gmail.com,contact:codehippies11@gmail.com,deepak:codehippies11@gmail.com,security:codehippies11@gmail.com
-  ```
+- `hello@codehippies.com` — the general address, used across the site
+- `contact@codehippies.com`
+- `deepak@codehippies.com`
+- `security@codehippies.com` — the address published in `SECURITY.md`
 
 Adding another is a one-line edit to the `forward-email=` record. Nothing in
 the repo may advertise an address that is not in it — a published contact that
