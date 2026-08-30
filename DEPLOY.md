@@ -19,25 +19,100 @@ variables — the contact form logs briefs server-side, the AI assistant answers
 extractively from its knowledge base, and unconfigured contact channels are
 hidden rather than broken.
 
-## 2. Custom domain
+## 2. Custom domain — codehippies.com
 
-1. Buy the domain in **your own name**. This must be your account and your card
-   — a domain registered to a contractor is a business risk, and it is also
-   the one step nobody can do on your behalf without your legal identity and
-   payment.
-2. Vercel → Project → **Settings → Domains** → add `codehippies.com` and
-   `www.codehippies.com`.
-3. At your registrar, set the records Vercel shows you. Either works:
-   - **Nameservers** (simplest): point the domain at Vercel's nameservers.
-   - **Records**: `A` for the apex to Vercel's IP, `CNAME` for `www` to
-     `cname.vercel-dns.com`.
-4. TLS is issued automatically once DNS resolves. There is nothing to buy and
-   nothing to renew.
-5. Set `NEXT_PUBLIC_SITE_URL=https://codehippies.com` in the environment
-   variables and redeploy — this drives canonical URLs, the sitemap, robots and
-   every generated OG image, so it must match the real domain.
+The Vercel side is **already done**. `codehippies.com` and `www.codehippies.com`
+are attached to the project, verified, and the DNS zone is fully built:
 
-DNS usually propagates in minutes and can take up to 48 hours.
+| Type | Name | Value | Purpose |
+| --- | --- | --- | --- |
+| `ALIAS` | `@` | `b271df34aeb21863.vercel-dns-017.com` | Apex → the deployment |
+| `ALIAS` | `*` | `cname.vercel-dns-017.com` | Wildcard, covers `www` and any future subdomain |
+| `CAA` | `@` | `0 issue "letsencrypt.org"` | Authorises Let's Encrypt to issue TLS |
+| `CAA` | `@` | `0 issue "pki.goog"` | Authorises Google Trust Services |
+| `CAA` | `@` | `0 issue "sectigo.com"` | Authorises Sectigo |
+
+Nothing needs creating. The single remaining step is at the registrar.
+
+### The one manual step: point the nameservers at Vercel
+
+The domain currently answers from Wix:
+
+```
+codehippies.com.  NS  ns8.wixdns.net.
+codehippies.com.  NS  ns9.wixdns.net.
+```
+
+Change them, in the Wix account that owns the domain, to:
+
+```
+ns1.vercel-dns.com
+ns2.vercel-dns.com
+```
+
+**In Wix:** Domains → select `codehippies.com` → **Advanced** →
+**Connect to an external DNS provider** (sometimes shown as "Change your
+nameservers" or "Point to another provider") → paste both nameservers → save.
+Wix will warn that its own services will stop resolving. That is expected and
+correct — the site is served by Vercel now.
+
+### This switch is safe, and here is why
+
+Before recommending it, the live zone was queried for anything that would
+break. There is nothing to lose:
+
+| Record type | Currently present | Consequence of switching |
+| --- | --- | --- |
+| `MX` | **None** | No email on this domain, so no mail can break |
+| `TXT` | **None** | No SPF, no DMARC, no domain-verification records |
+| `AAAA` | None | — |
+| Subdomains | `www` only | Covered by the wildcard `ALIAS` already in Vercel |
+
+Verified with:
+
+```bash
+for t in NS A AAAA MX TXT SOA; do
+  curl -s -H "accept: application/dns-json" \
+    "https://cloudflare-dns.com/dns-query?name=codehippies.com&type=$t"
+done
+```
+
+If you ever **do** add email to this domain, add the MX records in Vercel
+(Project → Settings → Domains → DNS Records), not at Wix — once nameservers
+move, Wix's DNS panel no longer controls anything.
+
+### After the switch
+
+Propagation is usually minutes and can take up to 48 hours. TLS is issued
+automatically once the nameservers resolve; there is nothing to buy or renew.
+
+Check progress:
+
+```bash
+# Should return ns1/ns2.vercel-dns.com once propagated
+curl -s -H "accept: application/dns-json" \
+  "https://cloudflare-dns.com/dns-query?name=codehippies.com&type=NS" | jq -r '.Answer[].data'
+
+# Should return 200 and the site title
+curl -sL -o /dev/null -w "%{http_code}\n" https://codehippies.com/
+```
+
+Or ask Vercel directly:
+
+```bash
+npx vercel domains inspect codehippies.com
+```
+
+Both nameserver columns matching means it is done.
+
+### Why nameservers rather than an A record
+
+Either works. Moving the nameservers hands the whole zone to Vercel, which is
+what you want here: DNS is then managed in one place alongside the deployment,
+the wildcard covers future subdomains automatically, and TLS renewal needs no
+coordination. Keeping DNS at Wix and pointing only an `A` record would work
+too, but leaves the zone split across two providers — which is how records get
+lost during the next change.
 
 ## 3. Environment variables
 
@@ -116,7 +191,8 @@ GitHub integration handles deployment and the job skips with a notice.
 
 ## 7. Pre-launch checklist
 
-- [ ] `NEXT_PUBLIC_SITE_URL` matches the real domain
+- [x] `NEXT_PUBLIC_SITE_URL` set to https://codehippies.com
+- [ ] Nameservers switched at Wix to ns1/ns2.vercel-dns.com (see §2)
 - [ ] At least one contact channel configured
 - [ ] `LEAD_WEBHOOK_URL` set, and a test brief received
 - [ ] Logo and favicon replaced
