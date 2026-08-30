@@ -19,100 +19,97 @@ variables — the contact form logs briefs server-side, the AI assistant answers
 extractively from its knowledge base, and unconfigured contact channels are
 hidden rather than broken.
 
-## 2. Custom domain — codehippies.com
+## 2. Custom domain — DNS stays at Wix
 
-The Vercel side is **already done**. `codehippies.com` and `www.codehippies.com`
-are attached to the project, verified, and the DNS zone is fully built:
+Wix does not allow the nameserver change on this domain, so DNS is managed **in
+the Wix DNS manager** and simply points at Vercel. This works exactly as well —
+it just means every record below must exist in Wix, because that is what
+answers queries for the domain.
 
-| Type | Name | Value | Purpose |
+> The records staged in Vercel's own DNS zone are **inert** while the
+> nameservers stay at Wix. They do no harm and become active automatically if
+> you ever move nameservers, but they are not serving anything today.
+
+### Current state, verified
+
+| Host | Status |
+| --- | --- |
+| `codehippies.com` | ✅ **Live** — A record already points at Vercel, returns the site |
+| `www.codehippies.com` | ❌ Still points at `cdn3.wixdns.net`, returns a Wix error |
+
+Vercel confirms the apex: `"configuredBy":"A"`, `"misconfigured":false`.
+
+### The complete record set for Wix
+
+Add or edit these in **Wix → Domains → codehippies.com → DNS Records**.
+
+#### Website
+
+| Type | Host | Value | TTL | Status |
+| --- | --- | --- | --- | --- |
+| `A` | `@` | `216.198.79.1` | 3600 | ✅ already set |
+| `CNAME` | `www` | `b271df34aeb21863.vercel-dns-017.com` | 3600 | ⚠️ **change this** — currently `cdn3.wixdns.net` |
+
+`www` is the only website record left to fix. If Wix rejects that CNAME value,
+use `cname.vercel-dns.com` instead — Vercel accepts both.
+
+A second A record `64.29.17.1` may be added alongside the first for redundancy.
+Optional; one is sufficient.
+
+#### Email — forwarding to codehippies@gmail.com
+
+| Type | Host | Priority | Value | TTL |
+| --- | --- | --- | --- | --- |
+| `MX` | `@` | `10` | `mx1.forwardemail.net` | 3600 |
+| `MX` | `@` | `20` | `mx2.forwardemail.net` | 3600 |
+
+> Forward Email's docs specify priority `0` for both. Some DNS managers,
+> including Wix, will not accept `0` — `10` and `20` work identically here,
+> because what matters is that mx1 is tried before mx2.
+
+**Remove any existing Wix MX records first.** Two mail providers competing for
+the same domain is how mail goes missing.
+
+#### TXT records
+
+| Type | Host | Value | TTL |
 | --- | --- | --- | --- |
-| `ALIAS` | `@` | `b271df34aeb21863.vercel-dns-017.com` | Apex → the deployment |
-| `ALIAS` | `*` | `cname.vercel-dns-017.com` | Wildcard, covers `www` and any future subdomain |
-| `CAA` | `@` | `0 issue "letsencrypt.org"` | Authorises Let's Encrypt to issue TLS |
-| `CAA` | `@` | `0 issue "pki.goog"` | Authorises Google Trust Services |
-| `CAA` | `@` | `0 issue "sectigo.com"` | Authorises Sectigo |
+| `TXT` | `@` | `forward-email=hello:codehippies@gmail.com,contact:codehippies@gmail.com,deepak:codehippies@gmail.com,security:codehippies@gmail.com` | 3600 |
+| `TXT` | `@` | `v=spf1 a include:spf.forwardemail.net include:_spf.google.com ~all` | 3600 |
+| `TXT` | `_dmarc` | `v=DMARC1; p=none; rua=mailto:codehippies@gmail.com; fo=1` | 3600 |
 
-Nothing needs creating. The single remaining step is at the registrar.
+Both apex `TXT` records must exist **as separate records** — do not merge them
+into one string. SPF and the forwarding config are read by different systems.
 
-### The one manual step: point the nameservers at Vercel
+#### CAA — optional
 
-The domain currently answers from Wix:
-
-```
-codehippies.com.  NS  ns8.wixdns.net.
-codehippies.com.  NS  ns9.wixdns.net.
-```
-
-Change them, in the Wix account that owns the domain, to:
-
-```
-ns1.vercel-dns.com
-ns2.vercel-dns.com
-```
-
-**In Wix:** Domains → select `codehippies.com` → **Advanced** →
-**Connect to an external DNS provider** (sometimes shown as "Change your
-nameservers" or "Point to another provider") → paste both nameservers → save.
-Wix will warn that its own services will stop resolving. That is expected and
-correct — the site is served by Vercel now.
-
-### This switch is safe, and here is why
-
-Before recommending it, the live zone was queried for anything that would
-break. There is nothing to lose:
-
-| Record type | Currently present | Consequence of switching |
+| Type | Host | Value |
 | --- | --- | --- |
-| `MX` | **None** | No email on this domain, so no mail can break |
-| `TXT` | **None** | No SPF, no DMARC, no domain-verification records |
-| `AAAA` | None | — |
-| Subdomains | `www` only | Covered by the wildcard `ALIAS` already in Vercel |
+| `CAA` | `@` | `0 issue "letsencrypt.org"` |
+| `CAA` | `@` | `0 issue "pki.goog"` |
+| `CAA` | `@` | `0 issue "sectigo.com"` |
 
-Verified with:
+These restrict which certificate authorities may issue for the domain. If Wix
+does not offer a CAA type, skip them — absence means any CA may issue, which is
+the default and is not a problem.
+
+### Verify after saving
 
 ```bash
-for t in NS A AAAA MX TXT SOA; do
+for t in A CNAME MX TXT; do
   curl -s -H "accept: application/dns-json" \
-    "https://cloudflare-dns.com/dns-query?name=codehippies.com&type=$t"
+    "https://cloudflare-dns.com/dns-query?name=codehippies.com&type=$t" | jq -r '.Answer[]?.data'
 done
-```
-
-If you ever **do** add email to this domain, add the MX records in Vercel
-(Project → Settings → Domains → DNS Records), not at Wix — once nameservers
-move, Wix's DNS panel no longer controls anything.
-
-### After the switch
-
-Propagation is usually minutes and can take up to 48 hours. TLS is issued
-automatically once the nameservers resolve; there is nothing to buy or renew.
-
-Check progress:
-
-```bash
-# Should return ns1/ns2.vercel-dns.com once propagated
 curl -s -H "accept: application/dns-json" \
-  "https://cloudflare-dns.com/dns-query?name=codehippies.com&type=NS" | jq -r '.Answer[].data'
+  "https://cloudflare-dns.com/dns-query?name=www.codehippies.com&type=CNAME" | jq -r '.Answer[]?.data'
 
-# Should return 200 and the site title
-curl -sL -o /dev/null -w "%{http_code}\n" https://codehippies.com/
+curl -sL -o /dev/null -w "apex %{http_code}\n" https://codehippies.com/
+curl -sL -o /dev/null -w "www  %{http_code}\n" https://www.codehippies.com/
 ```
 
-Or ask Vercel directly:
-
-```bash
-npx vercel domains inspect codehippies.com
-```
-
-Both nameserver columns matching means it is done.
-
-### Why nameservers rather than an A record
-
-Either works. Moving the nameservers hands the whole zone to Vercel, which is
-what you want here: DNS is then managed in one place alongside the deployment,
-the wildcard covers future subdomains automatically, and TLS renewal needs no
-coordination. Keeping DNS at Wix and pointing only an `A` record would work
-too, but leaves the zone split across two providers — which is how records get
-lost during the next change.
+Both should return `200`. Then send a real message to `hello@codehippies.com`
+from an outside address and confirm it arrives — DNS resolving is not the same
+as mail being delivered.
 
 ## 2b. Email on the domain — done
 
@@ -281,7 +278,9 @@ GitHub integration handles deployment and the job skips with a notice.
 - [x] `NEXT_PUBLIC_CONTACT_EMAIL` set to codehippies@gmail.com
 - [x] Domain email configured — MX, SPF, DMARC and forwarding aliases in Vercel (§2b)
 - [ ] After nameservers move: send a real test email to hello@codehippies.com
-- [ ] Nameservers switched at Wix to ns1/ns2.vercel-dns.com (see §2)
+- [x] Apex A record points at Vercel — codehippies.com is live
+- [ ] `www` CNAME changed in Wix from cdn3.wixdns.net to Vercel (see §2)
+- [ ] MX, SPF, forwarding and DMARC records added in Wix (see §2)
 - [ ] At least one contact channel configured
 - [ ] `LEAD_WEBHOOK_URL` set, and a test brief received
 - [ ] Logo and favicon replaced
