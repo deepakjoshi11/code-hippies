@@ -162,17 +162,55 @@ reports arrive at your Gmail. Once those reports show your legitimate mail
 passing, move to `p=quarantine`, then `p=reject`. Starting at `p=reject` is how
 people silently lose their own email.
 
-### To send *from* hello@codehippies.com
+### To send *from* hello@codehippies.com — free
 
-Forwarding is receive-only on the free plan, but Gmail can still send as the
-address at no cost:
+The DNS side is already done: SPF authorises Google to send for this domain
+(`include:_spf.google.com`). The rest is a setting inside your own Gmail
+account, which cannot be automated from outside it.
 
-1. Gmail → **Settings → Accounts and Import → Send mail as → Add another email address**
-2. Enter `hello@codehippies.com`, tick **Treat as an alias**
-3. Gmail emails a confirmation code — the forwarding above delivers it to your inbox
-4. Enter the code. You can now pick that address in the *From* dropdown.
+**Prerequisite:** the forwarding records must be live in Wix first. Gmail
+verifies the address by emailing a code to it — if forwarding is not working,
+the code never arrives and setup cannot complete.
 
-The SPF record already authorises Google, so this passes authentication.
+1. Gmail → ⚙ → **See all settings** → **Accounts and Import**
+2. Under *Send mail as*, click **Add another email address**
+3. Name: `Deepak Joshi` (or `Code Hippies`)
+   Email: `hello@codehippies.com`
+   Leave **Treat as an alias** ticked
+4. Click **Next Step** → **Send Verification**
+5. The code arrives in your Gmail inbox via the forwarding. Enter it.
+6. Back in *Accounts and Import*, set **When replying to a message** →
+   *Reply from the same address the message was sent to*
+
+You can now pick `hello@codehippies.com` in the **From** dropdown on any new
+message, and replies to mail sent to that address use it automatically.
+
+#### One caveat worth knowing before you use it commercially
+
+Sending this way routes through Google's consumer servers. Google's own
+documentation notes that recipients may sometimes still see your `@gmail.com`
+address, and messages can be shown as sent *via* gmail.com.
+
+More importantly for deliverability: DMARC requires either SPF or DKIM to
+*align* with the domain in the `From` header. When a consumer Gmail account
+sends as a custom-domain alias, that alignment is not guaranteed — which is
+precisely why the DMARC policy here starts at `p=none`. Nothing gets rejected,
+but some recipients may filter more aggressively than they would for mail sent
+through a provider that signs for your domain.
+
+**Test it before it matters.** Send a message from `hello@codehippies.com` to
+a free checker such as [mail-tester.com](https://www.mail-tester.com) and read
+the SPF, DKIM and DMARC lines. If the score is poor and you are sending
+business mail at volume, move to one of these:
+
+| Option | Cost | What it fixes |
+| --- | --- | --- |
+| Zoho Mail free plan | Free, up to 5 users | Real mailboxes on your domain with proper DKIM signing |
+| Forward Email paid SMTP | Low monthly | Keeps this exact setup, adds aligned sending |
+| Google Workspace | ~$6/user/month | Real Gmail mailbox, full alignment, admin controls |
+
+For low-volume enquiry replies — which is what this address is for — the free
+route is fine. Verify it rather than assume it.
 
 ### One honest trade-off
 
@@ -277,7 +315,9 @@ GitHub integration handles deployment and the job skips with a notice.
 - [x] `NEXT_PUBLIC_SITE_URL` set to https://codehippies.com
 - [x] `NEXT_PUBLIC_CONTACT_EMAIL` set to codehippies@gmail.com
 - [x] Domain email configured — MX, SPF, DMARC and forwarding aliases in Vercel (§2b)
-- [ ] After nameservers move: send a real test email to hello@codehippies.com
+- [ ] After Wix records are live: send a real test email to hello@codehippies.com
+- [ ] Gmail "Send mail as" configured for hello@codehippies.com (see §2b)
+- [ ] Outgoing mail scored at mail-tester.com
 - [x] Apex A record points at Vercel — codehippies.com is live
 - [ ] `www` CNAME changed in Wix from cdn3.wixdns.net to Vercel (see §2)
 - [ ] MX, SPF, forwarding and DMARC records added in Wix (see §2)
