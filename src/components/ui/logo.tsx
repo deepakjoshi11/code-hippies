@@ -26,7 +26,15 @@ export function Logo({
         width={size}
         height={size}
         priority={priority}
-        className={cn("rounded-full object-cover", className)}
+        /*
+         * The portrait is a dark disc on a light page, so it needs an edge or
+         * it reads as a hole punched in the header. A hairline ring plus a
+         * whisper of shadow gives it the seated look of a struck coin.
+         */
+        className={cn(
+          "rounded-full object-cover ring-1 ring-ink-100/15 shadow-[0_1px_3px_rgba(0,0,0,0.10)]",
+          className,
+        )}
       />
     );
   }

@@ -6,9 +6,10 @@
  * round the theme runs. That is what makes the light theme a change of eight
  * values here rather than a rewrite of 650 class names.
  *
- * Light is the default. `.surface-dark` below re-declares the same variables
- * for a subtree, so the hero can stay cinematic without any component knowing
- * which surface it is sitting on.
+ * The site runs light throughout. An earlier revision carried a `.surface-dark`
+ * class that re-declared these variables for a dark hero; the hero now veils
+ * the photograph in white instead, so nothing used it and it has been removed
+ * rather than left shipping to every visitor.
  */
 @theme {
   --color-ink-950: oklch(0.993 0.001 265);
@@ -55,41 +56,6 @@
   --text-primary: var(--color-ink-50);
   --text-secondary: var(--color-ink-300);
   --text-muted: oklch(0.545 0.013 265);
-}
-
-/**
- * A subtree that runs dark on a light page.
- *
- * Re-declaring the same custom properties is what makes this work: every
- * Tailwind colour utility compiles to `var(--color-…)`, so a component written
- * as `text-ink-300` resolves against whichever ramp is in scope. Nothing inside
- * needs to know it is on a dark surface, and no component gets a second set of
- * classes for the inverted case.
- *
- * The brand ramp is re-declared too. Its light-theme values are darkened for
- * contrast against white, which would make them nearly invisible here.
- */
-.surface-dark {
-  --color-ink-950: oklch(0.145 0.012 265);
-  --color-ink-900: oklch(0.19 0.014 265);
-  --color-ink-800: oklch(0.245 0.016 265);
-  --color-ink-700: oklch(0.40 0.016 265);
-  --color-ink-500: oklch(0.72 0.012 265);
-  --color-ink-300: oklch(0.83 0.01 265);
-  --color-ink-100: oklch(0.94 0.006 265);
-  --color-ink-50: oklch(0.985 0.003 265);
-
-  --color-brand-200: oklch(0.90 0.085 165);
-  --color-brand-400: oklch(0.80 0.145 165);
-  --color-brand-500: oklch(0.72 0.155 165);
-
-  --color-accent-400: oklch(0.80 0.14 62);
-
-  --border-subtle: color-mix(in oklab, var(--color-ink-100) 14%, transparent);
-  --text-primary: var(--color-ink-50);
-  --text-secondary: var(--color-ink-300);
-
-  color: var(--color-ink-50);
 }
 
 * {
