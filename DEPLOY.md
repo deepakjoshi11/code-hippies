@@ -114,105 +114,91 @@ coordination. Keeping DNS at Wix and pointing only an `A` record would work
 too, but leaves the zone split across two providers — which is how records get
 lost during the next change.
 
-## 2b. Email on the domain
+## 2b. Email on the domain — done
 
-### The thing to get right first
+`hello@codehippies.com` and three other addresses forward into
+`codehippies@gmail.com`, free and permanently, using
+[Forward Email](https://forwardemail.net) — open source, and configurable
+entirely through DNS with no account to create.
 
-`codehippies@gmail.com` is a **free consumer Gmail address**. DNS records on
-`codehippies.com` cannot make mail arrive at a `@gmail.com` mailbox, and
-Google's free Gmail does not accept mail for custom domains.
+**The records are already in the Vercel zone.** They activate the moment the
+nameservers move (§2). Nothing else to set up.
 
-Pointing `codehippies.com` MX at `gmail-smtp-in.l.google.com` — which looks
-right, and which a lot of guides suggest — makes **every email to the domain
-bounce**. Those servers only accept mail addressed to `@gmail.com`.
+### What is configured
 
-So there are two separate things, and only one of them needs DNS:
-
-| Goal | Needs DNS? | Status |
+| Type | Name | Value |
 | --- | --- | --- |
-| Show `codehippies@gmail.com` as the contact address on the site | No | **Done** — set as `NEXT_PUBLIC_CONTACT_EMAIL` |
-| Receive mail at `hello@codehippies.com` | Yes | Pick an option below |
+| `MX` | `@` | `mx1.forwardemail.net` (priority 0) |
+| `MX` | `@` | `mx2.forwardemail.net` (priority 0) |
+| `TXT` | `@` | `forward-email=hello:…,contact:…,deepak:…,security:…` |
+| `TXT` | `@` | `v=spf1 a include:spf.forwardemail.net include:_spf.google.com ~all` |
+| `TXT` | `_dmarc` | `v=DMARC1; p=none; rua=mailto:codehippies@gmail.com; fo=1` |
 
-### Option A — free forwarding (recommended to start)
+Working addresses, all landing in the same Gmail inbox:
 
-A forwarding service accepts mail for `@codehippies.com` and forwards it to
-your Gmail. You reply from Gmail. No mailbox to pay for, no migration.
+- `hello@codehippies.com` — the general address, used across the site
+- `contact@codehippies.com`
+- `deepak@codehippies.com`
+- `security@codehippies.com` — referenced in `SECURITY.md`
 
-Free providers that work with DNS at Vercel: **ImprovMX**, **Forward Email**.
-(Cloudflare Email Routing is also free and excellent, but it requires DNS to be
-hosted at Cloudflare, which conflicts with putting nameservers on Vercel.)
+Adding another is a one-line edit to the `forward-email=` record.
 
-Sign up, add `codehippies.com`, then add the records the provider gives you in
-**Vercel → Project → Settings → Domains → codehippies.com → DNS Records**.
-For ImprovMX they are:
+### Why these specific values
 
-```
-MX   @   10   mx1.improvmx.com
-MX   @   20   mx2.improvmx.com
-TXT  @        v=spf1 include:spf.improvmx.com ~all
-```
+**No catch-all.** A catch-all (`forward-email=codehippies@gmail.com` with no
+alias prefix) accepts mail to *any* address at the domain, which spammers find
+and exploit within weeks. Named aliases only.
 
-Set the alias `hello@codehippies.com → codehippies@gmail.com` in the provider's
-dashboard.
+**SPF includes Google as well as Forward Email.** Forward Email authorises
+inbound forwarding; `_spf.google.com` authorises Gmail to send *as*
+`hello@codehippies.com` once you set that up below. Without it, your outgoing
+mail fails SPF and lands in spam.
 
-**Sending as `hello@codehippies.com` from Gmail** is a separate step and works
-with either option: Gmail → Settings → Accounts → *Send mail as* → Add another
-email address. Gmail sends a confirmation link to the address, which the
-forwarder delivers to your inbox.
+**SPF ends `~all`, not `-all`.** Forward Email's docs suggest `-all` (hard
+fail). `~all` (soft fail) is the safer starting point: if you later send
+through a newsletter tool or CRM and forget to add it here, `~all` marks the
+mail while `-all` rejects it outright. Tighten to `-all` once you are certain
+of everything that sends on your behalf.
 
-### Option B — Google Workspace (real mailboxes, paid)
+**DMARC at `p=none`.** Monitor mode — nothing is rejected yet, and aggregate
+reports arrive at your Gmail. Once those reports show your legitimate mail
+passing, move to `p=quarantine`, then `p=reject`. Starting at `p=reject` is how
+people silently lose their own email.
 
-Roughly $6/user/month. You get an actual `hello@codehippies.com` mailbox with
-Gmail's interface, Drive, Calendar and admin controls. Worth it once email
-volume is real or you have staff.
+### To send *from* hello@codehippies.com
 
-Workspace gives you the exact records during setup. They look like this, but
-**use the ones from your own admin console** — the verification TXT is unique
-to your account:
+Forwarding is receive-only on the free plan, but Gmail can still send as the
+address at no cost:
 
-```
-MX   @   1    smtp.google.com
-TXT  @        v=spf1 include:_spf.google.com ~all
-TXT  @        google-site-verification=<your own value>
-```
+1. Gmail → **Settings → Accounts and Import → Send mail as → Add another email address**
+2. Enter `hello@codehippies.com`, tick **Treat as an alias**
+3. Gmail emails a confirmation code — the forwarding above delivers it to your inbox
+4. Enter the code. You can now pick that address in the *From* dropdown.
 
-### Either way, add DMARC
+The SPF record already authorises Google, so this passes authentication.
 
-Once mail flows, add a DMARC record. It tells receiving servers what to do with
-mail that fails authentication, and it is what stops someone spoofing your
-domain:
+### One honest trade-off
 
-```
-TXT  _dmarc   v=DMARC1; p=none; rua=mailto:codehippies@gmail.com
-```
+On Forward Email's free plan the forwarding configuration lives in a **public
+TXT record**, so `codehippies@gmail.com` is visible to anyone who queries your
+DNS. Their paid plan hides it.
 
-Start at `p=none` (monitor only, nothing is rejected). Once the reports show
-your legitimate mail passing, tighten to `p=quarantine` and then `p=reject`.
-Going straight to `p=reject` before you know what is sending is how people
-silently lose their own email.
+In this case it changes nothing: that address is already published on the
+contact page, in the footer and in `llms.txt`. If you later want it private,
+their paid plan or Google Workspace both solve it.
 
-### Where to add these records
-
-**In Vercel, not Wix** — once the nameservers move (§2), the Wix DNS panel no
-longer controls this zone. Vercel → Project → Settings → Domains →
-`codehippies.com` → DNS Records.
-
-### Verify before trusting it
+### Verify once nameservers have moved
 
 ```bash
-# MX should list your provider, not Wix and not gmail.com's own servers
 curl -s -H "accept: application/dns-json" \
   "https://cloudflare-dns.com/dns-query?name=codehippies.com&type=MX" | jq -r '.Answer[].data'
-
-# SPF and DMARC
 curl -s -H "accept: application/dns-json" \
   "https://cloudflare-dns.com/dns-query?name=codehippies.com&type=TXT" | jq -r '.Answer[].data'
-curl -s -H "accept: application/dns-json" \
-  "https://cloudflare-dns.com/dns-query?name=_dmarc.codehippies.com&type=TXT" | jq -r '.Answer[].data'
 ```
 
-Then send a real test message from an outside address and confirm it arrives.
-DNS resolving is not the same as mail being delivered.
+Then send a real message from an outside address to `hello@codehippies.com` and
+confirm it arrives. DNS resolving is not the same as mail being delivered —
+test it before putting the address on anything printed.
 
 ## 3. Environment variables
 
@@ -293,7 +279,8 @@ GitHub integration handles deployment and the job skips with a notice.
 
 - [x] `NEXT_PUBLIC_SITE_URL` set to https://codehippies.com
 - [x] `NEXT_PUBLIC_CONTACT_EMAIL` set to codehippies@gmail.com
-- [ ] Domain email chosen and MX/SPF/DMARC added in Vercel (see §2b), if you want hello@codehippies.com
+- [x] Domain email configured — MX, SPF, DMARC and forwarding aliases in Vercel (§2b)
+- [ ] After nameservers move: send a real test email to hello@codehippies.com
 - [ ] Nameservers switched at Wix to ns1/ns2.vercel-dns.com (see §2)
 - [ ] At least one contact channel configured
 - [ ] `LEAD_WEBHOOK_URL` set, and a test brief received

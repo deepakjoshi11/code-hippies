@@ -8,9 +8,9 @@ exploitable.
 **Preferred:** [GitHub private vulnerability reporting](https://github.com/deepakjoshi11/code-hippies/security/advisories/new)
 — it is encrypted, threaded, and gives you a CVE if one is warranted.
 
-**Alternative:** the contact form at https://codehippies.com/contact, with
-"security" in the message. It is server-validated, rate-limited and reaches me
-directly.
+**Alternative:** email `security@codehippies.com`, or the contact form at
+https://codehippies.com/contact with "security" in the message. Both reach me
+directly; the form is server-validated and rate-limited.
 
 ### What to expect
 
