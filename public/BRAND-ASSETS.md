@@ -25,7 +25,8 @@ There are two identities on this site and they are not interchangeable:
 | `logo.png` | 512×512 | Large form of the site logo. Circular, transparent corners. |
 | `logo-mark.png` | 256×256 | Header and footer mark. What `Logo` actually renders. |
 | `og-image.png` | 1200×630 | Social share card — the monkey mark centred on black. Per-page OG images are generated at `/og`; this is the fallback. |
-| `src/app/icon.png` | 512×512 | Favicon. Next serves this automatically from the app directory. |
+| `src/app/favicon.ico` | 16/32/48 | Served at `/favicon.ico`. Not a Google requirement — Google reads the `<link>` tag — but crawlers and SEO auditors probe this path by convention and report a 404 when it is missing. |
+| `src/app/icon.png` | 512×512 | The `<link rel="icon">` Google actually reads. Next serves it from the app directory. |
 | `src/app/apple-icon.png` | 180×180 | iOS home screen. Opaque on purpose — iOS renders alpha as black and applies its own corner mask. |
 | `portrait.jpg` | ≥800×800 | Not yet supplied. Photograph for `/about`; set `NEXT_PUBLIC_HAS_PORTRAIT=true` once added. |
 
@@ -50,7 +51,11 @@ full-colour 1024×1024 PNG as a favicon is a real cost on first paint.
 
 ## Notes
 
-- The favicon must stay legible at 16×16. Shrink it and look: if the laptop and
-  glasses turn to mush, simplify the mark rather than shipping it.
+- The favicon must stay legible at 16×16. At that size the ring, glasses and
+  laptop still read; the "CODE HIPPIES" wordmark does not, which is expected and
+  fine — shape and colour carry recognition in a tab strip, not text.
+- Regenerating `favicon.ico`: the PNGs embedded in it must be **RGBA**. Next's
+  ICO decoder rejects RGB, so a `flatten()` needs `ensureAlpha()` after it or
+  the build fails with "The PNG is not in RGBA format".
 - `og-image.png` keeps its subject inside the central 1200×600, because some
   platforms crop the edges.
