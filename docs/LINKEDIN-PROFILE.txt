@@ -121,6 +121,11 @@ Alongside these: technical SEO and Core Web Vitals work, and security and
 compliance review — OWASP-informed, with the reasoning written down rather than
 asserted.
 
+The standard is enforced, not claimed. codehippies.com fails its own build if
+Lighthouse drops below 90 on performance, accessibility, best practices or SEO
+— asserted on desktop and on throttled mobile, three runs each, every push. The
+config is public; so is the repository.
+
 How the studio works. Discovery happens before a price. The price is fixed
 against a written scope. Changes get quoted rather than quietly absorbed. Every
 project ships with a CI pipeline, a security review and a handover document,
@@ -318,6 +323,10 @@ partnerships. hello@codehippies.com
          - Technical SEO and Core Web Vitals work: measured, not asserted.
          - Every engagement includes a CI pipeline, a security review and a
            handover document.
+         - Quality gates that fail the build rather than file a ticket: the
+           studio site asserts Lighthouse 90+ across all four categories on
+           desktop and throttled mobile, plus zero axe WCAG 2.1 AA violations
+           across every page at three widths.
 
      Entry 2:
        Title:     Founder
@@ -449,7 +458,8 @@ SECONDARY — once each, spread naturally:
   retrieval augmented generation, AI chatbot development, technical SEO,
   Core Web Vitals, web performance, application security, OWASP,
   software consultant, freelance developer India, production software,
-  Astro, Tailwind CSS, PostgreSQL, Vercel, structured data, JSON-LD
+  Astro, Tailwind CSS, PostgreSQL, Vercel, structured data, JSON-LD,
+  Lighthouse CI, WCAG 2.1 AA, accessibility engineering, performance budget
 
 BRAND / ENTITY — exact string every time, no variants:
   Code Hippies, codehippies.com, Deepak Joshi, Dharmarthlabs
@@ -504,6 +514,8 @@ Safe to say, because it is verifiable today:
   - Founder of Dharmarthlabs.
   - The specific stacks listed in the case studies.
   - The retrieval-grounded assistant with a refusal path and CI evaluation.
+  - The Lighthouse and accessibility budgets enforced in CI. Anyone can read
+    lighthouserc.json in the public repository, or run Lighthouse themselves.
 
 
 --------------------------------------------------------------------------------
