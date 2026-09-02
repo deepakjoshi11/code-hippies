@@ -107,7 +107,7 @@ describe("cms link", () => {
 
   it("exposes a full read snapshot", () => {
     const snap = cmsSnapshot();
-    expect(snap.counts.caseStudies).toBe(13);
+    expect(snap.counts.caseStudies).toBe(15);
     expect(snap.counts.faqs).toBe(50);
     expect(snap.routes).toContain("/partner");
     expect(snap.routes).toContain("/enterprise");

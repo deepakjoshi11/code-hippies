@@ -5,8 +5,8 @@ import { faqs } from "@/data/faq";
 import { getAllPosts } from "@/lib/blog";
 
 describe("case studies", () => {
-  it("covers all 13 live production sites", () => {
-    expect(caseStudies).toHaveLength(13);
+  it("covers all 15 production sites", () => {
+    expect(caseStudies).toHaveLength(15);
   });
 
   it("has unique slugs and live https URLs", () => {
